@@ -11,7 +11,7 @@ class DashboardController extends BaseController
         return view('DashboardView');
     }
     public function create(){
-        $user = new \App\Entitiasfses\User();
+        $user = new \App\Entities\User();
         // ngebungkus yang dikirim usernya 
         
         if($user->fill($this->request->getPost())){

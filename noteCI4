@@ -68,3 +68,14 @@ ganti nama cabang yang sedang aktif
 git branch -M main
 gabungkan file 
 git pull origin main --rebase 
+
+git rebase --continue
+
+unggah env.example
+cp .env .env.example        # Menyalin isi .env ke file contoh
+git add .env.example        # Menambahkan file ke staging
+git commit -m "Tambah file env example"
+git push origin main        # Kirim ke GitHub
+
+my token
+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
