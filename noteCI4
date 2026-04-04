@@ -75,5 +75,5 @@ unggah env.example
 cp .env .env.example        # Menyalin isi .env ke file contoh
 git add .env.example        # Menambahkan file ke staging
 git commit -m "Tambah file env example"
-git push origin main        # Kirim ke GitHub
+git push origin main        # Kirim ke GitHub 
 
