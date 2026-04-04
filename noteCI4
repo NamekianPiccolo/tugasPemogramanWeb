@@ -77,3 +77,5 @@ git add .env.example        # Menambahkan file ke staging
 git commit -m "Tambah file env example"
 git push origin main        # Kirim ke GitHub 
 
+clone folder
+git clone https://github.com/NamekianPiccolo/Sistem-Arsip-Dokumen-Digital.git
