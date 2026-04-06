@@ -1,0 +1,94 @@
+buat controller 
+php spark make:controller DokumentController
+
+sudo systemctl status apache2
+
+# Masuk ke folder project
+cd /path/to/project
+
+# Beri izin tulis ke folder writable
+chmod -R 775 writable
+chmod -R 775 writable/logs
+chmod -R 775 writable/session
+
+# Jika pakai Apache, ubah ownership ke www-data
+sudo chown -R www-data:www-data writable
+
+cek lokasi configurasi php
+php -i | grep "Loaded Configuration File"
+
+langsung buka config nya
+sudo gedit $(php -r "echo php_ini_loaded_file();")
+
+lihat modul php 
+php -m
+
+hubungkan repo dengna git 
+ git remote add origin https://github.com/NamekianPiccolo/Sistem-Arsip-Dokumen-Digital.git
+
+commit project
+git commit -m "upload awal Projek"
+
+
+add satu file 
+git add noteCi4
+
+add semua file 
+
+
+upload projek ke cabang main 
+git push -u origin main
+
+hapus hubungan dari projek ke git  
+rm -rf .git
+
+
+masukkan file yang diubah ke staging area semua nya
+git add .
+
+
+
+
+inisialisasi folder jadi repo
+git init
+
+cek apakah sudah terhubung dengan repo di github 
+git remote -v
+
+cek apakah sudah login akun git
+git config --list
+
+# 1. Masukkan Email (Gunakan email yang terdaftar di akun GitHub kamu)
+git config --global user.email "email-kamu@gmail.com"
+
+# 2. Masukkan Nama (Bisa nama asli atau username GitHub kamu, misal: NamekianPiccolo)
+git config --global user.name "NamekianPiccolo"
+
+ganti nama cabang yang sedang aktif
+git branch -M main
+gabungkan file 
+
+perbarui semua data git 
+git pull origin main --rebase 
+
+git rebase --continue
+
+unggah env.example
+cp .env .env.example        # Menyalin isi .env ke file contoh
+git add .env.example        # Menambahkan file ke staging
+git commit -m "Tambah file env example"
+git push origin main        # Kirim ke GitHub 
+
+clone folder
+git clone https://github.com/NamekianPiccolo/Sistem-Arsip-Dokumen-Digital.git
+
+
+import database ke database saya
+mysql -u root -p nama_database_kamu < indonesia.sql
+
+balik sebelum masuk ke staging area
+git checkout -- .
+
+
+ganti repo 
+git remote set-url origin 
