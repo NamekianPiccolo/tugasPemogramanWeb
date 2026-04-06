@@ -98,6 +98,8 @@ _modules/*
 # phpenv local config
 .php-version
 
+# Custom Notes
+noteCI4.txt
 # Jetbrains editors (PHPStorm, etc)
 .idea/
 *.iml
