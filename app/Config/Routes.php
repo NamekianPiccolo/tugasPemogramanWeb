@@ -9,6 +9,7 @@ use CodeIgniter\Router\RouteCollection;
 // Route Home View
 $routes->get('/', 'HomeController::index');
 $routes->get('/login', 'AuthController::index');
+$routes->get('/mahasiswa/profile/(:alpha)/(:num)/(:alphanum)','HomeController::belajar_segment/$1/$2/$3');
 
 
 

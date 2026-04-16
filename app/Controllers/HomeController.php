@@ -11,4 +11,12 @@ class HomeController extends BaseController
     {
         return view("home");
     }
+    public function belajar_segment($nama, $nim, $kelas)
+    {
+       $data['nama'] = $nama;
+        $data['nim'] = $nim;
+        $data['kelas'] = $kelas;
+        return view('segment_view', $data);
+    }
 }
+
