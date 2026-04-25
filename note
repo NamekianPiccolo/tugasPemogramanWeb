@@ -2,3 +2,25 @@ npx tailwindcss -i ./public/css/input.css -o ./public/css/output.css --watch
 
 c:\laragon\www\punyafarel\.env
 php spark make:controller Login
+paksa push
+git push origin main --force
+
+
+warna web 
+Primary #0F6E56
+Sidebar #085041
+Accent #1D9E75
+
+shutdown -s -t 3600
+jalanain wsl nya
+wsl -d Ubuntu
+
+
+cek port
+netstat -ano | findstr :8080
+
+jalanin docker
+docker run -d -p 8080:80 --name web-php-app php-app-saya
+
+build docker
+docker build -t php-app-saya .

@@ -1,0 +1,139 @@
+/* public/Assets/css/glass_theme.css */
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Parallax Background */
+body {
+    background: url('../img/parallax_bg.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #e2e8f0;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+/* Base text overrides */
+h1, h2, h3, h4, h5, h6, .text-muted, label, .breadcrumb>li>a, .breadcrumb>li.active {
+    color: #f8fafc !important;
+}
+
+/* Glassmorphism for Navbar */
+.navbar-inverse {
+    background: rgba(15, 23, 42, 0.4) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+.navbar-inverse .navbar-brand {
+    color: #ffffff !important;
+    font-weight: 700;
+}
+.navbar-inverse .navbar-brand span {
+    color: #10b981 !important;
+}
+
+/* Glassmorphism for Sidebar */
+.sidebar {
+    background: rgba(15, 23, 42, 0.4) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+.sidebar ul.nav a {
+    color: #cbd5e1 !important;
+}
+.sidebar ul.nav a:hover, .sidebar ul.nav li.parent ul li a:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+.sidebar ul.nav li.active a {
+    background: rgba(16, 185, 129, 0.8) !important;
+    color: #ffffff !important;
+    border-radius: 8px;
+    margin: 4px 10px;
+}
+.sidebar .form-control {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+}
+
+/* Glassmorphism for Panels (Cards) */
+.panel {
+    background: rgba(30, 41, 59, 0.5) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
+}
+.panel-default > .panel-heading {
+    background: rgba(15, 23, 42, 0.6) !important;
+    color: #ffffff !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+}
+
+/* Table styling for glassmorphism */
+.table {
+    background: transparent !important;
+}
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+.table-bordered, .table-bordered > thead > tr > th, .table-bordered > tbody > tr > td {
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #f1f5f9 !important;
+}
+.table-bordered > thead > tr > th {
+    background: rgba(0, 0, 0, 0.2) !important;
+}
+.table > tbody > tr > td {
+    background: transparent !important;
+}
+
+/* Forms */
+.form-control {
+    background: rgba(15, 23, 42, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    border-radius: 8px !important;
+}
+.form-control:focus {
+    background: rgba(15, 23, 42, 0.8) !important;
+    border-color: #10b981 !important;
+    color: #ffffff !important;
+}
+
+/* Widget Panels (Dashboard) */
+.panel-widget {
+    border-radius: 12px !important;
+}
+.panel-blue, .panel-teal, .panel-orange {
+    background: rgba(30, 41, 59, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+.panel-widget .text-muted {
+    color: #94a3b8 !important;
+}
+.panel-widget .large {
+    color: #ffffff !important;
+}
+.widget-left {
+    background: transparent !important;
+}
+
+/* Fix background for main content to be fully transparent */
+.main {
+    background: transparent !important;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    background: rgba(15, 23, 42, 0.4) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+}

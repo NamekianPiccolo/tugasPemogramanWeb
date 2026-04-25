@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # 1. Service untuk CodeIgniter 4 (Apache + PHP)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ci4_app
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      - CI_ENVIRONMENT=development
+    depends_on:
+      - db
+
+  # 2. Service untuk Database (MySQL)
+  db:
+    image: mysql:8.0
+    container_name: ci4_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: ci4_database
+      MYSQL_USER: ci4_user
+      MYSQL_PASSWORD: ci4_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  # 3. Service untuk Tailwind CSS (Node.js)
+  # Container ini akan memantau perubahan file PHP dan compile CSS otomatis
+  node:
+    image: node:20-alpine
+    container_name: ci4_node
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    # Perintah ini akan install tailwind saat pertama kali jalan, lalu watch
+    command: sh -c "npm install && npm run watch"
+
+# Penyimpanan data MySQL agar tidak hilang saat container dihapus
+volumes:
+  db_data:

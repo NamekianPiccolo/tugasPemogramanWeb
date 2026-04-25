@@ -1,0 +1,70 @@
+Daftar Tugas dan Fitur Kelola Admin
+Berikut adalah rincian aktivitas yang dilakukan oleh Admin:
+
+Login & Dashboard: Mengakses sistem dan memantau ringkasan seluruh arsip melalui tampilan dashboard.
+
+Manajemen Data Dokumen (CRUD): Melakukan pengelolaan informasi detail dokumen yang meliputi judul, tanggal, dan deskripsi.
+
+Pengaturan Kategori: Mengelola kategori untuk mengelompokkan setiap dokumen berdasarkan jenisnya agar lebih terorganisir.
++1
+
+
+Pengaturan Unit / Bagian: Menentukan dan mengelola unit kerja mana yang memiliki atau bertanggung jawab atas suatu dokumen.
+
+
+Pengunggahan Berkas: Mengunggah file fisik dokumen ke dalam sistem dalam format digital seperti PDF atau DOC.
+
+
+Distribusi Dokumen (Transaksi): Melakukan pencatatan terhadap proses distribusi dokumen atau peminjaman dokumen.
+
+
+Pemantauan Riwayat: Melihat histori akses serta melacak riwayat distribusi dokumen yang telah terjadi.
+
+tabel user
+- id 
+- username
+- namaLengkap
+- email
+- password
+- role
+
+tabel file
+- id
+- id_kategori
+- id_unit
+- file_path
+- namaFile
+- size
+- deskripsi
+- file_extention
+
+
+kategori
+- id
+- nama_Kategori
+
+unit_kerja
+- id
+- nama_Unit
+
+distribusi
+- id
+- id_dokumen
+- tgl_distribusi 
+- penerima
+- status
+
+riwayat
+- id
+- id_dokumen
+- id_user
+- aktivitas
+- waktu
+
+izin 
+- id 
+- id_user
+- pesan
+- status_izin
+- id_dokumen
+- tgl_pengajuan
