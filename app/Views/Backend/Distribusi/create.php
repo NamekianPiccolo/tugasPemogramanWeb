@@ -7,14 +7,14 @@
 </div>
 
 <div class="max-w-4xl bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8">
-    <form action="<?= base_url('admin/distribusi/store') ?>" method="post" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <form action="<?= base_url(session()->get('role') . '/distribusi/store') ?>" method="post" class="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         <div class="md:col-span-2">
             <label class="block text-gray-300 text-sm font-semibold mb-2">Pilih Dokumen</label>
             <select name="dokumen_id" class="w-full bg-[#0f172a]/80 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all" required>
                 <option value="" class="bg-gray-900 text-gray-400">-- Pilih Dokumen --</option>
                 <?php foreach($dokumen as $d): ?>
-                    <option value="<?= $d['id'] ?>" class="bg-gray-800 text-white"><?= esc($d['judul']) ?></option>
+                    <option value="<?= $d['id'] ?>" class="bg-gray-800 text-white" <?= (isset($selected_dokumen) && $selected_dokumen == $d['id']) ? 'selected' : '' ?>><?= esc($d['judul']) ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -47,7 +47,7 @@
             <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-xl font-medium shadow-lg shadow-brand-500/30 transition-all">
                 Simpan Data
             </button>
-            <a href="<?= base_url('admin/distribusi') ?>" class="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-medium transition-all">
+            <a href="<?= base_url(session()->get('role') . '/distribusi') ?>" class="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-medium transition-all">
                 Batal
             </a>
         </div>

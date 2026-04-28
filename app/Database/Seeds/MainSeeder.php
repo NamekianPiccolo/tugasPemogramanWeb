@@ -12,6 +12,8 @@ class MainSeeder extends Seeder
         $usersData = [
             [
                 'username'   => 'admin',
+                'nama_lengkap' => 'Administrator Utama',
+                'email'      => 'admin@example.com',
                 'password'   => password_hash('admin123', PASSWORD_DEFAULT),
                 'role'       => 'admin',
                 'created_at' => date('Y-m-d H:i:s'),
@@ -19,8 +21,10 @@ class MainSeeder extends Seeder
             ],
             [
                 'username'   => 'petugas',
+                'nama_lengkap' => 'Petugas Arsip',
+                'email'      => 'petugas@example.com',
                 'password'   => password_hash('petugas123', PASSWORD_DEFAULT),
-                'role'       => 'petugas',
+                'role'       => 'karyawan',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ]

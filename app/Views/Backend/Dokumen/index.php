@@ -6,9 +6,11 @@
         <h1 class="text-3xl font-bold text-white tracking-wide">Data Dokumen Arsip</h1>
         <p class="text-gray-300 mt-2">Kelola dan telusuri seluruh dokumen digital Anda.</p>
     </div>
+    <?php if (session()->get('role') === 'admin') : ?>
     <a href="<?= base_url('admin/dokumen/create') ?>" class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-xl font-medium shadow-lg shadow-brand-500/30 transition-all">
         <i class="fas fa-upload mr-2"></i> Upload Dokumen
     </a>
+    <?php endif; ?>
 </div>
 
 <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
@@ -42,13 +44,26 @@
                             <span class="text-gray-500 text-sm">-</span>
                         <?php endif; ?>
                     </td>
-                    <td class="px-6 py-4 text-center flex justify-center gap-2">
-                        <a href="<?= base_url('admin/dokumen/edit/' . $d['id']) ?>" class="bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500 hover:text-white px-3 py-1.5 rounded-lg transition-colors border border-yellow-500/30">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <a href="<?= base_url('admin/dokumen/delete/' . $d['id']) ?>" class="bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white px-3 py-1.5 rounded-lg transition-colors border border-red-500/30" onclick="return confirm('Yakin ingin menghapus dokumen ini beserta filenya?');">
-                            <i class="fas fa-trash"></i>
-                        </a>
+                    <td class="px-6 py-4 text-center">
+                        <div class="flex justify-center gap-2">
+                            <?php if (session()->get('role') === 'admin') : ?>
+                                <a href="<?= base_url('admin/dokumen/edit/' . $d['id']) ?>" class="bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500 hover:text-white px-3 py-1.5 rounded-lg transition-colors border border-yellow-500/30">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="<?= base_url('admin/dokumen/delete/' . $d['id']) ?>" class="bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white px-3 py-1.5 rounded-lg transition-colors border border-red-500/30" onclick="return confirm('Yakin ingin menghapus dokumen ini beserta filenya?');">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            <?php elseif (isset($d['status_izin']) && $d['status_izin'] === 'Disetujui') : ?>
+                                <a href="<?= base_url('karyawan/dokumen/edit/' . $d['id']) ?>" class="bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500 hover:text-white px-3 py-1.5 rounded-lg transition-colors border border-yellow-500/30" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="<?= base_url('karyawan/distribusi/create?dokumen=' . $d['id']) ?>" class="bg-blue-500/20 text-blue-400 hover:bg-blue-500 hover:text-white px-3 py-1.5 rounded-lg transition-colors border border-blue-500/30" title="Kirim">
+                                    <i class="fas fa-paper-plane"></i>
+                                </a>
+                            <?php else : ?>
+                                <span class="text-xs text-gray-500">No Access</span>
+                            <?php endif; ?>
+                        </div>
                     </td>
                 </tr>
                 <?php endforeach; ?>

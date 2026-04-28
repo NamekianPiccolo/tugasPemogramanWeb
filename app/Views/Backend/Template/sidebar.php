@@ -11,36 +11,69 @@
         <!-- Navigation -->
         <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-2">
             
-            <a href="<?= base_url('admin/dashboard') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 <?= $seg2 == 'dashboard' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30' : 'text-gray-300 hover:bg-white/10 hover:text-white' ?>">
-                <i class="fas fa-chart-pie w-5 text-center"></i>
-                <span class="font-medium">Dashboard</span>
-            </a>
+            <?php if (session()->get('role') === 'admin') : ?>
+                <a href="<?= base_url('admin/dashboard') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 <?= $seg2 == 'dashboard' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30' : 'text-gray-300 hover:bg-white/10 hover:text-white' ?>">
+                    <i class="fas fa-chart-pie w-5 text-center"></i>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+ 
+                <a href="<?= base_url('admin/dokumen') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 <?= $seg2 == 'dokumen' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30' : 'text-gray-300 hover:bg-white/10 hover:text-white' ?>">
+                    <i class="fas fa-folder-open w-5 text-center"></i>
+                    <span class="font-medium">Data Dokumen</span>
+                </a>
+ 
+                <a href="<?= base_url('admin/kategori') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 <?= $seg2 == 'kategori' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30' : 'text-gray-300 hover:bg-white/10 hover:text-white' ?>">
+                    <i class="fas fa-tags w-5 text-center"></i>
+                    <span class="font-medium">Kategori Dokumen</span>
+                </a>
+ 
+                <a href="<?= base_url('admin/unit') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 <?= $seg2 == 'unit' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30' : 'text-gray-300 hover:bg-white/10 hover:text-white' ?>">
+                    <i class="fas fa-briefcase w-5 text-center"></i>
+                    <span class="font-medium">Unit / Bagian</span>
+                </a>
+ 
+                <a href="<?= base_url('admin/user') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 <?= $seg2 == 'user' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30' : 'text-gray-300 hover:bg-white/10 hover:text-white' ?>">
+                    <i class="fas fa-users w-5 text-center"></i>
+                    <span class="font-medium">Kelola User</span>
+                </a>
+ 
+                <a href="<?= base_url('admin/distribusi') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 <?= $seg2 == 'distribusi' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30' : 'text-gray-300 hover:bg-white/10 hover:text-white' ?>">
+                    <i class="fas fa-exchange-alt w-5 text-center"></i>
+                    <span class="font-medium">Distribusi</span>
+                </a>
+ 
+                <a href="<?= base_url('admin/riwayat') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 <?= $seg2 == 'riwayat' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30' : 'text-gray-300 hover:bg-white/10 hover:text-white' ?>">
+                    <i class="fas fa-history w-5 text-center"></i>
+                    <span class="font-medium">Riwayat</span>
+                </a>
 
-            <a href="<?= base_url('admin/dokumen') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 <?= $seg2 == 'dokumen' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30' : 'text-gray-300 hover:bg-white/10 hover:text-white' ?>">
-                <i class="fas fa-folder-open w-5 text-center"></i>
-                <span class="font-medium">Data Dokumen</span>
-            </a>
+                <a href="<?= base_url('admin/izin') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 <?= $seg2 == 'izin' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30' : 'text-gray-300 hover:bg-white/10 hover:text-white' ?>">
+                    <i class="fas fa-check-circle w-5 text-center"></i>
+                    <span class="font-medium">Persetujuan Izin</span>
+                </a>
 
-            <a href="<?= base_url('admin/kategori') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 <?= $seg2 == 'kategori' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30' : 'text-gray-300 hover:bg-white/10 hover:text-white' ?>">
-                <i class="fas fa-tags w-5 text-center"></i>
-                <span class="font-medium">Kategori Dokumen</span>
-            </a>
-
-            <a href="<?= base_url('admin/unit') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 <?= $seg2 == 'unit' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30' : 'text-gray-300 hover:bg-white/10 hover:text-white' ?>">
-                <i class="fas fa-briefcase w-5 text-center"></i>
-                <span class="font-medium">Unit / Bagian</span>
-            </a>
-
-            <a href="<?= base_url('admin/distribusi') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 <?= $seg2 == 'distribusi' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30' : 'text-gray-300 hover:bg-white/10 hover:text-white' ?>">
-                <i class="fas fa-exchange-alt w-5 text-center"></i>
-                <span class="font-medium">Distribusi</span>
-            </a>
-
-            <a href="<?= base_url('admin/riwayat') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 <?= $seg2 == 'riwayat' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30' : 'text-gray-300 hover:bg-white/10 hover:text-white' ?>">
-                <i class="fas fa-history w-5 text-center"></i>
-                <span class="font-medium">Riwayat</span>
-            </a>
-
+                <a href="<?= base_url('admin/revisi') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 <?= $seg2 == 'revisi' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30' : 'text-gray-300 hover:bg-white/10 hover:text-white' ?>">
+                    <i class="fas fa-file-signature w-5 text-center"></i>
+                    <span class="font-medium">Review Perubahan</span>
+                </a>
+<?php else : ?>
+                <!-- Menu Karyawan -->
+                <a href="<?= base_url('karyawan/dashboard') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 <?= $seg2 == 'dashboard' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30' : 'text-gray-300 hover:bg-white/10 hover:text-white' ?>">
+                    <i class="fas fa-chart-pie w-5 text-center"></i>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+ 
+                <a href="<?= base_url('karyawan/dokumen') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 <?= $seg2 == 'dokumen' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30' : 'text-gray-300 hover:bg-white/10 hover:text-white' ?>">
+                    <i class="fas fa-folder-open w-5 text-center"></i>
+                    <span class="font-medium">Lihat Dokumen</span>
+                </a>
+                
+                <a href="<?= base_url('karyawan/izin') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 <?= $seg2 == 'izin' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30' : 'text-gray-300 hover:bg-white/10 hover:text-white' ?>">
+                    <i class="fas fa-key w-5 text-center"></i>
+                    <span class="font-medium">Izin Akses</span>
+                </a>
+            <?php endif; ?>
+ 
         </nav>
 
         <!-- User Info & Logout -->

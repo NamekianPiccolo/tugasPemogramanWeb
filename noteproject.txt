@@ -1,0 +1,49 @@
+
+tabel user
+- id 
+- username
+- namaLengkap
+- email
+- password
+- role (admin, karyawan)
+
+tabel file
+- id
+- id_kategori
+- id_unit
+- file_path
+- namaFile
+- size
+- deskripsi
+- file_extention
+
+
+kategori
+- id
+- nama_Kategori
+
+unit_kerja
+- id
+- nama_Unit
+
+dokumen
+- id
+- id_dokumen
+- tgl_distribusi 
+- penerima
+- status
+
+riwayat
+- id
+- id_dokumen
+- id_user
+- aktivitas
+- waktu
+
+izin 
+- id 
+- id_user
+- pesan
+- status_izin
+- id_dokumen
+- tgl_pengajuan

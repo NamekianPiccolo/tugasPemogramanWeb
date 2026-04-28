@@ -16,6 +16,8 @@ class CreateDokumenTable extends Migration
             'file_dokumen' => ['type' => 'VARCHAR', 'constraint' => '255'],
             'kategori_id'  => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'null' => true],
             'unit_id'      => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'null' => true],
+            'ukuran_file'  => ['type' => 'INT', 'null' => true],
+            'ekstensi_file' => ['type' => 'VARCHAR', 'constraint' => '10', 'null' => true],
             'created_at'   => ['type' => 'DATETIME', 'null' => true],
             'updated_at'   => ['type' => 'DATETIME', 'null' => true],
         ]);

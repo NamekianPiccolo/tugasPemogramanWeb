@@ -26,7 +26,7 @@ tabel user
 - namaLengkap
 - email
 - password
-- role
+- role (admin, karyawan)
 
 tabel file
 - id
@@ -47,7 +47,7 @@ unit_kerja
 - id
 - nama_Unit
 
-distribusi
+dokumen
 - id
 - id_dokumen
 - tgl_distribusi 
@@ -68,3 +68,40 @@ izin
 - status_izin
 - id_dokumen
 - tgl_pengajuan
+
+
+# Memberikan kepemilikan folder ke user www-data (user Apache/PHP-FPM)
+docker exec -it tugaspemogramanweb-app-1 chown -R www-data:www-data /var/www/html/writable
+
+# Memberikan izin akses penuh ke folder tersebut
+docker exec -it tugaspemogramanweb-app-1 chmod -R 777 /var/www/html/writable
+
+
+docker-compose up -d --build
+
+
+untuk nginx
+
+server {
+    listen 80;
+    index index.php index.html;
+    server_name localhost;
+    root /var/www/html/public; # CI4 root ada di folder public
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass app:9000; # Pastikan ini mengarah ke service 'app'
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+}
+
+app.baseURL = 'http://104.234.26.94:8080/'
+
+docker exec -it ci4_app composer install
+
+composer.jsonnya ada typo

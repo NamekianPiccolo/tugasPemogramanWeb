@@ -7,7 +7,9 @@
 </div>
 
 <div class="max-w-4xl bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8">
-    <form action="<?= base_url('admin/dokumen/update/' . $dokumen['id']) ?>" method="post" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <form action="<?= base_url(session()->get('role') . '/dokumen/update/' . $dokumen['id']) ?>" method="post" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <input type="hidden" name="dokumen_id" value="<?= $dokumen['id'] ?>">
+        <input type="hidden" name="file_lama" value="<?= $dokumen['file_dokumen'] ?>">
         
         <div class="md:col-span-2">
             <label class="block text-gray-300 text-sm font-semibold mb-2">Judul Dokumen</label>
@@ -56,7 +58,7 @@
             <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-xl font-medium shadow-lg shadow-brand-500/30 transition-all">
                 Simpan Perubahan
             </button>
-            <a href="<?= base_url('admin/dokumen') ?>" class="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-medium transition-all">
+            <a href="<?= base_url(session()->get('role') . '/dokumen') ?>" class="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-medium transition-all">
                 Batal
             </a>
         </div>

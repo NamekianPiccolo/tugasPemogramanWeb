@@ -29,6 +29,7 @@ class DistribusiController extends BaseController
     public function create()
     {
         $data['dokumen'] = $this->dokumenModel->findAll();
+        $data['selected_dokumen'] = $this->request->getGet('dokumen');
         return view('Backend/Distribusi/create', $data);
     }
 
@@ -42,7 +43,8 @@ class DistribusiController extends BaseController
             'status' => $this->request->getPost('status')
         ]);
         session()->setFlashdata('success', 'Data distribusi/peminjaman berhasil ditambahkan.');
-        return redirect()->to('/admin/distribusi');
+        $role = session()->get('role');
+        return redirect()->to("/$role/distribusi");
     }
 
     public function edit($id)
@@ -62,13 +64,15 @@ class DistribusiController extends BaseController
             'status' => $this->request->getPost('status')
         ]);
         session()->setFlashdata('success', 'Data distribusi berhasil diubah.');
-        return redirect()->to('/admin/distribusi');
+        $role = session()->get('role');
+        return redirect()->to("/$role/distribusi");
     }
 
     public function delete($id)
     {
         $this->distribusiModel->delete($id);
         session()->setFlashdata('success', 'Data distribusi berhasil dihapus.');
-        return redirect()->to('/admin/distribusi');
+        $role = session()->get('role');
+        return redirect()->to("/$role/distribusi");
     }
 }

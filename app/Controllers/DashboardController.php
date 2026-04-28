@@ -16,11 +16,20 @@ class DashboardController extends BaseController
         $unitModel = new UnitModel();
 
         $data = [
+            'title' => 'Dashboard Admin',
             'total_dokumen' => $dokumenModel->countAllResults(),
             'total_kategori' => $kategoriModel->countAllResults(),
             'total_unit' => $unitModel->countAllResults(),
         ];
 
         return view('Backend/dashboard', $data);
+    }
+
+    public function karyawan()
+    {
+        $data = [
+            'title' => 'Dashboard Karyawan'
+        ];
+        return view('Backend/karyawan_dashboard', $data);
     }
 }

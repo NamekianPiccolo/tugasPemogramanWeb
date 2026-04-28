@@ -27,11 +27,15 @@ class AuthController extends BaseController
         if ($dataUser) {
             if (password_verify($password, $dataUser['password'])) {
                 session()->set([
-                    'username'   => $dataUser['username'],
-                    'role'       => $dataUser['role'],
-                    'isLoggedIn' => true
+                    'id'           => $dataUser['id'],
+                    'username'     => $dataUser['username'],
+                    'nama_lengkap' => $dataUser['nama_lengkap'],
+                    'email'        => $dataUser['email'],
+                    'role'         => $dataUser['role'],
+                    'isLoggedIn'   => true
                 ]);
-                return redirect()->to('/admin/dashboard');
+                $redirectPath = ($dataUser['role'] === 'admin') ? '/admin/dashboard' : '/karyawan/dashboard';
+                return redirect()->to($redirectPath);
             } else {
                 session()->setFlashdata('error', 'Password salah');
                 return redirect()->back();

@@ -63,13 +63,14 @@ class DokumenController extends BaseController
         // Catat Riwayat
         $this->riwayatModel->save([
             'dokumen_id' => $dokumenId,
-            'user_id' => 1, // Seharusnya dari session, dihardcode untuk demo
+            'user_id' => session()->get('id'), 
             'aksi' => 'Upload Dokumen',
-            'keterangan' => 'Dokumen baru diunggah oleh admin.'
+            'keterangan' => 'Dokumen baru diunggah oleh ' . session()->get('username')
         ]);
 
         session()->setFlashdata('success', 'Dokumen berhasil ditambahkan.');
-        return redirect()->to('/admin/dokumen');
+        $role = session()->get('role');
+        return redirect()->to("/$role/dokumen");
     }
 
     public function edit($id)
@@ -105,7 +106,8 @@ class DokumenController extends BaseController
         ]);
 
         session()->setFlashdata('success', 'Dokumen berhasil diubah.');
-        return redirect()->to('/admin/dokumen');
+        $role = session()->get('role');
+        return redirect()->to("/$role/dokumen");
     }
 
     public function delete($id)
@@ -116,6 +118,20 @@ class DokumenController extends BaseController
         }
         $this->dokumenModel->delete($id);
         session()->setFlashdata('success', 'Dokumen berhasil dihapus.');
-        return redirect()->to('/admin/dokumen');
+        $role = session()->get('role');
+        return redirect()->to("/$role/dokumen");
+    }
+
+    public function karyawan_index()
+    {
+        $userId = session()->get('id');
+        $data['dokumen'] = $this->dokumenModel
+            ->select('dokumen.*, kategori.nama_kategori, unit.nama_unit, izin.status_izin')
+            ->join('kategori', 'kategori.id = dokumen.kategori_id', 'left')
+            ->join('unit', 'unit.id = dokumen.unit_id', 'left')
+            ->join('izin', "izin.dokumen_id = dokumen.id AND izin.user_id = $userId", 'left')
+            ->findAll();
+        
+        return view('Backend/Dokumen/index', $data);
     }
 }
