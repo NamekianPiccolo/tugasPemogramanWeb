@@ -82,6 +82,24 @@ docker exec -it ci4_app php spark db:seed MainSeeder
 
 ---
 
+## 🌐 Cloudflare Tunnel Deployment
+
+This project includes a built-in Cloudflare Tunnel (`cloudflared`) service in `docker-compose.yml` to securely expose your application to the web with free SSL and DDoS protection.
+
+### How to use Cloudflare Tunnel:
+1. Go to your **Cloudflare Dashboard > Zero Trust > Networks > Tunnels** and create a new tunnel.
+2. Under "Install and run a connector", copy your **Tunnel Token**.
+3. Open your local `.env` and paste your token:
+   ```ini
+   CLOUDFLARE_TUNNEL_TOKEN = your_copied_cloudflare_token_here
+   ```
+4. Start your services. The tunnel container will automatically start and route traffic securely to your CodeIgniter app container:
+   ```bash
+   docker-compose up -d
+   ```
+
+---
+
 ## 🛠️ Development & Utilities
 
 ### Watch Tailwind CSS Changes
