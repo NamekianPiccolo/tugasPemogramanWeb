@@ -4,7 +4,7 @@ set -e
 # Pindah ke directory project
 cd /var/www/html
 
-# Cek jika folder vendor belum ada (terhapus atau tertutup oleh mounting volume VPS),
+# Cek jika folder vendor tidak ada (terhapus atau tertutup oleh mounting volume VPS),
 # jalankan composer install otomatis untuk memulihkannya.
 if [ ! -d "/var/www/html/vendor" ]; then
     echo "======================================================"
@@ -12,6 +12,14 @@ if [ ! -d "/var/www/html/vendor" ]; then
     echo "======================================================"
     composer install --no-interaction --optimize-autoloader
 fi
+
+# Sesuaikan kepemilikan dan hak akses folder 'writable' secara otomatis
+# agar Apache (user www-data) dapat menulis cache, logs, dan upload file.
+echo "======================================================"
+echo "🔒 Adjusting writable directory permissions..."
+echo "======================================================"
+chown -R www-data:www-data /var/www/html/writable
+chmod -R 777 /var/www/html/writable
 
 echo "======================================================"
 echo "⏳ Waiting for MySQL database connection..."
