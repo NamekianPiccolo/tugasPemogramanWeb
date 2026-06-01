@@ -29,7 +29,9 @@ class MainSeeder extends Seeder
                 'updated_at' => date('Y-m-d H:i:s'),
             ]
         ];
-        $this->db->table('users')->insertBatch($usersData);
+        if ($this->db->table('users')->countAllResults() === 0) {
+            $this->db->table('users')->insertBatch($usersData);
+        }
 
         // 2. Seed Kategori Dokumen
         $kategoriData = [
@@ -38,7 +40,9 @@ class MainSeeder extends Seeder
             ['nama_kategori' => 'Surat Keluar', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
             ['nama_kategori' => 'Laporan Keuangan', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
         ];
-        $this->db->table('kategori')->insertBatch($kategoriData);
+        if ($this->db->table('kategori')->countAllResults() === 0) {
+            $this->db->table('kategori')->insertBatch($kategoriData);
+        }
 
         // 3. Seed Unit / Bagian
         $unitData = [
@@ -47,7 +51,9 @@ class MainSeeder extends Seeder
             ['nama_unit' => 'Akademik', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
             ['nama_unit' => 'Kemahasiswaan', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
         ];
-        $this->db->table('unit')->insertBatch($unitData);
+        if ($this->db->table('unit')->countAllResults() === 0) {
+            $this->db->table('unit')->insertBatch($unitData);
+        }
 
         // 4. Seed Dokumen (Contoh Dummy Data 1 Dokumen)
         $dokumenData = [
@@ -62,7 +68,9 @@ class MainSeeder extends Seeder
                 'updated_at'   => date('Y-m-d H:i:s'),
             ]
         ];
-        $this->db->table('dokumen')->insertBatch($dokumenData);
+        if ($this->db->table('dokumen')->countAllResults() === 0) {
+            $this->db->table('dokumen')->insertBatch($dokumenData);
+        }
 
         // 5. Seed Distribusi Dokumen
         $distribusiData = [
@@ -76,7 +84,9 @@ class MainSeeder extends Seeder
                 'updated_at'      => date('Y-m-d H:i:s'),
             ]
         ];
-        $this->db->table('distribusi')->insertBatch($distribusiData);
+        if ($this->db->table('distribusi')->countAllResults() === 0) {
+            $this->db->table('distribusi')->insertBatch($distribusiData);
+        }
 
         // 6. Seed Riwayat Aktivitas
         $riwayatData = [
@@ -88,6 +98,8 @@ class MainSeeder extends Seeder
                 'created_at'  => date('Y-m-d H:i:s'),
             ]
         ];
-        $this->db->table('riwayat')->insertBatch($riwayatData);
+        if ($this->db->table('riwayat')->countAllResults() === 0) {
+            $this->db->table('riwayat')->insertBatch($riwayatData);
+        }
     }
 }
