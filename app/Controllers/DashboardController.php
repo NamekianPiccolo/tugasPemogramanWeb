@@ -22,14 +22,21 @@ class DashboardController extends BaseController
             'total_unit' => $unitModel->countAllResults(),
         ];
 
-        return view('Backend/dashboard', $data);
+        return view('admin/dashboard', $data);
     }
 
     public function karyawan()
     {
+        $dokumenModel = new DokumenModel();
+        $izinModel = new \App\Models\IzinModel();
+        $userId = session()->get('id');
+
         $data = [
-            'title' => 'Dashboard Karyawan'
+            'title' => 'Dashboard Karyawan',
+            'total_dokumen' => $dokumenModel->countAllResults(),
+            'izin_pending' => $izinModel->where('user_id', $userId)->where('status_izin', 'Menunggu')->countAllResults(),
+            'izin_disetujui' => $izinModel->where('user_id', $userId)->where('status_izin', 'Disetujui')->countAllResults(),
         ];
-        return view('Backend/karyawan_dashboard', $data);
+        return view('admin/dashboard', $data);
     }
 }

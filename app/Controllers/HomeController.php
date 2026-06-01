@@ -18,5 +18,8 @@ class HomeController extends BaseController
         $data['kelas'] = $kelas;
         return view('segment_view', $data);
     }
+    
+
+
 }
 

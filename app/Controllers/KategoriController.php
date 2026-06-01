@@ -17,42 +17,60 @@ class KategoriController extends BaseController
     public function index()
     {
         $data['kategori'] = $this->kategoriModel->findAll();
-        return view('Backend/Kategori/index', $data);
+        $data['title'] = 'Data Kategori Dokumen';
+        return view('admin/kategori/index', $data);
     }
 
     public function create()
     {
-        return view('Backend/Kategori/create');
+        $data['title'] = 'Tambah Kategori Dokumen';
+        return view('admin/kategori/create', $data);
     }
 
     public function store()
     {
-        $this->kategoriModel->save([
-            'nama_kategori' => $this->request->getPost('nama_kategori')
-        ]);
-        session()->setFlashdata('success', 'Kategori berhasil ditambahkan.');
-        return redirect()->to('/admin/kategori');
+        try {
+            $this->kategoriModel->save([
+                'nama_kategori' => $this->request->getPost('nama_kategori')
+            ]);
+            session()->setFlashdata('success', 'Kategori berhasil ditambahkan.');
+            return redirect()->to('/admin/kategori');
+        } catch (\Exception $e) {
+            session()->setFlashdata('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
     public function edit($id)
     {
         $data['kategori'] = $this->kategoriModel->find($id);
-        return view('Backend/Kategori/edit', $data);
+        $data['title'] = 'Edit Kategori Dokumen';
+        return view('admin/kategori/edit', $data);
     }
 
     public function update($id)
     {
-        $this->kategoriModel->update($id, [
-            'nama_kategori' => $this->request->getPost('nama_kategori')
-        ]);
-        session()->setFlashdata('success', 'Kategori berhasil diubah.');
-        return redirect()->to('/admin/kategori');
+        try {
+            $this->kategoriModel->update($id, [
+                'nama_kategori' => $this->request->getPost('nama_kategori')
+            ]);
+            session()->setFlashdata('success', 'Kategori berhasil diubah.');
+            return redirect()->to('/admin/kategori');
+        } catch (\Exception $e) {
+            session()->setFlashdata('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
     public function delete($id)
     {
-        $this->kategoriModel->delete($id);
-        session()->setFlashdata('success', 'Kategori berhasil dihapus.');
-        return redirect()->to('/admin/kategori');
+        try {
+            $this->kategoriModel->delete($id);
+            session()->setFlashdata('success', 'Kategori berhasil dihapus.');
+            return redirect()->to('/admin/kategori');
+        } catch (\Exception $e) {
+            session()->setFlashdata('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 }

@@ -23,6 +23,7 @@ class RiwayatController extends BaseController
             ->orderBy('riwayat.created_at', 'DESC')
             ->findAll();
             
-        return view('Backend/Riwayat/index', $data);
+        $data['title'] = 'Riwayat Aktivitas';
+        return view('admin/riwayat/index', $data);
     }
 }

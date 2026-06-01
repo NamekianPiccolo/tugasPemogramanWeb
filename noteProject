@@ -102,6 +102,6 @@ server {
 
 app.baseURL = 'http://104.234.26.94:8080/'
 
-docker exec -it ci4_app composer install
+    docker exec -it ci4_app composer install
 
 composer.jsonnya ada typo

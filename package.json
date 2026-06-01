@@ -1,8 +1,4 @@
 {
-  "devDependencies": {
-    "@tailwindcss/cli": "^4.2.2",
-    "tailwindcss": "^4.2.2"
-  },
   "name": "tugaspemogramanweb",
   "description": "CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.\r More information can be found at the [official site](https://codeigniter.com).",
   "version": "1.0.0",
@@ -11,9 +7,9 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx @tailwindcss/cli -i ./src/input.css -o ./public/css/output.css",
-    "watch": "npx @tailwindcss/cli -i ./src/input.css -o ./public/css/output.css --watch"
+    "build": "tailwindcss -i ./public/css/input.css -o ./public/css/output.css",
+    "watch": "tailwindcss -i ./public/css/input.css -o ./public/css/output.css --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -24,9 +20,5 @@
   "bugs": {
     "url": "https://github.com/NamekianPiccolo/tugasPemogramanWeb/issues"
   },
-  "homepage": "https://github.com/NamekianPiccolo/tugasPemogramanWeb#readme",
-  "dependencies": {
-    "autoprefixer": "^10.5.0",
-    "postcss": "^8.5.10"
-  }
+  "homepage": "https://github.com/NamekianPiccolo/tugasPemogramanWeb#readme"
 }

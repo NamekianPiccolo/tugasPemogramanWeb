@@ -23,56 +23,74 @@ class DistribusiController extends BaseController
             ->select('distribusi.*, dokumen.judul')
             ->join('dokumen', 'dokumen.id = distribusi.dokumen_id', 'left')
             ->findAll();
-        return view('Backend/Distribusi/index', $data);
+        $data['title'] = 'Data Distribusi Dokumen';
+        return view('admin/distribusi/index', $data);
     }
 
     public function create()
     {
         $data['dokumen'] = $this->dokumenModel->findAll();
         $data['selected_dokumen'] = $this->request->getGet('dokumen');
-        return view('Backend/Distribusi/create', $data);
+        $data['title'] = 'Tambah Distribusi Dokumen';
+        return view('admin/distribusi/create', $data);
     }
 
     public function store()
     {
-        $this->distribusiModel->save([
-            'dokumen_id' => $this->request->getPost('dokumen_id'),
-            'peminjam' => $this->request->getPost('peminjam'),
-            'tanggal_pinjam' => $this->request->getPost('tanggal_pinjam'),
-            'tanggal_kembali' => $this->request->getPost('tanggal_kembali'),
-            'status' => $this->request->getPost('status')
-        ]);
-        session()->setFlashdata('success', 'Data distribusi/peminjaman berhasil ditambahkan.');
-        $role = session()->get('role');
-        return redirect()->to("/$role/distribusi");
+        try {
+            $this->distribusiModel->save([
+                'dokumen_id' => $this->request->getPost('dokumen_id'),
+                'peminjam' => $this->request->getPost('peminjam'),
+                'tanggal_pinjam' => $this->request->getPost('tanggal_pinjam'),
+                'tanggal_kembali' => $this->request->getPost('tanggal_kembali'),
+                'status' => $this->request->getPost('status')
+            ]);
+            session()->setFlashdata('success', 'Data distribusi/peminjaman berhasil ditambahkan.');
+            $role = session()->get('role');
+            return redirect()->to("/$role/distribusi");
+        } catch (\Exception $e) {
+            session()->setFlashdata('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
     public function edit($id)
     {
         $data['distribusi'] = $this->distribusiModel->find($id);
         $data['dokumen'] = $this->dokumenModel->findAll();
-        return view('Backend/Distribusi/edit', $data);
+        $data['title'] = 'Edit Distribusi Dokumen';
+        return view('admin/distribusi/edit', $data);
     }
 
     public function update($id)
     {
-        $this->distribusiModel->update($id, [
-            'dokumen_id' => $this->request->getPost('dokumen_id'),
-            'peminjam' => $this->request->getPost('peminjam'),
-            'tanggal_pinjam' => $this->request->getPost('tanggal_pinjam'),
-            'tanggal_kembali' => $this->request->getPost('tanggal_kembali'),
-            'status' => $this->request->getPost('status')
-        ]);
-        session()->setFlashdata('success', 'Data distribusi berhasil diubah.');
-        $role = session()->get('role');
-        return redirect()->to("/$role/distribusi");
+        try {
+            $this->distribusiModel->update($id, [
+                'dokumen_id' => $this->request->getPost('dokumen_id'),
+                'peminjam' => $this->request->getPost('peminjam'),
+                'tanggal_pinjam' => $this->request->getPost('tanggal_pinjam'),
+                'tanggal_kembali' => $this->request->getPost('tanggal_kembali'),
+                'status' => $this->request->getPost('status')
+            ]);
+            session()->setFlashdata('success', 'Data distribusi berhasil diubah.');
+            $role = session()->get('role');
+            return redirect()->to("/$role/distribusi");
+        } catch (\Exception $e) {
+            session()->setFlashdata('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
     public function delete($id)
     {
-        $this->distribusiModel->delete($id);
-        session()->setFlashdata('success', 'Data distribusi berhasil dihapus.');
-        $role = session()->get('role');
-        return redirect()->to("/$role/distribusi");
+        try {
+            $this->distribusiModel->delete($id);
+            session()->setFlashdata('success', 'Data distribusi berhasil dihapus.');
+            $role = session()->get('role');
+            return redirect()->to("/$role/distribusi");
+        } catch (\Exception $e) {
+            session()->setFlashdata('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 }

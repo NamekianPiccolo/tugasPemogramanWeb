@@ -7,7 +7,7 @@ use CodeIgniter\Router\RouteCollection;
  */
  
 // Route Home View
-$routes->get('/', 'HomeController::index');
+
 $routes->get('/login', 'AuthController::index');
 $routes->post('/login', 'AuthController::process');
 $routes->get('/logout', 'AuthController::logout');
@@ -93,3 +93,13 @@ $routes->group('karyawan', ['filter' => ['auth', 'role:karyawan']], static funct
         $routes->post('store', 'DistribusiController::store');
     });
 });
+
+
+
+$routes->get('/', 'AuthController::index');
+$routes->get('/home/coba-parameter/(:alpha)/(:num)/(:alphanum)', 'Home::belajar_segment/$1/$2/$3');
+
+$routes->get('/das', 'Admin::dash');
+// Routes untuk login admin
+$routes->get('/admin/login-admin', 'Admin::login');
+    

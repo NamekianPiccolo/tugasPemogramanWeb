@@ -3,185 +3,328 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Digital Archive System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="<?= base_url('css/output.css') ?>">
+    <title>Login — Workspace DMS</title>
+    <!-- Organic Theme Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Kalam:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="<?= base_url('css/output.css') ?>" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
+        :root {
+            --bg: #f4ebd8;
+            --surface: #fffcf2;
+            --primary: #84a98c;
+            --secondary: #e07a5f;
+            --txt: #3d405b;
+            --muted: #8a817c;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
         body {
-            font-family: 'Outfit', sans-serif;
-            background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), url('<?= base_url('images/login_bg.png') ?>');
+            margin: 0; padding: 0;
+            background-color: var(--bg);
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            font-family: 'Lora', serif;
+            color: var(--txt);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .organic-shape {
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+        }
+
+        .container {
+            background: var(--surface);
+            position: relative;
+            overflow: hidden;
+            width: 800px;
+            max-width: 90%;
+            min-height: 520px;
+            border: 3px solid var(--txt);
+            box-shadow: 6px 6px 0px var(--txt);
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+        }
+
+        .form-container {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: var(--surface);
+        }
+
+        .sign-in-container {
+            left: 0;
+            width: 50%;
+            z-index: 2;
+        }
+        .container.right-panel-active .sign-in-container {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        .sign-up-container {
+            left: 0;
+            width: 50%;
+            opacity: 0;
+            z-index: 1;
+        }
+        .container.right-panel-active .sign-up-container {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+            animation: show 0.6s;
+        }
+
+        @keyframes show {
+            0%, 49.99% { opacity: 0; z-index: 1; }
+            50%, 100% { opacity: 1; z-index: 5; }
+        }
+
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 100;
+        }
+        .container.right-panel-active .overlay-container {
+            transform: translateX(-100%);
+        }
+
+        .overlay {
+            background: var(--primary);
+            background-repeat: no-repeat;
             background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            background-position: 0 0;
+            color: #fffcf2;
+            position: relative;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            transform: translateX(0);
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            border-left: 3px solid var(--txt);
+            border-right: 3px solid var(--txt);
+        }
+        .container.right-panel-active .overlay {
+            transform: translateX(50%);
+            background: var(--secondary);
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        .overlay-panel {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 40px;
+            text-align: center;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transform: translateX(0);
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
-        .input-glass {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
+        .overlay-left {
+            transform: translateX(-20%);
+        }
+        .container.right-panel-active .overlay-left {
+            transform: translateX(0);
         }
 
-        .input-glass:focus {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: #1D9E75;
-            box-shadow: 0 0 20px rgba(29, 158, 117, 0.2);
+        .overlay-right {
+            right: 0;
+            transform: translateX(0);
+        }
+        .container.right-panel-active .overlay-right {
+            transform: translateX(20%);
         }
 
-        .btn-gradient {
-            background: linear-gradient(135deg, #1D9E75 0%, #0F6E56 100%);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        h1 {
+            font-family: 'Kalam', cursive;
+            font-weight: 700;
+            margin: 0;
+            margin-bottom: 16px;
+            font-size: 32px;
+            color: var(--txt);
+        }
+        .overlay-panel h1 {
+            color: #fffcf2;
         }
 
-        .btn-gradient:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(15, 110, 86, 0.3);
-            filter: brightness(1.1);
+        p {
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 24px;
+            margin: 10px 0 30px;
         }
 
-        .float-animation {
-            animation: floating 6s ease-in-out infinite;
+        .ni {
+            background-color: transparent;
+            border: 2px solid var(--txt);
+            padding: 12px 15px;
+            margin: 8px 0;
+            width: 100%;
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            outline: none;
+            font-family: 'Lora', serif;
+            font-size: 15px;
+            color: var(--txt);
+            transition: all 0.2s;
+        }
+        .ni:focus {
+            background-color: rgba(132, 169, 140, 0.1);
+            transform: scale(1.02);
+            box-shadow: 2px 2px 0px var(--txt);
+        }
+        .ni::placeholder {
+            color: var(--muted);
+            font-family: 'Kalam', cursive;
         }
 
-        @keyframes floating {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        .btn-custom {
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            border: 2px solid var(--txt);
+            background-color: var(--primary);
+            color: #fffcf2;
+            font-size: 16px;
+            font-family: 'Kalam', cursive;
+            font-weight: bold;
+            padding: 10px 45px;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 3px 3px 0px var(--txt);
         }
 
-        /* Custom Scrollbar for the info area */
-        .custom-scroll::-webkit-scrollbar {
-            width: 4px;
+        .btn-custom:active { transform: translateY(2px); box-shadow: 1px 1px 0px var(--txt); }
+        .btn-custom:hover { background-color: #6a8c72; }
+        .btn-custom:focus { outline: none; }
+        
+        .btn-custom.ghost {
+            background-color: transparent;
+            border-color: #fffcf2;
+            color: #fffcf2;
+            box-shadow: 3px 3px 0px #fffcf2;
         }
-        .custom-scroll::-webkit-scrollbar-track {
-            background: transparent;
+        .btn-custom.ghost:hover {
+            background-color: rgba(255,255,255,0.1);
         }
-        .custom-scroll::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+        .btn-custom.ghost:active {
+            transform: translateY(2px); box-shadow: 1px 1px 0px #fffcf2;
+        }
+
+        /* Scribble decoration */
+        .scribble {
+            position: absolute;
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: 0;
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+<body>
 
-    <!-- Ambient Glow -->
-    <div class="absolute top-1/4 -left-20 w-80 h-80 bg-brand-500/20 rounded-full blur-[100px] opacity-50"></div>
-    <div class="absolute bottom-1/4 -right-20 w-80 h-80 bg-teal-500/20 rounded-full blur-[100px] opacity-50"></div>
+<!-- Background Decorations -->
+<svg class="scribble" style="top: 10%; left: 5%; width: 150px;" viewBox="0 0 100 100">
+    <path fill="none" stroke="var(--txt)" stroke-width="2" d="M10 50 Q 30 20 50 50 T 90 50" />
+</svg>
+<svg class="scribble" style="bottom: 10%; right: 5%; width: 200px;" viewBox="0 0 100 100">
+    <path fill="none" stroke="var(--secondary)" stroke-width="2" d="M10 80 Q 40 10 90 80" />
+</svg>
 
-    <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 glass-card rounded-[3rem] overflow-hidden animate-in fade-in zoom-in duration-700">
-        
-        <!-- Left Side: Login Form -->
-        <div class="p-10 lg:p-20 flex flex-col justify-center">
-            <div class="mb-10">
-                <div class="w-16 h-16 bg-brand-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-brand-500/30 float-animation">
-                    <i class="fas fa-archive text-white text-2xl"></i>
-                </div>
-                <h1 class="text-4xl font-bold text-white tracking-tight mb-3">Selamat Datang</h1>
-                <p class="text-gray-400">Masuk untuk mengakses sistem arsip digital.</p>
+<div class="container" id="container">
+    
+    <!-- ADMIN LOGIN (Sign In / Default Left) -->
+    <div class="form-container sign-in-container">
+        <form action="<?= base_url('login') ?>" method="POST" class="h-full flex flex-col justify-center items-center text-center">
+            <?= csrf_field() ?>
+            <h1>Sign in Admin</h1>
+            
+            <?php if (session()->getFlashdata('error')): ?>
+            <div class="text-xs mb-4 p-3 w-full organic-shape" style="background:rgba(224,122,95,0.15); color:var(--txt); border: 2px solid var(--secondary); font-family: 'Kalam', cursive; font-weight: bold; font-size: 14px;">
+                <?= session()->getFlashdata('error') ?>
             </div>
-
-            <?php if (session()->getFlashdata('error')) : ?>
-                <div class="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-2xl mb-8 flex items-center gap-3 text-sm font-medium animate-in slide-in-from-top duration-300">
-                    <i class="fas fa-circle-exclamation text-lg"></i>
-                    <?= session()->getFlashdata('error') ?>
-                </div>
             <?php endif; ?>
 
-            <form action="<?= base_url('login') ?>" method="POST" class="space-y-6">
-                <?= csrf_field() ?>
-                
-                <div class="space-y-2">
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Username</label>
-                    <div class="relative">
-                        <i class="far fa-user absolute left-5 top-1/2 -translate-y-1/2 text-gray-500"></i>
-                        <input type="text" name="username" placeholder="Masukkan username" class="w-full input-glass p-5 pl-14 rounded-2xl text-white outline-none placeholder:text-gray-600 font-medium" required>
-                    </div>
-                </div>
-
-                <div class="space-y-2">
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Password</label>
-                    <div class="relative">
-                        <i class="far fa-lock absolute left-5 top-1/2 -translate-y-1/2 text-gray-500"></i>
-                        <input type="password" name="password" placeholder="Masukkan password" class="w-full input-glass p-5 pl-14 rounded-2xl text-white outline-none placeholder:text-gray-600 font-medium" required>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-between text-sm px-1">
-                    <label class="flex items-center gap-2 text-gray-500 cursor-pointer group">
-                        <input type="checkbox" class="rounded border-gray-700 bg-gray-800 text-brand-500 focus:ring-brand-500/20 transition-all">
-                        <span class="group-hover:text-gray-300 transition-colors">Ingat Saya</span>
-                    </label>
-                    <a href="#" class="text-brand-400 hover:text-brand-300 font-semibold transition-all">Lupa Password?</a>
-                </div>
-
-                <button type="submit" class="w-full btn-gradient text-white font-bold py-5 rounded-2xl shadow-xl shadow-brand-500/10 text-lg">
-                    Masuk Sekarang
-                </button>
-            </form>
-
-            <div class="mt-12 pt-8 border-t border-white/5 text-center">
-                <p class="text-gray-500 text-sm">
-                    Belum punya akun? <span class="text-brand-400 font-semibold cursor-pointer hover:text-brand-300 transition-colors" id="showInfo">Hubungi Admin</span>
-                </p>
-            </div>
-        </div>
-
-        <!-- Right Side: Info/Decoration -->
-        <div class="hidden lg:flex flex-col justify-between p-20 bg-black/20 border-l border-white/5 relative overflow-hidden">
-            <!-- Geometric Decoration -->
-            <div class="absolute -top-10 -right-10 w-40 h-40 bg-brand-500/10 rounded-full blur-3xl"></div>
-            
-            <div class="relative z-10">
-                <h2 class="text-3xl font-bold text-white mb-6 leading-tight">Masa Depan <br><span class="text-brand-400">Pengarsipan Digital</span></h2>
-                <div class="space-y-8">
-                    <div class="flex gap-5">
-                        <div class="w-12 h-12 shrink-0 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
-                            <i class="fas fa-shield-check text-brand-400"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-white font-bold mb-1">Keamanan Terjamin</h4>
-                            <p class="text-gray-400 text-sm leading-relaxed">Enkripsi data tingkat tinggi untuk melindungi setiap dokumen berharga Anda.</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-5">
-                        <div class="w-12 h-12 shrink-0 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
-                            <i class="fas fa-bolt text-brand-400"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-white font-bold mb-1">Akses Instan</h4>
-                            <p class="text-gray-400 text-sm leading-relaxed">Cari dan temukan dokumen dalam hitungan detik dengan mesin pencari pintar.</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-5">
-                        <div class="w-12 h-12 shrink-0 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
-                            <i class="fas fa-users text-brand-400"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-white font-bold mb-1">Kolaborasi Tim</h4>
-                            <p class="text-gray-400 text-sm leading-relaxed">Bagikan dokumen dan kelola izin akses tim Anda dengan kontrol penuh.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="relative z-10">
-                <div class="p-6 bg-brand-500/10 border border-brand-500/20 rounded-3xl backdrop-blur-sm">
-                    <p class="text-brand-200 text-sm font-medium mb-1 italic">"Efisiensi adalah kunci kesuksesan modern."</p>
-                    <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">- Kelompok 6 Projek</p>
-                </div>
-            </div>
-        </div>
-
+            <input type="text" name="username" class="ni" placeholder="Username" required value="<?= old('username') ?>" />
+            <input type="password" name="password" class="ni" placeholder="Password" required />
+            <button type="submit" class="btn-custom" style="background: var(--primary);">Masuk</button>
+        </form>
     </div>
 
-    <!-- Modals or Overlays can be added here -->
+    <!-- KARYAWAN LOGIN (Sign Up / Hidden Left) -->
+    <div class="form-container sign-up-container">
+        <form action="<?= base_url('login') ?>" method="POST" class="h-full flex flex-col justify-center items-center text-center">
+            <?= csrf_field() ?>
+            <h1>Sign in Karyawan</h1>
+            
+            <?php if (session()->getFlashdata('error')): ?>
+            <div class="text-xs mb-4 p-3 w-full organic-shape" style="background:rgba(224,122,95,0.15); color:var(--txt); border: 2px solid var(--secondary); font-family: 'Kalam', cursive; font-weight: bold; font-size: 14px;">
+                <?= session()->getFlashdata('error') ?>
+            </div>
+            <?php endif; ?>
+
+            <input type="text" name="username" class="ni" placeholder="Username" required value="<?= old('username') ?>" />
+            <input type="password" name="password" class="ni" placeholder="Password" required />
+            <button type="submit" class="btn-custom" style="background: var(--secondary);">Masuk</button>
+        </form>
+    </div>
+
+    <!-- OVERLAY PANEL -->
+    <div class="overlay-container">
+        <div class="overlay">
+            
+            <!-- Left Overlay (Shown when Karyawan form is active) -->
+            <div class="overlay-panel overlay-left">
+                <h1>Selamat Datang!</h1>
+                <p>Masuk sebagai Administrator untuk mengelola seluruh dokumen dan arsip digital.</p>
+                <button class="btn-custom ghost" id="signIn">Sign In Admin</button>
+            </div>
+            
+            <!-- Right Overlay (Shown when Admin form is active) -->
+            <div class="overlay-panel overlay-right">
+                <h1>Halo, Karyawan!</h1>
+                <p>Masuk menggunakan akun Karyawan Anda untuk mencari dokumen dan mengajukan izin akses.</p>
+                <button class="btn-custom ghost" id="signUp">Sign In Karyawan</button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<script>
+    const signUpButton = document.getElementById('signUp');
+    const signInButton = document.getElementById('signIn');
+    const container = document.getElementById('container');
+
+    signUpButton.addEventListener('click', () => {
+        container.classList.add("right-panel-active");
+    });
+
+    signInButton.addEventListener('click', () => {
+        container.classList.remove("right-panel-active");
+    });
+
+    // Entrance Animation
+    document.addEventListener('DOMContentLoaded', () => {
+        gsap.from('#container', { y: 40, opacity: 0, duration: 1, ease: 'back.out(1.2)' });
+        gsap.from('.scribble', { opacity: 0, duration: 2, delay: 0.5 });
+    });
+</script>
 
 </body>
 </html>

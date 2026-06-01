@@ -23,7 +23,7 @@ class IzinController extends BaseController
             ->where('user_id', session()->get('id'))
             ->findAll();
         
-        return view('Backend/Izin/index', $data);
+        return view('admin/izin/karyawan_index', $data);
     }
 
     public function create()
@@ -32,35 +32,40 @@ class IzinController extends BaseController
         $data['title'] = 'Ajukan Izin Akses';
         $data['dokumen'] = $dokumenModel->findAll();
         
-        return view('Backend/Izin/create', $data);
+        return view('admin/izin/create', $data);
     }
 
     public function store()
     {
-        $userId = session()->get('id');
-        $dokumenId = $this->request->getPost('dokumen_id');
-
-        // Cek apakah sudah ada pengajuan yang Pending atau Disetujui
-        $existing = $this->izinModel->where([
-            'user_id' => $userId,
-            'dokumen_id' => $dokumenId
-        ])->whereIn('status_izin', ['Pending', 'Disetujui'])->first();
-
-        if ($existing) {
-            session()->setFlashdata('error', 'Anda sudah memiliki pengajuan untuk dokumen ini yang sedang diproses atau sudah disetujui.');
-            return redirect()->back();
+        try {
+            $userId = session()->get('id');
+            $dokumenId = $this->request->getPost('dokumen_id');
+    
+            // Cek apakah sudah ada pengajuan yang Pending atau Disetujui
+            $existing = $this->izinModel->where([
+                'user_id' => $userId,
+                'dokumen_id' => $dokumenId
+            ])->whereIn('status_izin', ['Pending', 'Disetujui'])->first();
+    
+            if ($existing) {
+                session()->setFlashdata('error', 'Anda sudah memiliki pengajuan untuk dokumen ini yang sedang diproses atau sudah disetujui.');
+                return redirect()->back();
+            }
+    
+            $this->izinModel->save([
+                'user_id' => $userId,
+                'dokumen_id' => $dokumenId,
+                'pesan' => $this->request->getPost('pesan'),
+                'status_izin' => 'Pending',
+                'tgl_pengajuan' => date('Y-m-d H:i:s')
+            ]);
+    
+            session()->setFlashdata('success', 'Pengajuan izin berhasil dikirim.');
+            return redirect()->to('/karyawan/izin');
+        } catch (\Exception $e) {
+            session()->setFlashdata('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
         }
-
-        $this->izinModel->save([
-            'user_id' => $userId,
-            'dokumen_id' => $dokumenId,
-            'pesan' => $this->request->getPost('pesan'),
-            'status_izin' => 'Pending',
-            'tgl_pengajuan' => date('Y-m-d H:i:s')
-        ]);
-
-        session()->setFlashdata('success', 'Pengajuan izin berhasil dikirim.');
-        return redirect()->to('/karyawan/izin');
     }
 
     public function admin_index()
@@ -73,20 +78,30 @@ class IzinController extends BaseController
             ->orderBy('izin.created_at', 'DESC')
             ->findAll();
         
-        return view('Backend/Izin/admin_index', $data);
+        return view('admin/izin/index', $data);
     }
 
     public function approve($id)
     {
-        $this->izinModel->update($id, ['status_izin' => 'Disetujui']);
-        session()->setFlashdata('success', 'Izin berhasil disetujui.');
-        return redirect()->to('/admin/izin');
+        try {
+            $this->izinModel->update($id, ['status_izin' => 'Disetujui']);
+            session()->setFlashdata('success', 'Izin berhasil disetujui.');
+            return redirect()->to('/admin/izin');
+        } catch (\Exception $e) {
+            session()->setFlashdata('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 
     public function reject($id)
     {
-        $this->izinModel->update($id, ['status_izin' => 'Ditolak']);
-        session()->setFlashdata('success', 'Izin telah ditolak.');
-        return redirect()->to('/admin/izin');
+        try {
+            $this->izinModel->update($id, ['status_izin' => 'Ditolak']);
+            session()->setFlashdata('success', 'Izin telah ditolak.');
+            return redirect()->to('/admin/izin');
+        } catch (\Exception $e) {
+            session()->setFlashdata('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 }
