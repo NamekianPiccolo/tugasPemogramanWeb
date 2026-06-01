@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-RUN npx tailwindcss -i ./public/css/input.css -o ./public/css/output.css
+RUN npx @tailwindcss/cli -i ./public/css/input.css -o ./public/css/output.css
 
 # Stage 2: Final PHP Apache Image
 FROM php:8.2-apache

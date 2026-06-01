@@ -7,9 +7,13 @@
     "test": "tests"
   },
   "scripts": {
-    "build": "tailwindcss -i ./public/css/input.css -o ./public/css/output.css",
-    "watch": "tailwindcss -i ./public/css/input.css -o ./public/css/output.css --watch",
+    "build": "@tailwindcss/cli -i ./public/css/input.css -o ./public/css/output.css",
+    "watch": "@tailwindcss/cli -i ./public/css/input.css -o ./public/css/output.css --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.2.2",
+    "tailwindcss": "^4.2.2"
   },
   "repository": {
     "type": "git",
