@@ -1,75 +1,107 @@
-# CodeIgniter 4 Application Starter
+# Tugas Pemrograman Web - Kelompok 6
 
-## What is CodeIgniter?
+A modern web application built using **CodeIgniter 4** and styled with **Tailwind CSS**. This repository is configured to run fully in a dockerized environment.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+---
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## 🚀 Docker Quick Start Installation
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+Follow these steps to build, install, and run this project seamlessly on your machine using Docker.
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+### 📋 Prerequisites
+Make sure you have the following installed on your host machine:
+*   [Docker](https://www.docker.com/products/docker-desktop)
+*   [Docker Compose](https://docs.docker.com/compose/install/)
 
-## Installation & updates
+---
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+### 🛠️ Installation Steps
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+#### 1. Clone the Repository
+Clone this repository to your local directory:
+```bash
+git clone https://github.com/NamekianPiccolo/tugasPemogramanWeb.git
+cd tugasPemogramanWeb
+```
 
-## Setup
+#### 2. Set Up the Environment Configuration (`.env`)
+Copy the provided environment example template to `.env`:
+```bash
+cp .env.example .env
+```
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+Open `.env` and update the database configuration to match the Docker Compose setup:
+```ini
+# App Environment
+CI_ENVIRONMENT = development
+app_baseURL = 'http://localhost:8080/'
 
-## Important Change with index.php
+# Database configuration for Docker
+database.default.hostname = db
+database.default.database = ci4_database
+database.default.username = ci4_user
+database.default.password = ci4_password
+database.default.DBDriver = MySQLi
+database.default.port = 3306
+```
+> [!IMPORTANT]
+> When running inside Docker, `database.default.hostname` must be set to `db` (the service name in `docker-compose.yml`) instead of `localhost`.
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+---
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+#### 3. Build and Run the Docker Containers
+Launch the docker-compose services. This command will:
+1. Compile **Tailwind CSS** using a Node.js build stage.
+2. Build the PHP 8.2-Apache runtime with all required CodeIgniter 4 extensions.
+3. Automatically install all PHP dependencies via Composer.
+4. Spin up the MySQL database container.
+```bash
+docker-compose up -d --build
+```
 
-**Please** read the user guide for a better explanation of how CI4 works!
+Verify that the containers are up and running:
+```bash
+docker ps
+```
+The application will be accessible at: [http://localhost:8080](http://localhost:8080).
 
-## Repository Management
+---
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+#### 4. Run Migrations & Seed the Database
+Once the database container is ready, run the database migrations and seeders to populate initial data:
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+**Run Migrations:**
+```bash
+docker exec -it ci4_app php spark migrate
+```
 
-## Server Requirements
+**Seed the Database (MainSeeder):**
+```bash
+docker exec -it ci4_app php spark db:seed MainSeeder
+```
 
-PHP version 8.2 or higher is required, with the following extensions installed:
+---
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+## 🛠️ Development & Utilities
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
+### Watch Tailwind CSS Changes
+For active CSS editing, you can use the Node container to automatically watch and compile Tailwind modifications:
+```bash
+docker-compose run --rm node npm run watch
+```
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+### Accessing the PHP Container Shell
+If you need to execute standard `spark` commands directly inside the Apache container:
+```bash
+docker exec -it ci4_app bash
+```
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
-
-
-
-
-
-npm install and composer install 
+### Stopping the Services
+To shut down the docker containers without losing your MySQL data:
+```bash
+docker-compose down
+```
+To shut down and wipe the database volume:
+```bash
+docker-compose down -v
+```
