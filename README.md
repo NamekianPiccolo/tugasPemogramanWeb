@@ -44,7 +44,7 @@ Open `.env` and update the database configuration to match the Docker Compose se
 ```ini
 # App Environment
 CI_ENVIRONMENT = development
-app_baseURL = 'http://localhost:8080/'
+app_baseURL = 'http://localhost:8081/'
 
 # Database configuration for Docker
 database.default.hostname = db
@@ -75,7 +75,7 @@ Verify that the containers are up and running:
 ```bash
 docker ps
 ```
-The application will be accessible at: [http://localhost:8080](http://localhost:8080).
+The application will be accessible at: [http://localhost:8081](http://localhost:8081).
 
 ---
 
