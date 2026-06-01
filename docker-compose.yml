@@ -43,6 +43,18 @@ services:
     # Perintah ini akan install tailwind saat pertama kali jalan, lalu watch
     command: sh -c "npm install && npm run watch"
 
+  # 4. Service untuk Cloudflare Tunnel (cloudflared)
+  # Menghubungkan container 'app' secara langsung ke domain Cloudflare Anda
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: ci4_tunnel
+    restart: always
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    command: tunnel --no-autoupdate run
+    depends_on:
+      - app
+
 # Penyimpanan data MySQL agar tidak hilang saat container dihapus
 volumes:
   db_data:
