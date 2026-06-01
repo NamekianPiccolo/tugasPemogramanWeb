@@ -4,6 +4,16 @@ A modern web application built using **CodeIgniter 4** and styled with **Tailwin
 
 ---
 
+## ✨ Zero-Configuration Features
+
+This project is engineered to work out-of-the-box with **zero local configuration** required. Simply run the build command, and the system handles the rest:
+
+*   **⚡ Zero-Config Database Bootstrapping**: A smart startup entrypoint (`docker-entrypoint.sh`) waits for MySQL to be fully online and automatically runs `php spark migrate` and `php spark db:seed MainSeeder` for you.
+*   **🧹 Multi-Stage Tailwind CSS Compilation**: Tailwind CSS v4 compiles inside an isolated builder stage. The final web container remains **completely clean and free of any `node_modules`** or heavy node runtimes.
+*   **🔒 Instant Cloudflare Tunneling**: Generates a secure, shareable public HTTPS link (`trycloudflare.com`) instantly when launched, allowing you to showcase your local project to anyone, anywhere—no port forwarding, accounts, or tokens required.
+
+---
+
 ## 🚀 Docker Quick Start Installation
 
 Follow these steps to build, install, and run this project seamlessly on your machine using Docker.
