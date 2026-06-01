@@ -51,10 +51,12 @@ database.default.port = 3306
 
 #### 3. Build and Run the Docker Containers
 Launch the docker-compose services. This command will:
-1. Compile **Tailwind CSS** using a Node.js build stage.
-2. Build the PHP 8.2-Apache runtime with all required CodeIgniter 4 extensions.
-3. Automatically install all PHP dependencies via Composer.
-4. Spin up the MySQL database container.
+1. **Compile Tailwind CSS** using a temporary Node.js build stage (installing all node modules and cleanly deleting them afterward).
+2. **Build the PHP 8.2-Apache runtime** with all required CodeIgniter 4 extensions.
+3. **Automatically install PHP dependencies** via Composer.
+4. **Spin up MySQL database** and wait for it to be fully ready.
+5. **Automatically run database migrations & seeders** on startup (`MainSeeder` runs automatically!).
+
 ```bash
 docker-compose up -d --build
 ```
@@ -67,8 +69,8 @@ The application will be accessible at: [http://localhost:8080](http://localhost:
 
 ---
 
-#### 4. Run Migrations & Seed the Database
-Once the database container is ready, run the database migrations and seeders to populate initial data:
+#### 4. Run Migrations & Seed the Database (Optional / Manual)
+Since migrations and database seeding are **handled automatically** on startup, you do not need to run these. However, if you need to run them manually in the future:
 
 **Run Migrations:**
 ```bash

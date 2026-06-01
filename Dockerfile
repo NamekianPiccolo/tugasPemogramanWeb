@@ -49,8 +49,15 @@ COPY --from=css-builder /app/public/css/output.css /var/www/html/public/css/outp
 # Run composer install
 RUN composer install --no-interaction --optimize-autoloader
 
+# Copy entrypoint script and make it executable
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 # Set correct permissions for CodeIgniter 4
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 /var/www/html/writable
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["apache2-foreground"]
 
 EXPOSE 80
