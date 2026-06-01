@@ -6,6 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: ci4-tugas-web:latest
     container_name: ci4_app
     restart: always
     ports:
