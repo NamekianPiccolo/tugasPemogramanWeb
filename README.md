@@ -84,12 +84,12 @@ Since migrations and database seeding are **handled automatically** on startup, 
 
 **Run Migrations:**
 ```bash
-docker exec -it ci4_app php spark migrate
+docker exec -it tugas_web_app php spark migrate
 ```
 
 **Seed the Database (MainSeeder):**
 ```bash
-docker exec -it ci4_app php spark db:seed MainSeeder
+docker exec -it tugas_web_app php spark db:seed MainSeeder
 ```
 
 ---
@@ -105,7 +105,7 @@ This project includes a built-in **Cloudflare Quick Tunnel** in `docker-compose.
    ```
 2. Wait a few seconds for the tunnel to connect, then check the tunnel logs to find your public URL:
    ```bash
-   docker logs ci4_tunnel
+   docker logs tugas_web_tunnel
    ```
 3. Look for a block that looks like this:
    ```text
@@ -129,7 +129,7 @@ docker-compose run --rm node npm run watch
 ### Accessing the PHP Container Shell
 If you need to execute standard `spark` commands directly inside the Apache container:
 ```bash
-docker exec -it ci4_app bash
+docker exec -it tugas_web_app bash
 ```
 
 ### Stopping the Services

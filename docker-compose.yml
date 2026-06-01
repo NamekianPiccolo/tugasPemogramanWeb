@@ -6,8 +6,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: ci4-tugas-web:latest
-    container_name: ci4_app
+    image: tugas-web-app:latest
+    container_name: tugas_web_app
     restart: always
     ports:
       - "8080:80"
@@ -21,7 +21,7 @@ services:
   # 2. Service untuk Database (MySQL)
   db:
     image: mysql:8.0
-    container_name: ci4_db
+    container_name: tugas_web_db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
@@ -37,7 +37,7 @@ services:
   # Container ini akan memantau perubahan file PHP dan compile CSS otomatis
   node:
     image: node:20-alpine
-    container_name: ci4_node
+    container_name: tugas_web_node
     working_dir: /var/www/html
     volumes:
       - .:/var/www/html
@@ -49,7 +49,7 @@ services:
   # Cukup jalankan 'docker logs ci4_tunnel' setelah up untuk melihat link Anda.
   tunnel:
     image: cloudflare/cloudflared:latest
-    container_name: ci4_tunnel
+    container_name: tugas_web_tunnel
     restart: always
     command: tunnel --no-autoupdate --url http://app:80
     depends_on:
