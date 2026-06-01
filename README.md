@@ -84,21 +84,27 @@ docker exec -it ci4_app php spark db:seed MainSeeder
 
 ---
 
-## 🌐 Cloudflare Tunnel Deployment
+## 🌐 Cloudflare Quick Tunnel Deployment
 
-This project includes a built-in Cloudflare Tunnel (`cloudflared`) service in `docker-compose.yml` to securely expose your application to the web with free SSL and DDoS protection.
+This project includes a built-in **Cloudflare Quick Tunnel** in `docker-compose.yml`. This allows you to generate a secure, public HTTPS link (e.g. `https://your-random-words.trycloudflare.com`) to share your local application with teachers or team members **without needing a Cloudflare account, token, or custom domain!**
 
-### How to use Cloudflare Tunnel:
-1. Go to your **Cloudflare Dashboard > Zero Trust > Networks > Tunnels** and create a new tunnel.
-2. Under "Install and run a connector", copy your **Tunnel Token**.
-3. Open your local `.env` and paste your token:
-   ```ini
-   CLOUDFLARE_TUNNEL_TOKEN = your_copied_cloudflare_token_here
-   ```
-4. Start your services. The tunnel container will automatically start and route traffic securely to your CodeIgniter app container:
+### How to get your Link:
+1. Start your Docker services normally:
    ```bash
-   docker-compose up -d
+   docker-compose up -d --build
    ```
+2. Wait a few seconds for the tunnel to connect, then check the tunnel logs to find your public URL:
+   ```bash
+   docker logs ci4_tunnel
+   ```
+3. Look for a block that looks like this:
+   ```text
+   +--------------------------------------------------------------------------------------+
+   |  Your quick tunnel has been created! Visit it at:                                    |
+   |  https://some-random-words.trycloudflare.com                                         |
+   +--------------------------------------------------------------------------------------+
+   ```
+4. Copy that HTTPS link and open it in your browser. Anyone in the world can now securely access your CodeIgniter 4 application!
 
 ---
 
