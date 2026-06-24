@@ -46,10 +46,11 @@ class MainSeeder extends Seeder
 
         // 3. Seed Unit / Bagian
         $unitData = [
-            ['nama_unit' => 'Rektorat', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
-            ['nama_unit' => 'Keuangan', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
-            ['nama_unit' => 'Akademik', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
-            ['nama_unit' => 'Kemahasiswaan', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
+            ['nama_unit' => 'HRD / Personalia', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
+            ['nama_unit' => 'Finance / Keuangan', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
+            ['nama_unit' => 'IT / Teknologi', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
+            ['nama_unit' => 'Marketing / Pemasaran', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
+            ['nama_unit' => 'Operations / Operasional', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
         ];
         if ($this->db->table('unit')->countAllResults() === 0) {
             $this->db->table('unit')->insertBatch($unitData);

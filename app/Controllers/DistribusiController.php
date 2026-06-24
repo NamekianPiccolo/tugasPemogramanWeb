@@ -5,23 +5,29 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\DistribusiModel;
 use App\Models\DokumenModel;
+use App\Models\UserModel;
 
 class DistribusiController extends BaseController
 {
     protected $distribusiModel;
     protected $dokumenModel;
+    protected $userModel;
+    protected $riwayatModel;
 
     public function __construct()
     {
         $this->distribusiModel = new DistribusiModel();
         $this->dokumenModel = new DokumenModel();
+        $this->userModel = new UserModel();
+        $this->riwayatModel = new \App\Models\RiwayatModel();
     }
 
     public function index()
     {
         $data['distribusi'] = $this->distribusiModel
-            ->select('distribusi.*, dokumen.judul')
+            ->select('distribusi.*, dokumen.judul, users.nama_lengkap as peminjam_nama')
             ->join('dokumen', 'dokumen.id = distribusi.dokumen_id', 'left')
+            ->join('users', 'users.id = distribusi.user_id', 'left')
             ->findAll();
         $data['title'] = 'Data Distribusi Dokumen';
         return view('admin/distribusi/index', $data);
@@ -30,6 +36,7 @@ class DistribusiController extends BaseController
     public function create()
     {
         $data['dokumen'] = $this->dokumenModel->findAll();
+        $data['users'] = $this->userModel->where('role', 'karyawan')->findAll();
         $data['selected_dokumen'] = $this->request->getGet('dokumen');
         $data['title'] = 'Tambah Distribusi Dokumen';
         return view('admin/distribusi/create', $data);
@@ -38,13 +45,25 @@ class DistribusiController extends BaseController
     public function store()
     {
         try {
+            $dokumenId = $this->request->getPost('dokumen_id');
+            $userId = $this->request->getPost('user_id');
+            
             $this->distribusiModel->save([
-                'dokumen_id' => $this->request->getPost('dokumen_id'),
-                'peminjam' => $this->request->getPost('peminjam'),
+                'dokumen_id' => $dokumenId,
+                'user_id' => $userId,
                 'tanggal_pinjam' => $this->request->getPost('tanggal_pinjam'),
                 'tanggal_kembali' => $this->request->getPost('tanggal_kembali'),
                 'status' => $this->request->getPost('status')
             ]);
+            
+            // Catat Riwayat Peminjaman
+            $this->riwayatModel->save([
+                'dokumen_id' => $dokumenId,
+                'user_id' => session()->get('id'), 
+                'aksi' => 'Distribusi Dokumen',
+                'keterangan' => 'Dokumen dipinjamkan/didistribusikan ke user ID: ' . $userId
+            ]);
+
             session()->setFlashdata('success', 'Data distribusi/peminjaman berhasil ditambahkan.');
             $role = session()->get('role');
             return redirect()->to("/$role/distribusi");
@@ -58,6 +77,7 @@ class DistribusiController extends BaseController
     {
         $data['distribusi'] = $this->distribusiModel->find($id);
         $data['dokumen'] = $this->dokumenModel->findAll();
+        $data['users'] = $this->userModel->where('role', 'karyawan')->findAll();
         $data['title'] = 'Edit Distribusi Dokumen';
         return view('admin/distribusi/edit', $data);
     }
@@ -65,12 +85,23 @@ class DistribusiController extends BaseController
     public function update($id)
     {
         try {
+            $dokumenId = $this->request->getPost('dokumen_id');
+            $status = $this->request->getPost('status');
+
             $this->distribusiModel->update($id, [
-                'dokumen_id' => $this->request->getPost('dokumen_id'),
-                'peminjam' => $this->request->getPost('peminjam'),
+                'dokumen_id' => $dokumenId,
+                'user_id' => $this->request->getPost('user_id'),
                 'tanggal_pinjam' => $this->request->getPost('tanggal_pinjam'),
                 'tanggal_kembali' => $this->request->getPost('tanggal_kembali'),
-                'status' => $this->request->getPost('status')
+                'status' => $status
+            ]);
+
+            // Catat Riwayat Update Distribusi
+            $this->riwayatModel->save([
+                'dokumen_id' => $dokumenId,
+                'user_id' => session()->get('id'), 
+                'aksi' => 'Update Distribusi',
+                'keterangan' => 'Status peminjaman diubah menjadi: ' . $status
             ]);
             session()->setFlashdata('success', 'Data distribusi berhasil diubah.');
             $role = session()->get('role');

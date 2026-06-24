@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="920" style="background: #ffffff; font-family: system-ui, -apple-system, sans-serif;">
+  <!-- Background Grid (Very subtle for design polish) -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f0f0f0" stroke-width="1" />
+    </pattern>
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#444444" />
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#grid)" />
+
+  <!-- Title of Diagram -->
+  <text x="700" y="40" font-size="28" font-weight="bold" text-anchor="middle" fill="#111111" letter-spacing="1">DIAGRAM USE CASE</text>
+  <text x="700" y="65" font-size="14" fill="#666666" text-anchor="middle">Sistem Manajemen Arsip Dokumen Digital</text>
+
+  <!-- System Boundary Box -->
+  <rect x="300" y="90" width="800" height="800" rx="12" ry="12" fill="#fcfcfc" stroke="#111111" stroke-width="2.5" />
+  <text x="700" y="125" font-size="18" font-weight="bold" text-anchor="middle" fill="#333333" letter-spacing="0.5">Sistem Arsip Dokumen Digital (CI4)</text>
+
+  <!-- ================= ACTORS ================= -->
+  
+  <!-- ADMIN (Left) -->
+  <g transform="translate(0, 0)">
+    <!-- Head -->
+    <circle cx="130" cy="450" r="22" fill="#ffffff" stroke="#111111" stroke-width="2.5" />
+    <!-- Eye details (subtle stickman polish) -->
+    <circle cx="122" cy="446" r="2" fill="#111111" />
+    <circle cx="138" cy="446" r="2" fill="#111111" />
+    <path d="M 124 458 Q 130 464 136 458" fill="none" stroke="#111111" stroke-width="1.5" />
+    
+    <!-- Body -->
+    <line x1="130" y1="472" x2="130" y2="540" stroke="#111111" stroke-width="2.5" stroke-linecap="round" />
+    <!-- Arms -->
+    <line x1="100" y1="495" x2="160" y2="495" stroke="#111111" stroke-width="2.5" stroke-linecap="round" />
+    <!-- Legs -->
+    <line x1="130" y1="540" x2="105" y2="600" stroke="#111111" stroke-width="2.5" stroke-linecap="round" />
+    <line x1="130" y1="540" x2="155" y2="600" stroke="#111111" stroke-width="2.5" stroke-linecap="round" />
+    <!-- Label -->
+    <rect x="70" y="615" width="120" height="30" rx="5" ry="5" fill="#111111" />
+    <text x="130" y="635" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">ADMIN</text>
+  </g>
+
+  <!-- KARYAWAN (Right) -->
+  <g transform="translate(0, 0)">
+    <!-- Head -->
+    <circle cx="1270" cy="450" r="22" fill="#ffffff" stroke="#111111" stroke-width="2.5" />
+    <!-- Eye details (subtle stickman polish) -->
+    <circle cx="1262" cy="446" r="2" fill="#111111" />
+    <circle cx="1278" cy="446" r="2" fill="#111111" />
+    <path d="M 1264 458 Q 1270 464 1276 458" fill="none" stroke="#111111" stroke-width="1.5" />
+
+    <!-- Body -->
+    <line x1="1270" y1="472" x2="1270" y2="540" stroke="#111111" stroke-width="2.5" stroke-linecap="round" />
+    <!-- Arms -->
+    <line x1="1240" y1="495" x2="1300" y2="495" stroke="#111111" stroke-width="2.5" stroke-linecap="round" />
+    <!-- Legs -->
+    <line x1="1270" y1="540" x2="1245" y2="600" stroke="#111111" stroke-width="2.5" stroke-linecap="round" />
+    <line x1="1270" y1="540" x2="1295" y2="600" stroke="#111111" stroke-width="2.5" stroke-linecap="round" />
+    <!-- Label -->
+    <rect x="1210" y="615" width="120" height="30" rx="5" ry="5" fill="#111111" />
+    <text x="1270" y="635" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">KARYAWAN</text>
+  </g>
+
+  <!-- ================= USE CASES (Ovals) ================= -->
+
+  <!-- SHARED USE CASES -->
+  <!-- Login / Logout -->
+  <g>
+    <ellipse cx="700" cy="180" rx="120" ry="24" fill="#ffffff" stroke="#111111" stroke-width="1.5" />
+    <text x="700" y="184" font-size="13" font-weight="bold" text-anchor="middle" fill="#111111">Login / Logout</text>
+  </g>
+
+  <!-- ADMIN SPECIFIC (Left Column: cx="530", rx="140", ry="24") -->
+  <!-- 1. Dashboard Admin -->
+  <g>
+    <ellipse cx="530" cy="250" rx="140" ry="24" fill="#ffffff" stroke="#111111" stroke-width="1.5" />
+    <text x="530" y="254" font-size="13" text-anchor="middle" fill="#111111">Melihat Dashboard Admin</text>
+  </g>
+  <!-- 2. CRUD Dokumen -->
+  <g>
+    <ellipse cx="530" cy="320" rx="140" ry="24" fill="#ffffff" stroke="#111111" stroke-width="1.5" />
+    <text x="530" y="324" font-size="13" text-anchor="middle" fill="#111111">Mengelola Data Dokumen (CRUD)</text>
+  </g>
+  <!-- 3. CRUD Kategori -->
+  <g>
+    <ellipse cx="530" cy="390" rx="140" ry="24" fill="#ffffff" stroke="#111111" stroke-width="1.5" />
+    <text x="530" y="394" font-size="13" text-anchor="middle" fill="#111111">Mengelola Kategori Dokumen (CRUD)</text>
+  </g>
+  <!-- 4. CRUD Unit Kerja -->
+  <g>
+    <ellipse cx="530" cy="460" rx="140" ry="24" fill="#ffffff" stroke="#111111" stroke-width="1.5" />
+    <text x="530" y="464" font-size="13" text-anchor="middle" fill="#111111">Mengelola Unit Kerja / Bagian (CRUD)</text>
+  </g>
+  <!-- 5. CRUD User -->
+  <g>
+    <ellipse cx="530" cy="530" rx="140" ry="24" fill="#ffffff" stroke="#111111" stroke-width="1.5" />
+    <text x="530" y="534" font-size="13" text-anchor="middle" fill="#111111">Mengelola Data User (CRUD)</text>
+  </g>
+  <!-- 6. Distribusi Dokumen -->
+  <g>
+    <ellipse cx="530" cy="600" rx="140" ry="24" fill="#ffffff" stroke="#111111" stroke-width="1.5" />
+    <text x="530" y="604" font-size="13" text-anchor="middle" fill="#111111">Mendistribusikan Dokumen</text>
+  </g>
+  <!-- 7. Riwayat Aktivitas -->
+  <g>
+    <ellipse cx="530" cy="670" rx="140" ry="24" fill="#ffffff" stroke="#111111" stroke-width="1.5" />
+    <text x="530" y="674" font-size="13" text-anchor="middle" fill="#111111">Melihat Riwayat Aktivitas</text>
+  </g>
+  <!-- 8. Persetujuan Izin -->
+  <g>
+    <ellipse cx="530" cy="740" rx="140" ry="24" fill="#ffffff" stroke="#111111" stroke-width="1.5" />
+    <text x="530" y="744" font-size="13" text-anchor="middle" fill="#111111">Mengelola Persetujuan Izin</text>
+  </g>
+  <!-- 9. Persetujuan Revisi -->
+  <g>
+    <ellipse cx="530" cy="810" rx="140" ry="24" fill="#ffffff" stroke="#111111" stroke-width="1.5" />
+    <text x="530" y="814" font-size="13" text-anchor="middle" fill="#111111">Mengelola Persetujuan Revisi</text>
+  </g>
+
+  <!-- KARYAWAN SPECIFIC (Right Column: cx="870", rx="140", ry="24") -->
+  <!-- 1. Dashboard Karyawan -->
+  <g>
+    <ellipse cx="870" cy="280" rx="140" ry="24" fill="#ffffff" stroke="#111111" stroke-width="1.5" />
+    <text x="870" y="284" font-size="13" text-anchor="middle" fill="#111111">Melihat Dashboard Karyawan</text>
+  </g>
+  <!-- 2. Ajukan Izin -->
+  <g>
+    <ellipse cx="870" cy="410" rx="140" ry="24" fill="#ffffff" stroke="#111111" stroke-width="1.5" />
+    <text x="870" y="414" font-size="13" text-anchor="middle" fill="#111111">Mengajukan Izin Akses Dokumen</text>
+  </g>
+  <!-- 3. Lihat & Mengunduh Dokumen -->
+  <g>
+    <ellipse cx="870" cy="540" rx="140" ry="24" fill="#ffffff" stroke="#111111" stroke-width="1.5" />
+    <text x="870" y="544" font-size="13" text-anchor="middle" fill="#111111">Melihat &amp; Mengunduh Dokumen</text>
+  </g>
+  <!-- 4. Ajukan Revisi -->
+  <g>
+    <ellipse cx="870" cy="670" rx="140" ry="24" fill="#ffffff" stroke="#111111" stroke-width="1.5" />
+    <text x="870" y="674" font-size="13" text-anchor="middle" fill="#111111">Mengajukan Revisi/Perubahan</text>
+  </g>
+
+
+  <!-- ================= RELATIONSHIP LINES ================= -->
+
+  <!-- ADMIN TO USE CASES -->
+  <!-- Login / Logout -->
+  <path d="M 130 450 L 130 180 L 580 180" fill="none" stroke="#444444" stroke-width="1.5" />
+  
+  <!-- Direct associations -->
+  <line x1="160" y1="495" x2="390" y2="250" stroke="#444444" stroke-width="1.5" />
+  <line x1="160" y1="495" x2="390" y2="320" stroke="#444444" stroke-width="1.5" />
+  <line x1="160" y1="495" x2="390" y2="390" stroke="#444444" stroke-width="1.5" />
+  <line x1="160" y1="495" x2="390" y2="460" stroke="#444444" stroke-width="1.5" />
+  <line x1="160" y1="495" x2="390" y2="530" stroke="#444444" stroke-width="1.5" />
+  <line x1="160" y1="495" x2="390" y2="600" stroke="#444444" stroke-width="1.5" />
+  <line x1="160" y1="495" x2="390" y2="670" stroke="#444444" stroke-width="1.5" />
+  <line x1="160" y1="495" x2="390" y2="740" stroke="#444444" stroke-width="1.5" />
+  <line x1="160" y1="495" x2="390" y2="810" stroke="#444444" stroke-width="1.5" />
+
+  <!-- KARYAWAN TO USE CASES -->
+  <!-- Login / Logout -->
+  <path d="M 1270 450 L 1270 180 L 820 180" fill="none" stroke="#444444" stroke-width="1.5" />
+
+  <!-- Direct associations -->
+  <line x1="1240" y1="495" x2="1010" y2="280" stroke="#444444" stroke-width="1.5" />
+  <line x1="1240" y1="495" x2="1010" y2="410" stroke="#444444" stroke-width="1.5" />
+  <line x1="1240" y1="495" x2="1010" y2="540" stroke="#444444" stroke-width="1.5" />
+  <line x1="1240" y1="495" x2="1010" y2="670" stroke="#444444" stroke-width="1.5" />
+
+  <!-- INTER-USECASE RELATIONSHIPS (Dashed arrows) -->
+  <!-- Melihat & Mengunduh Dokumen (Y=540) --include--> Mengajukan Izin Akses Dokumen (Y=410) (Pointing up) -->
+  <line x1="870" y1="516" x2="870" y2="442" stroke="#444444" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrow)" />
+  <text x="880" y="475" font-size="11" font-style="italic" fill="#555555">&lt;&lt;include&gt;&gt;</text>
+  <text x="880" y="490" font-size="10" fill="#777777">(minta izin dulu)</text>
+
+</svg>

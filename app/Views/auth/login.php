@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login — Workspace DMS</title>
     <!-- Organic Theme Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Kalam:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap" rel="stylesheet">
     <link href="<?= base_url('css/output.css') ?>" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
@@ -17,12 +17,15 @@
             --txt: #3d405b;
             --muted: #8a817c;
         }
-        *, *::before, *::after { box-sizing: border-box; }
+        *, *::before, *::after { 
+            box-sizing: border-box; 
+            font-family: 'Kalam', cursive !important;
+        }
         body {
             margin: 0; padding: 0;
             background-color: var(--bg);
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-            font-family: 'Lora', serif;
+            font-family: 'Kalam', cursive;
             color: var(--txt);
             min-height: 100vh;
             display: flex;
@@ -179,7 +182,7 @@
             width: 100%;
             border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
             outline: none;
-            font-family: 'Lora', serif;
+            font-family: 'Kalam', cursive;
             font-size: 15px;
             color: var(--txt);
             transition: all 0.2s;
@@ -239,30 +242,37 @@
 <body>
 
 <!-- Background Decorations -->
-<svg class="scribble" style="top: 10%; left: 5%; width: 150px;" viewBox="0 0 100 100">
+<svg class="scribble" style="top: 10%; left: 5%; width: 150px" viewBox="0 0 100 100">
     <path fill="none" stroke="var(--txt)" stroke-width="2" d="M10 50 Q 30 20 50 50 T 90 50" />
 </svg>
-<svg class="scribble" style="bottom: 10%; right: 5%; width: 200px;" viewBox="0 0 100 100">
+<svg class="scribble" style="bottom: 10%; right: 5%; width: 200px" viewBox="0 0 100 100">
     <path fill="none" stroke="var(--secondary)" stroke-width="2" d="M10 80 Q 40 10 90 80" />
 </svg>
 
-<div class="container" id="container">
+<?php
+$session = session();
+$flashError = $session->getFlashdata('error');
+$flashLoginType = $session->getFlashdata('login_type');
+?>
+
+<div class="container <?= ($flashLoginType === 'karyawan') ? 'right-panel-active' : '' ?>" id="container">
     
     <!-- ADMIN LOGIN (Sign In / Default Left) -->
     <div class="form-container sign-in-container">
         <form action="<?= base_url('login') ?>" method="POST" class="h-full flex flex-col justify-center items-center text-center">
             <?= csrf_field() ?>
+            <input type="hidden" name="login_type" value="admin">
             <h1>Sign in Admin</h1>
             
-            <?php if (session()->getFlashdata('error')): ?>
-            <div class="text-xs mb-4 p-3 w-full organic-shape" style="background:rgba(224,122,95,0.15); color:var(--txt); border: 2px solid var(--secondary); font-family: 'Kalam', cursive; font-weight: bold; font-size: 14px;">
-                <?= session()->getFlashdata('error') ?>
+            <?php if ($flashError && $flashLoginType !== 'karyawan'): ?>
+            <div class="text-xs mb-4 p-3 w-full organic-shape" style="background:rgba(224,122,95,0.15); color:var(--txt); border: 2px solid var(--secondary); font-family: 'Kalam', cursive; font-weight: bold; font-size: 14px">
+                <?= $flashError ?>
             </div>
             <?php endif; ?>
 
             <input type="text" name="username" class="ni" placeholder="Username" required value="<?= old('username') ?>" />
             <input type="password" name="password" class="ni" placeholder="Password" required />
-            <button type="submit" class="btn-custom" style="background: var(--primary);">Masuk</button>
+            <button type="submit" class="btn-custom" style="background: var(--primary)">Masuk</button>
         </form>
     </div>
 
@@ -270,17 +280,18 @@
     <div class="form-container sign-up-container">
         <form action="<?= base_url('login') ?>" method="POST" class="h-full flex flex-col justify-center items-center text-center">
             <?= csrf_field() ?>
+            <input type="hidden" name="login_type" value="karyawan">
             <h1>Sign in Karyawan</h1>
             
-            <?php if (session()->getFlashdata('error')): ?>
-            <div class="text-xs mb-4 p-3 w-full organic-shape" style="background:rgba(224,122,95,0.15); color:var(--txt); border: 2px solid var(--secondary); font-family: 'Kalam', cursive; font-weight: bold; font-size: 14px;">
-                <?= session()->getFlashdata('error') ?>
+            <?php if ($flashError && $flashLoginType === 'karyawan'): ?>
+            <div class="text-xs mb-4 p-3 w-full organic-shape" style="background:rgba(224,122,95,0.15); color:var(--txt); border: 2px solid var(--secondary); font-family: 'Kalam', cursive; font-weight: bold; font-size: 14px">
+                <?= $flashError ?>
             </div>
             <?php endif; ?>
 
             <input type="text" name="username" class="ni" placeholder="Username" required value="<?= old('username') ?>" />
             <input type="password" name="password" class="ni" placeholder="Password" required />
-            <button type="submit" class="btn-custom" style="background: var(--secondary);">Masuk</button>
+            <button type="submit" class="btn-custom" style="background: var(--secondary)">Masuk</button>
         </form>
     </div>
 

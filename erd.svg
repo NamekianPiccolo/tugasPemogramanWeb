@@ -1,0 +1,387 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="1100" style="background: #ffffff; font-family: system-ui, -apple-system, sans-serif;">
+  <!-- Background Grid -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f0f0f0" stroke-width="1" />
+    </pattern>
+    <!-- Relationship markers -->
+    <marker id="one" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6">
+      <circle cx="5" cy="5" r="3" fill="#444444" stroke="#444444" stroke-width="1" />
+    </marker>
+    <marker id="many" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 1 2 L 8 5 L 1 8 M 5 2 L 5 8" fill="none" stroke="#444444" stroke-width="1.5" stroke-linecap="round" />
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#grid)" />
+
+  <!-- Title -->
+  <text x="710" y="40" font-size="28" font-weight="bold" text-anchor="middle" fill="#111111" letter-spacing="1">ENTITY RELATIONSHIP DIAGRAM (ERD)</text>
+  <text x="710" y="65" font-size="14" fill="#666666" text-anchor="middle">Skema Database Sistem Manajemen Arsip Dokumen Digital</text>
+
+  <!-- ================= TABLES ================= -->
+
+  <!-- 1. KATEGORI (X=80, Y=120) -->
+  <g transform="translate(80, 120)">
+    <!-- Shadow & Border -->
+    <rect width="280" height="130" rx="8" ry="8" fill="#ffffff" stroke="#222222" stroke-width="2" />
+    <!-- Header -->
+    <path d="M 0 8 A 8 8 0 0 1 8 0 L 272 0 A 8 8 0 0 1 280 8 L 280 30 L 0 30 Z" fill="#2b2d42" />
+    <text x="140" y="20" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">kategori</text>
+    
+    <!-- Rows -->
+    <!-- id -->
+    <rect x="2" y="32" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="47" font-size="11" font-weight="bold" fill="#d90429">id</text>
+    <text x="90" y="47" font-size="11" fill="#2b2d42">INT (PK)</text>
+    
+    <!-- nama_kategori -->
+    <rect x="2" y="56" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="71" font-size="11" fill="#2b2d42">nama_kategori</text>
+    <text x="90" y="71" font-size="11" fill="#8d99ae">VARCHAR(100)</text>
+
+    <!-- created_at -->
+    <rect x="2" y="80" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="95" font-size="11" fill="#2b2d42">created_at</text>
+    <text x="90" y="95" font-size="11" fill="#8d99ae">DATETIME</text>
+
+    <!-- updated_at -->
+    <rect x="2" y="104" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="119" font-size="11" fill="#2b2d42">updated_at</text>
+    <text x="90" y="119" font-size="11" fill="#8d99ae">DATETIME</text>
+  </g>
+
+  <!-- 2. UNIT (X=80, Y=330) -->
+  <g transform="translate(80, 330)">
+    <rect width="280" height="130" rx="8" ry="8" fill="#ffffff" stroke="#222222" stroke-width="2" />
+    <path d="M 0 8 A 8 8 0 0 1 8 0 L 272 0 A 8 8 0 0 1 280 8 L 280 30 L 0 30 Z" fill="#2b2d42" />
+    <text x="140" y="20" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">unit</text>
+    
+    <rect x="2" y="32" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="47" font-size="11" font-weight="bold" fill="#d90429">id</text>
+    <text x="90" y="47" font-size="11" fill="#2b2d42">INT (PK)</text>
+    
+    <rect x="2" y="56" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="71" font-size="11" fill="#2b2d42">nama_unit</text>
+    <text x="90" y="71" font-size="11" fill="#8d99ae">VARCHAR(100)</text>
+
+    <rect x="2" y="80" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="95" font-size="11" fill="#2b2d42">created_at</text>
+    <text x="90" y="95" font-size="11" fill="#8d99ae">DATETIME</text>
+
+    <rect x="2" y="104" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="119" font-size="11" fill="#2b2d42">updated_at</text>
+    <text x="90" y="119" font-size="11" fill="#8d99ae">DATETIME</text>
+  </g>
+
+  <!-- 3. USERS (X=80, Y=540) -->
+  <g transform="translate(80, 540)">
+    <rect width="280" height="226" rx="8" ry="8" fill="#ffffff" stroke="#222222" stroke-width="2" />
+    <path d="M 0 8 A 8 8 0 0 1 8 0 L 272 0 A 8 8 0 0 1 280 8 L 280 30 L 0 30 Z" fill="#2b2d42" />
+    <text x="140" y="20" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">users</text>
+    
+    <rect x="2" y="32" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="47" font-size="11" font-weight="bold" fill="#d90429">id</text>
+    <text x="90" y="47" font-size="11" fill="#2b2d42">INT (PK)</text>
+    
+    <rect x="2" y="56" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="71" font-size="11" fill="#2b2d42">username</text>
+    <text x="90" y="71" font-size="11" fill="#8d99ae">VARCHAR(100)</text>
+
+    <rect x="2" y="80" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="95" font-size="11" fill="#2b2d42">nama_lengkap</text>
+    <text x="90" y="95" font-size="11" fill="#8d99ae">VARCHAR(255)</text>
+
+    <rect x="2" y="104" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="119" font-size="11" fill="#2b2d42">email</text>
+    <text x="90" y="119" font-size="11" fill="#8d99ae">VARCHAR(150)</text>
+
+    <rect x="2" y="128" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="143" font-size="11" fill="#2b2d42">password</text>
+    <text x="90" y="143" font-size="11" fill="#8d99ae">VARCHAR(255)</text>
+
+    <rect x="2" y="152" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="167" font-size="11" fill="#2b2d42">role</text>
+    <text x="90" y="167" font-size="11" fill="#8d99ae">VARCHAR(50)</text>
+
+    <rect x="2" y="176" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="191" font-size="11" fill="#2b2d42">created_at</text>
+    <text x="90" y="191" font-size="11" fill="#8d99ae">DATETIME</text>
+
+    <rect x="2" y="200" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="215" font-size="11" fill="#2b2d42">updated_at</text>
+    <text x="90" y="215" font-size="11" fill="#8d99ae">DATETIME</text>
+  </g>
+
+  <!-- 4. DOKUMEN (X=540, Y=140) -->
+  <g transform="translate(540, 140)">
+    <rect width="280" height="298" rx="8" ry="8" fill="#ffffff" stroke="#222222" stroke-width="2" />
+    <path d="M 0 8 A 8 8 0 0 1 8 0 L 272 0 A 8 8 0 0 1 280 8 L 280 30 L 0 30 Z" fill="#2b2d42" />
+    <text x="140" y="20" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">dokumen</text>
+    
+    <rect x="2" y="32" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="47" font-size="11" font-weight="bold" fill="#d90429">id</text>
+    <text x="90" y="47" font-size="11" fill="#2b2d42">INT (PK)</text>
+    
+    <rect x="2" y="56" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="71" font-size="11" fill="#2b2d42">judul</text>
+    <text x="90" y="71" font-size="11" fill="#8d99ae">VARCHAR(255)</text>
+
+    <rect x="2" y="80" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="95" font-size="11" fill="#2b2d42">deskripsi</text>
+    <text x="90" y="95" font-size="11" fill="#8d99ae">TEXT</text>
+
+    <rect x="2" y="104" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="119" font-size="11" fill="#2b2d42">tanggal</text>
+    <text x="90" y="119" font-size="11" fill="#8d99ae">DATE</text>
+
+    <rect x="2" y="128" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="143" font-size="11" fill="#2b2d42">file_dokumen</text>
+    <text x="90" y="143" font-size="11" fill="#8d99ae">VARCHAR(255)</text>
+
+    <rect x="2" y="152" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="167" font-size="11" font-weight="bold" fill="#3a86c8">kategori_id</text>
+    <text x="90" y="167" font-size="11" fill="#2b2d42">INT (FK)</text>
+
+    <rect x="2" y="176" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="191" font-weight="bold" fill="#3a86c8">unit_id</text>
+    <text x="90" y="191" font-size="11" fill="#2b2d42">INT (FK)</text>
+
+    <rect x="2" y="200" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="215" fill="#2b2d42">ukuran_file</text>
+    <text x="90" y="215" font-size="11" fill="#8d99ae">INT</text>
+
+    <rect x="2" y="224" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="239" fill="#2b2d42">ekstensi_file</text>
+    <text x="90" y="239" font-size="11" fill="#8d99ae">VARCHAR(10)</text>
+
+    <rect x="2" y="248" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="263" fill="#2b2d42">created_at</text>
+    <text x="90" y="263" font-size="11" fill="#8d99ae">DATETIME</text>
+
+    <rect x="2" y="272" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="287" fill="#2b2d42">updated_at</text>
+    <text x="90" y="287" font-size="11" fill="#8d99ae">DATETIME</text>
+  </g>
+
+  <!-- 5. REVISI (X=540, Y=520) -->
+  <g transform="translate(540, 520)">
+    <rect width="280" height="346" rx="8" ry="8" fill="#ffffff" stroke="#222222" stroke-width="2" />
+    <path d="M 0 8 A 8 8 0 0 1 8 0 L 272 0 A 8 8 0 0 1 280 8 L 280 30 L 0 30 Z" fill="#2b2d42" />
+    <text x="140" y="20" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">revisi</text>
+    
+    <rect x="2" y="32" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="47" font-size="11" font-weight="bold" fill="#d90429">id</text>
+    <text x="90" y="47" font-size="11" fill="#2b2d42">INT (PK)</text>
+    
+    <rect x="2" y="56" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="71" font-weight="bold" fill="#3a86c8">dokumen_id</text>
+    <text x="90" y="71" font-size="11" fill="#2b2d42">INT (FK)</text>
+
+    <rect x="2" y="80" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="95" font-weight="bold" fill="#3a86c8">user_id</text>
+    <text x="90" y="95" font-size="11" fill="#2b2d42">INT (FK)</text>
+
+    <rect x="2" y="104" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="119" fill="#2b2d42">judul</text>
+    <text x="90" y="119" font-size="11" fill="#8d99ae">VARCHAR(255)</text>
+
+    <rect x="2" y="128" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="143" fill="#2b2d42">deskripsi</text>
+    <text x="90" y="143" font-size="11" fill="#8d99ae">TEXT</text>
+
+    <rect x="2" y="152" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="167" fill="#2b2d42">tanggal</text>
+    <text x="90" y="167" font-size="11" fill="#8d99ae">DATE</text>
+
+    <rect x="2" y="176" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="191" fill="#2b2d42">kategori_id</text>
+    <text x="90" y="191" font-size="11" fill="#8d99ae">INT</text>
+
+    <rect x="2" y="200" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="215" fill="#2b2d42">unit_id</text>
+    <text x="90" y="215" font-size="11" fill="#8d99ae">INT</text>
+
+    <rect x="2" y="224" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="239" fill="#2b2d42">file_dokumen</text>
+    <text x="90" y="239" font-size="11" fill="#8d99ae">VARCHAR(255)</text>
+
+    <rect x="2" y="248" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="263" fill="#2b2d42">status_revisi</text>
+    <text x="90" y="263" font-size="11" fill="#8d99ae">ENUM</text>
+
+    <rect x="2" y="272" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="287" fill="#2b2d42">pesan_admin</text>
+    <text x="90" y="287" font-size="11" fill="#8d99ae">TEXT</text>
+
+    <rect x="2" y="296" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="311" fill="#2b2d42">created_at</text>
+    <text x="90" y="311" font-size="11" fill="#8d99ae">DATETIME</text>
+
+    <rect x="2" y="320" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="335" fill="#2b2d42">updated_at</text>
+    <text x="90" y="335" font-size="11" fill="#8d99ae">DATETIME</text>
+  </g>
+
+  <!-- 6. DISTRIBUSI (X=1040, Y=120) -->
+  <g transform="translate(1040, 120)">
+    <rect width="280" height="202" rx="8" ry="8" fill="#ffffff" stroke="#222222" stroke-width="2" />
+    <path d="M 0 8 A 8 8 0 0 1 8 0 L 272 0 A 8 8 0 0 1 280 8 L 280 30 L 0 30 Z" fill="#2b2d42" />
+    <text x="140" y="20" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">distribusi</text>
+    
+    <rect x="2" y="32" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="47" font-size="11" font-weight="bold" fill="#d90429">id</text>
+    <text x="90" y="47" font-size="11" fill="#2b2d42">INT (PK)</text>
+    
+    <rect x="2" y="56" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="71" font-weight="bold" fill="#3a86c8">dokumen_id</text>
+    <text x="90" y="71" font-size="11" fill="#2b2d42">INT (FK)</text>
+
+    <rect x="2" y="80" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="95" font-weight="bold" fill="#3a86c8">user_id</text>
+    <text x="90" y="95" font-size="11" fill="#2b2d42">INT (FK)</text>
+
+    <rect x="2" y="104" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="119" fill="#2b2d42">tanggal_pinjam</text>
+    <text x="90" y="119" font-size="11" fill="#8d99ae">DATE</text>
+
+    <rect x="2" y="128" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="143" fill="#2b2d42">tanggal_kembali</text>
+    <text x="90" y="143" font-size="11" fill="#8d99ae">DATE</text>
+
+    <rect x="2" y="152" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="167" fill="#2b2d42">status</text>
+    <text x="90" y="167" font-size="11" fill="#8d99ae">ENUM</text>
+
+    <rect x="2" y="176" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="191" fill="#2b2d42">created_at</text>
+    <text x="90" y="191" font-size="11" fill="#8d99ae">DATETIME</text>
+  </g>
+
+  <!-- 7. IZIN (X=1040, Y=370) -->
+  <g transform="translate(1040, 370)">
+    <rect width="280" height="226" rx="8" ry="8" fill="#ffffff" stroke="#222222" stroke-width="2" />
+    <path d="M 0 8 A 8 8 0 0 1 8 0 L 272 0 A 8 8 0 0 1 280 8 L 280 30 L 0 30 Z" fill="#2b2d42" />
+    <text x="140" y="20" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">izin</text>
+    
+    <rect x="2" y="32" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="47" font-size="11" font-weight="bold" fill="#d90429">id</text>
+    <text x="90" y="47" font-size="11" fill="#2b2d42">INT (PK)</text>
+    
+    <rect x="2" y="56" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="71" font-weight="bold" fill="#3a86c8">user_id</text>
+    <text x="90" y="71" font-size="11" fill="#2b2d42">INT (FK)</text>
+
+    <rect x="2" y="80" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="95" font-weight="bold" fill="#3a86c8">dokumen_id</text>
+    <text x="90" y="95" font-size="11" fill="#2b2d42">INT (FK)</text>
+
+    <rect x="2" y="104" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="119" fill="#2b2d42">pesan</text>
+    <text x="90" y="119" font-size="11" fill="#8d99ae">TEXT</text>
+
+    <rect x="2" y="128" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="143" fill="#2b2d42">status_izin</text>
+    <text x="90" y="143" font-size="11" fill="#8d99ae">ENUM</text>
+
+    <rect x="2" y="152" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="167" fill="#2b2d42">tgl_pengajuan</text>
+    <text x="90" y="167" font-size="11" fill="#8d99ae">DATETIME</text>
+
+    <rect x="2" y="176" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="191" fill="#2b2d42">created_at</text>
+    <text x="90" y="191" font-size="11" fill="#8d99ae">DATETIME</text>
+
+    <rect x="2" y="200" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="215" fill="#2b2d42">updated_at</text>
+    <text x="90" y="215" font-size="11" fill="#8d99ae">DATETIME</text>
+  </g>
+
+  <!-- 8. RIWAYAT (X=1040, Y=640) -->
+  <g transform="translate(1040, 640)">
+    <rect width="280" height="178" rx="8" ry="8" fill="#ffffff" stroke="#222222" stroke-width="2" />
+    <path d="M 0 8 A 8 8 0 0 1 8 0 L 272 0 A 8 8 0 0 1 280 8 L 280 30 L 0 30 Z" fill="#2b2d42" />
+    <text x="140" y="20" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">riwayat</text>
+    
+    <rect x="2" y="32" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="47" font-size="11" font-weight="bold" fill="#d90429">id</text>
+    <text x="90" y="47" font-size="11" fill="#2b2d42">INT (PK)</text>
+    
+    <rect x="2" y="56" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="71" font-weight="bold" fill="#3a86c8">dokumen_id</text>
+    <text x="90" y="71" font-size="11" fill="#2b2d42">INT (FK)</text>
+
+    <rect x="2" y="80" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="95" font-weight="bold" fill="#3a86c8">user_id</text>
+    <text x="90" y="95" font-size="11" fill="#2b2d42">INT (FK)</text>
+
+    <rect x="2" y="104" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="119" fill="#2b2d42">aksi</text>
+    <text x="90" y="119" font-size="11" fill="#8d99ae">VARCHAR(100)</text>
+
+    <rect x="2" y="128" width="276" height="22" fill="#f8f9fa" />
+    <text x="12" y="143" fill="#2b2d42">keterangan</text>
+    <text x="90" y="143" font-size="11" fill="#8d99ae">TEXT</text>
+
+    <rect x="2" y="152" width="276" height="22" fill="#ffffff" />
+    <text x="12" y="167" fill="#2b2d42">created_at</text>
+    <text x="90" y="167" font-size="11" fill="#8d99ae">DATETIME</text>
+  </g>
+
+
+  <!-- ================= RELATIONSHIP LINES (Orthogonal) ================= -->
+
+  <!-- 1. kategori.id (1) -> dokumen.kategori_id (N) -->
+  <!-- Kategori right edge: 360, id row center Y: 120 + 30 + 11 = 161 -->
+  <!-- Dokumen left edge: 540, kategori_id row center Y: 140 + 30 + 5*24 + 11 = 301 -->
+  <path d="M 360 161 H 450 V 301 H 540" fill="none" stroke="#444444" stroke-width="1.5" marker-start="url(#one)" marker-end="url(#many)" />
+
+  <!-- 2. unit.id (1) -> dokumen.unit_id (N) -->
+  <!-- Unit right edge: 360, id row center Y: 330 + 30 + 11 = 371 -->
+  <!-- Dokumen left edge: 540, unit_id row center Y: 140 + 30 + 6*24 + 11 = 325 -->
+  <path d="M 360 371 H 450 V 325 H 540" fill="none" stroke="#444444" stroke-width="1.5" marker-start="url(#one)" marker-end="url(#many)" />
+
+  <!-- 3. dokumen.id (1) -> distribusi.dokumen_id (N) -->
+  <!-- Dokumen right edge: 820, id row center Y: 140 + 30 + 11 = 181 -->
+  <!-- Distribusi left edge: 1040, dokumen_id row center Y: 120 + 30 + 1*24 + 11 = 185 -->
+  <path d="M 820 181 H 930 V 185 H 1040" fill="none" stroke="#444444" stroke-width="1.5" marker-start="url(#one)" marker-end="url(#many)" />
+
+  <!-- 4. users.id (1) -> distribusi.user_id (N) -->
+  <!-- Users right edge: 360, id row center Y: 540 + 30 + 11 = 581 -->
+  <!-- Distribusi left edge: 1040, user_id row center Y: 120 + 30 + 2*24 + 11 = 209 -->
+  <!-- Rute memutar menghindari dokumen box (melalui gap X=450 lalu ke X=930 di bawah dokumen) -->
+  <path d="M 360 581 H 450 V 480 H 930 V 209 H 1040" fill="none" stroke="#444444" stroke-width="1.5" marker-start="url(#one)" marker-end="url(#many)" />
+
+  <!-- 5. dokumen.id (1) -> izin.dokumen_id (N) -->
+  <!-- Dokumen right edge: 820, id row center Y: 140 + 30 + 11 = 181 -->
+  <!-- Izin left edge: 1040, dokumen_id row center Y: 370 + 30 + 2*24 + 11 = 459 -->
+  <path d="M 820 181 H 910 V 459 H 1040" fill="none" stroke="#444444" stroke-width="1.5" marker-start="url(#one)" marker-end="url(#many)" />
+
+  <!-- 6. users.id (1) -> izin.user_id (N) -->
+  <!-- Users right edge: 360, id row center Y: 540 + 30 + 11 = 581 -->
+  <!-- Izin left edge: 1040, user_id row center Y: 370 + 30 + 1*24 + 11 = 435 -->
+  <!-- Rute lewat gap X=450 lalu ke X=940 -->
+  <path d="M 360 581 H 450 V 500 H 940 V 435 H 1040" fill="none" stroke="#444444" stroke-width="1.5" marker-start="url(#one)" marker-end="url(#many)" />
+
+  <!-- 7. dokumen.id (1) -> riwayat.dokumen_id (N) -->
+  <!-- Dokumen right edge: 820, id row center Y: 140 + 30 + 11 = 181 -->
+  <!-- Riwayat left edge: 1040, dokumen_id row center Y: 640 + 30 + 1*24 + 11 = 695 -->
+  <path d="M 820 181 H 890 V 695 H 1040" fill="none" stroke="#444444" stroke-width="1.5" marker-start="url(#one)" marker-end="url(#many)" />
+
+  <!-- 8. users.id (1) -> riwayat.user_id (N) -->
+  <!-- Users right edge: 360, id row center Y: 540 + 30 + 11 = 581 -->
+  <!-- Riwayat left edge: 1040, user_id row center Y: 640 + 30 + 2*24 + 11 = 719 -->
+  <!-- Rute memutar via X=450 lalu ke X=950 -->
+  <path d="M 360 581 H 450 V 510 H 950 V 719 H 1040" fill="none" stroke="#444444" stroke-width="1.5" marker-start="url(#one)" marker-end="url(#many)" />
+
+  <!-- 9. dokumen.id (1) -> revisi.dokumen_id (N) -->
+  <!-- Dokumen left edge: 540, id row center Y: 140 + 30 + 11 = 181 -->
+  <!-- Revisi left edge: 540, dokumen_id row center Y: 520 + 30 + 1*24 + 11 = 585 -->
+  <!-- Rute ke kiri lewat X=510 -->
+  <path d="M 540 181 H 510 V 585 H 540" fill="none" stroke="#444444" stroke-width="1.5" marker-start="url(#one)" marker-end="url(#many)" />
+
+  <!-- 10. users.id (1) -> revisi.user_id (N) -->
+  <!-- Users right edge: 360, id row center Y: 540 + 30 + 11 = 581 -->
+  <!-- Revisi left edge: 540, user_id row center Y: 520 + 30 + 2*24 + 11 = 609 -->
+  <path d="M 360 581 H 450 V 609 H 540" fill="none" stroke="#444444" stroke-width="1.5" marker-start="url(#one)" marker-end="url(#many)" />
+
+</svg>

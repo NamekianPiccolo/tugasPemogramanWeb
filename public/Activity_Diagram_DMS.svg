@@ -1,0 +1,301 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1420" width="100%" height="100%">
+  <defs>
+    <!-- Modern Sans-Serif Fonts Integration -->
+    <style type="text/css">
+      @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap');
+      
+      .title-text { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; fill: #111827; font-size: 26px; text-anchor: middle; letter-spacing: 0.5px; }
+      .subtitle-text { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; fill: #4b5563; font-size: 14px; text-anchor: middle; }
+      .lane-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; fill: #111827; font-size: 16px; text-anchor: middle; letter-spacing: 0.5px; }
+      .node-text { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12.5px; fill: #1f2937; font-weight: 500; text-anchor: middle; }
+      .node-text-bold { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13.5px; fill: #111827; font-weight: 700; text-anchor: middle; }
+      .label-text { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; fill: #374151; font-weight: 600; }
+      .label-text-green { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; fill: #059669; font-weight: 700; }
+      .line-label { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; fill: #4b5563; font-style: italic; }
+      
+      /* Formal UML Monochrome Styles */
+      .uml-shape {
+        stroke: #111827;
+        stroke-width: 2;
+        fill: #ffffff;
+      }
+      .uml-line {
+        stroke: #111827;
+        stroke-width: 1.8;
+        fill: none;
+      }
+      .state-header { fill: #f3f4f6; stroke: #111827; stroke-width: 2; }
+      .legend-card { fill: #ffffff; stroke: #e5e7eb; stroke-width: 1; }
+    </style>
+
+    <!-- Arrow Marker -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#111827" />
+    </marker>
+  </defs>
+
+  <!-- Background (Pure White) -->
+  <rect width="1400" height="1420" fill="#ffffff" />
+
+  <!-- Title Section -->
+  <g transform="translate(0, 15)">
+    <rect x="50" y="10" width="1300" height="70" rx="6" class="uml-shape" style="fill: #f9fafb; stroke: #d1d5db;" />
+    <text x="700" y="42" class="title-text">UML ACTIVITY DIAGRAM — DOCUMENT MANAGEMENT SYSTEM (DMS)</text>
+    <text x="700" y="66" class="subtitle-text">Desain Formal Standard (Monokrom) — Berdasarkan Logika Kode Program (CodeIgniter 4)</text>
+  </g>
+
+  <!-- Swimlane Grid & Backgrounds -->
+  <g transform="translate(0, 115)">
+    <!-- Lane Backgrounds -->
+    <rect x="50" y="0" width="410" height="1245" rx="4" class="uml-shape" style="fill: #ffffff; stroke: #111827; stroke-width: 2;" />
+    <rect x="475" y="0" width="450" height="1245" rx="4" class="uml-shape" style="fill: #ffffff; stroke: #111827; stroke-width: 2;" />
+    <rect x="940" y="0" width="410" height="1245" rx="4" class="uml-shape" style="fill: #ffffff; stroke: #111827; stroke-width: 2;" />
+
+    <!-- Lane Headers -->
+    <rect x="50" y="0" width="410" height="45" class="uml-shape" style="fill: #f3f4f6;" />
+    <text x="255" y="28" class="lane-title">KARYAWAN (USER)</text>
+
+    <rect x="475" y="0" width="450" height="45" class="uml-shape" style="fill: #f3f4f6;" />
+    <text x="700" y="28" class="lane-title">SISTEM UTAMA (DMS ENGINE)</text>
+
+    <rect x="940" y="0" width="410" height="45" class="uml-shape" style="fill: #f3f4f6;" />
+    <text x="1145" y="28" class="lane-title">ADMINISTRATOR (ADMIN)</text>
+
+    <!-- Division Lines -->
+    <line x1="467.5" y1="0" x2="467.5" y2="1245" stroke="#111827" stroke-width="1.5" />
+    <line x1="932.5" y1="0" x2="932.5" y2="1245" stroke="#111827" stroke-width="1.5" />
+  </g>
+
+  <!-- Activity Nodes and Flow (Y starts after header, Y-offset by Y=115) -->
+  <g transform="translate(0, 115)">
+    
+    <!-- === AUTHENTICATION FLOW === -->
+    <!-- Start State -->
+    <circle cx="255" cy="85" r="10" fill="#111827" />
+    
+    <!-- Line: Start -> Login Form -->
+    <line x1="255" y1="95" x2="255" y2="120" class="uml-line" marker-end="url(#arrow)" />
+    
+    <!-- Action: Input Credentials -->
+    <rect x="145" y="120" width="220" height="50" rx="4" class="uml-shape" />
+    <text x="255" y="141" class="node-text-bold">Login &amp; Input Kredensial</text>
+    <text x="255" y="157" class="node-text">Username &amp; Password</text>
+
+    <!-- Line: Login Form -> AuthController -->
+    <path d="M 365 145 L 590 145" class="uml-line" marker-end="url(#arrow)" />
+    
+    <!-- Action: AuthController::login() -->
+    <rect x="590" y="120" width="220" height="50" rx="4" class="uml-shape" />
+    <text x="700" y="141" class="node-text-bold">AuthController::login()</text>
+    <text x="700" y="157" class="node-text">Validasi &amp; Ambil Session</text>
+
+    <!-- Line: AuthController -> Decision Sukses -->
+    <line x1="700" y1="170" x2="700" y2="198" class="uml-line" marker-end="url(#arrow)" />
+    
+    <!-- Decision: Valid? -->
+    <path d="M 700 200 L 745 230 L 700 260 L 655 230 Z" class="uml-shape" />
+    <text x="700" y="235" class="node-text-bold">Valid?</text>
+
+    <!-- Line: Decision (No) -> Back to Login -->
+    <path d="M 655 230 L 255 230 L 255 172" class="uml-line" marker-end="url(#arrow)" />
+    <text x="410" y="222" class="label-text">Tidak (Flash Error)</text>
+
+    <!-- Line: Decision (Yes) -> Cek Peran -->
+    <line x1="700" y1="260" x2="700" y2="298" class="uml-line" marker-end="url(#arrow)" />
+
+    <!-- Decision: Peran / Role? -->
+    <path d="M 700 300 L 750 330 L 700 360 L 650 330 Z" class="uml-shape" />
+    <text x="700" y="335" class="node-text-bold">Role?</text>
+
+    <!-- Branch Karyawan (Left) -->
+    <path d="M 650 330 L 255 330 L 255 378" class="uml-line" marker-end="url(#arrow)" />
+    <text x="430" y="322" class="label-text">Karyawan</text>
+
+    <!-- Branch Admin (Right) -->
+    <path d="M 750 330 L 1145 330 L 1145 378" class="uml-line" marker-end="url(#arrow)" />
+    <text x="940" y="322" class="label-text">Admin</text>
+
+    <!-- Action: Explore Dokumen (Karyawan) -->
+    <rect x="145" y="380" width="220" height="50" rx="4" class="uml-shape" />
+    <text x="255" y="401" class="node-text-bold">Explore Dokumen</text>
+    <text x="255" y="417" class="node-text">Tampil Dokumen &amp; Status Izin</text>
+
+    <!-- Action: Dashboard Admin (Admin) -->
+    <rect x="1035" y="380" width="220" height="50" rx="4" class="uml-shape" />
+    <text x="1145" y="401" class="node-text-bold">Dashboard Admin</text>
+    <text x="1145" y="417" class="node-text">Menu CRUD &amp; Riwayat Aktivitas</text>
+
+
+    <!-- === ACCESS CHECK FLOW === -->
+    <!-- Line: Explore -> Memilih Dokumen -->
+    <line x1="255" y1="430" x2="255" y2="458" class="uml-line" marker-end="url(#arrow)" />
+
+    <!-- Action: Memilih Dokumen -->
+    <rect x="145" y="460" width="220" height="50" rx="4" class="uml-shape" />
+    <text x="255" y="481" class="node-text-bold">Memilih Dokumen</text>
+    <text x="255" y="497" class="node-text">Klik salah satu berkas di grid</text>
+
+    <!-- Line: Memilih -> Cek Izin -->
+    <path d="M 365 485 L 590 485" class="uml-line" marker-end="url(#arrow)" />
+
+    <!-- Action: Cek Status Izin & Peran -->
+    <rect x="590" y="460" width="220" height="50" rx="4" class="uml-shape" />
+    <text x="700" y="481" class="node-text-bold">DokumenController::index()</text>
+    <text x="700" y="497" class="node-text">Join Tabel Izin &amp; Cek Lock State</text>
+
+    <!-- Line: Cek Izin -> Decision Status Izin -->
+    <line x1="700" y1="510" x2="700" y2="538" class="uml-line" marker-end="url(#arrow)" />
+
+    <!-- Decision: Status Izin Berkas? -->
+    <path d="M 700 540 L 760 575 L 700 610 L 640 575 Z" class="uml-shape" />
+    <text x="700" y="579" class="node-text-bold">Status Izin?</text>
+
+
+    <!-- ==================================== -->
+    <!-- BRANCH A: DISITUJI / APPROVED (LEFT) -->
+    <!-- ==================================== -->
+    <!-- Line: Decision -> Lihat & Unduh -->
+    <path d="M 640 575 L 255 575 L 255 618" class="uml-line" marker-end="url(#arrow)" />
+    <text x="410" y="567" class="label-text-green">Disetujui / Tanpa Izin</text>
+
+    <!-- Action: Lihat & Unduh Berkas -->
+    <rect x="145" y="620" width="220" height="50" rx="4" class="uml-shape" />
+    <text x="255" y="641" class="node-text-bold">Lihat &amp; Unduh Berkas</text>
+    <text x="255" y="657" class="node-text">Buka link berkas di folder upload</text>
+
+    <!-- Line: Lihat -> Pilihan Pengajuan Revisi -->
+    <line x1="255" y1="670" x2="255" y2="698" class="uml-line" marker-end="url(#arrow)" />
+
+    <!-- Action: Ajukan Revisi -->
+    <rect x="145" y="700" width="220" height="50" rx="4" class="uml-shape" />
+    <text x="255" y="721" class="node-text-bold">Ajukan Revisi Dokumen</text>
+    <text x="255" y="737" class="node-text">Upload file draf revisi baru</text>
+
+    <!-- Line: Ajukan -> Proses & Simpan Draft -->
+    <path d="M 365 725 L 590 725" class="uml-line" marker-end="url(#arrow)" />
+
+    <!-- Action: Proses & Simpan Draft Revisi -->
+    <rect x="590" y="700" width="220" height="50" rx="4" class="uml-shape" />
+    <text x="700" y="721" class="node-text-bold">RevisiController::store()</text>
+    <text x="700" y="737" class="node-text">Simpan ke DB: status_revisi = 'Pending'</text>
+
+    <!-- Line: Simpan Draft -> Review Draf Admin -->
+    <path d="M 810 725 L 1035 725" class="uml-line" marker-end="url(#arrow)" />
+
+    <!-- Action: Review Draf Perubahan (Admin) -->
+    <rect x="1035" y="700" width="220" height="50" rx="4" class="uml-shape" />
+    <text x="1145" y="721" class="node-text-bold">Tinjau Draf Perubahan</text>
+    <text x="1145" y="737" class="node-text">Bandingkan berkas lama &amp; baru</text>
+
+    <!-- Line: Review Draf -> Decision Admin Draf -->
+    <line x1="1145" y1="750" x2="1145" y2="778" class="uml-line" marker-end="url(#arrow)" />
+
+    <!-- Decision: Setujui Draf Perubahan? -->
+    <path d="M 1145 780 L 1195 810 L 1145 840 L 1095 810 Z" class="uml-shape" />
+    <text x="1145" y="815" class="node-text-bold">Setujui?</text>
+
+    <!-- Yes Path (Revisi Disetujui) -> Apply to DB -->
+    <path d="M 1095 810 L 810 810" class="uml-line" marker-end="url(#arrow)" />
+    <text x="915" y="802" class="label-text-green">Ya (Approve)</text>
+
+    <!-- Action: Terapkan ke Tabel Dokumen & Riwayat -->
+    <rect x="590" y="785" width="220" height="50" rx="4" class="uml-shape" style="fill: #f9fafb;" />
+    <text x="700" y="806" class="node-text-bold">RevisiController::approve()</text>
+    <text x="700" y="822" class="node-text">status_revisi='Disetujui', Update Dokumen</text>
+
+    <!-- No Path (Revisi Ditolak) -->
+    <path d="M 1145 840 L 1145 870 L 810 870" class="uml-line" marker-end="url(#arrow)" />
+    <text x="955" y="862" class="label-text">Tidak (Reject)</text>
+
+    <!-- Action: Simpan Alasan Penolakan -->
+    <rect x="590" y="845" width="220" height="50" rx="4" class="uml-shape" />
+    <text x="700" y="866" class="node-text-bold">RevisiController::reject()</text>
+    <text x="700" y="882" class="node-text">status_revisi='Ditolak', Catat Alasan</text>
+
+
+    <!-- ==================================== -->
+    <!-- BRANCH B: PENDING / AWAITING (MID)   -->
+    <!-- ==================================== -->
+    <!-- Line: Decision -> Tampilkan Pending -->
+    <path d="M 700 610 L 700 638" class="uml-line" marker-end="url(#arrow)" />
+    <text x="705" y="623" class="line-label">Pending</text>
+
+    <!-- Action: Tampilkan Status Pending -->
+    <rect x="590" y="640" width="220" height="50" rx="4" class="uml-shape" style="fill: #f9fafb;" />
+    <text x="700" y="661" class="node-text-bold">Menunggu Persetujuan</text>
+    <text x="700" y="677" class="node-text">Menunggu Keputusan Izin Admin</text>
+
+
+    <!-- ==================================== -->
+    <!-- BRANCH C: BELUM ADA / DITOLAK (RIGHT)-->
+    <!-- ==================================== -->
+    <!-- Line: Decision -> Klik Minta Akses -->
+    <path d="M 760 575 L 1145 575 L 1145 608" class="uml-line" marker-end="url(#arrow)" />
+    <text x="915" y="567" class="label-text">Terkunci / Ditolak / Belum Ada Izin</text>
+
+    <!-- Action: Klik "Minta Akses" & Isi Pesan -->
+    <rect x="1035" y="610" width="220" height="50" rx="4" class="uml-shape" />
+    <text x="1145" y="631" class="node-text-bold">🔒 Ajukan Izin Akses Berkas</text>
+    <text x="1145" y="647" class="node-text">Kirim Pesan Alasan Pengajuan Akses</text>
+
+    <!-- Line: Klik Minta -> Simpan Izin -->
+    <path d="M 1035 635 L 810 635" class="uml-line" marker-end="url(#arrow)" />
+
+    <!-- Action: Simpan Izin Status "Pending" -->
+    <rect x="590" y="610" width="220" height="50" rx="4" class="uml-shape" />
+    <text x="700" y="631" class="node-text-bold">IzinController::store()</text>
+    <text x="700" y="647" class="node-text">Save ke DB: status_izin = 'Pending'</text>
+
+    <!-- Bridge Line down to review permision -->
+    <path d="M 700 660 L 700 690 L 1145 690 L 1145 930" class="uml-line" />
+    <path d="M 1145 930 L 1145 958" class="uml-line" marker-end="url(#arrow)" />
+    
+    <!-- Action: Tinjau Permohonan Izin Akses (Admin) -->
+    <rect x="1035" y="960" width="220" height="50" rx="4" class="uml-shape" />
+    <text x="1145" y="981" class="node-text-bold">Tinjau Permohonan Izin</text>
+    <text x="1145" y="997" class="node-text">Menu: Manajemen Persetujuan Izin</text>
+
+    <!-- Line: Tinjau -> Decision Admin Izin -->
+    <line x1="1145" y1="1010" x2="1145" y2="1038" class="uml-line" marker-end="url(#arrow)" />
+
+    <!-- Decision: Beri Izin Akses? -->
+    <path d="M 1145 1040 L 1195 1070 L 1145 1100 L 1095 1070 Z" class="uml-shape" />
+    <text x="1145" y="1075" class="node-text-bold">Setujui Izin?</text>
+
+    <!-- Yes Path (Izin Disetujui) -->
+    <path d="M 1095 1070 L 810 1070" class="uml-line" marker-end="url(#arrow)" />
+    <text x="915" y="1062" class="label-text-green">Ya (Approve)</text>
+
+    <!-- Action: Ubah Status Izin ke "Disetujui" -->
+    <rect x="590" y="1045" width="220" height="50" rx="4" class="uml-shape" style="fill: #f9fafb;" />
+    <text x="700" y="1066" class="node-text-bold">IzinController::approve()</text>
+    <text x="700" y="1082" class="node-text">Ubah status_izin ke 'Disetujui'</text>
+
+    <!-- No Path (Izin Ditolak) -->
+    <path d="M 1145 1100 L 1145 1130 L 810 1130" class="uml-line" marker-end="url(#arrow)" />
+    <text x="955" y="1122" class="label-text">Tidak (Reject)</text>
+
+    <!-- Action: Ubah Status Izin ke "Ditolak" -->
+    <rect x="590" y="1105" width="220" height="50" rx="4" class="uml-shape" />
+    <text x="700" y="1126" class="node-text-bold">IzinController::reject()</text>
+    <text x="700" y="1142" class="node-text">Ubah status_izin ke 'Ditolak'</text>
+
+  </g>
+
+  <!-- Legend & Annotations Card -->
+  <g transform="translate(50, 1375)">
+    <rect x="0" y="0" width="1300" height="35" rx="4" class="uml-shape" style="fill: #f9fafb; stroke: #d1d5db;" />
+    
+    <circle cx="50" cy="18" r="6" fill="#111827" />
+    <text x="65" y="22" font-family="'Plus Jakarta Sans', sans-serif" font-size="12px" fill="#1f2937" font-weight="bold">Start Node</text>
+
+    <rect x="180" y="10" width="15" height="15" rx="3" class="uml-shape" style="fill: #ffffff;" />
+    <text x="205" y="22" font-family="'Plus Jakarta Sans', sans-serif" font-size="12px" fill="#1f2937" font-weight="bold">Aktivitas Standar</text>
+
+    <rect x="430" y="10" width="15" height="15" rx="3" class="uml-shape" style="fill: #f9fafb;" />
+    <text x="455" y="22" font-family="'Plus Jakarta Sans', sans-serif" font-size="12px" fill="#1f2937" font-weight="bold">Proses Sistem / DB Update</text>
+
+    <path d="M 720 17.5 L 780 17.5" stroke="#111827" stroke-width="2" />
+    <text x="795" y="22" font-family="'Plus Jakarta Sans', sans-serif" font-size="12px" fill="#1f2937" font-weight="bold">Alur Kontrol (Control Flow)</text>
+  </g>
+</svg>

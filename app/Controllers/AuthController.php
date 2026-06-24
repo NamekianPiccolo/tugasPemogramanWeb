@@ -19,10 +19,12 @@ class AuthController extends BaseController
 
     public function process()
     {
+        $loginType = null;
         try {
             $users = new UserModel();
             $username = $this->request->getPost('username');
             $password = $this->request->getPost('password');
+            $loginType = $this->request->getPost('login_type');
             
             $dataUser = $users->where('username', $username)->first();
     
@@ -39,14 +41,17 @@ class AuthController extends BaseController
                     $redirectPath = ($dataUser['role'] === 'admin') ? '/admin/dashboard' : '/karyawan/dashboard';
                     return redirect()->to($redirectPath);
                 } else {
+                    session()->setFlashdata('login_type', $loginType);
                     session()->setFlashdata('error', 'Password salah');
                     return redirect()->back();
                 }
             } else {
+                session()->setFlashdata('login_type', $loginType);
                 session()->setFlashdata('error', 'Username tidak ditemukan');
                 return redirect()->back();
             }
         } catch (\Exception $e) {
+            session()->setFlashdata('login_type', $loginType);
             session()->setFlashdata('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
             return redirect()->back();
         }

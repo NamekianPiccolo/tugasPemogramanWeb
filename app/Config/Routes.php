@@ -86,12 +86,6 @@ $routes->group('karyawan', ['filter' => ['auth', 'role:karyawan']], static funct
         $routes->get('create', 'IzinController::create');
         $routes->post('store', 'IzinController::store');
     });
-
-    $routes->group('distribusi', static function ($routes) {
-        $routes->get('/', 'DistribusiController::index');
-        $routes->get('create', 'DistribusiController::create');
-        $routes->post('store', 'DistribusiController::store');
-    });
 });
 
 

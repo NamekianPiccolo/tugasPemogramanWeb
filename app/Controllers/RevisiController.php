@@ -44,6 +44,34 @@ class RevisiController extends BaseController
                 'file_dokumen'  => $fileName,
                 'status_revisi' => 'Pending'
             ]);
+            
+            // Ubah status distribusi menjadi 'Dikembalikan'
+            $distribusiModel = new \App\Models\DistribusiModel();
+            $userId = session()->get('id');
+            $activeDistribusi = $distribusiModel->where('dokumen_id', $dokumenId)
+                                                ->where('user_id', $userId)
+                                                ->where('status !=', 'Dikembalikan')
+                                                ->first();
+            if ($activeDistribusi) {
+                $distribusiModel->update($activeDistribusi['id'], ['status' => 'Dikembalikan']);
+            }
+
+            // Ubah status izin menjadi 'Selesai' agar karyawan harus minta izin lagi jika ingin merevisi kembali
+            $izinModel = new \App\Models\IzinModel();
+            $activeIzin = $izinModel->where('dokumen_id', $dokumenId)
+                                    ->where('user_id', $userId)
+                                    ->where('status_izin', 'Disetujui')
+                                    ->first();
+            if ($activeIzin) {
+                $izinModel->update($activeIzin['id'], ['status_izin' => 'Selesai']);
+            }
+            // Catat Riwayat Pengajuan Revisi
+            $this->riwayatModel->save([
+                'dokumen_id' => $dokumenId,
+                'user_id' => session()->get('id'), 
+                'aksi' => 'Ajukan Revisi',
+                'keterangan' => 'Mengajukan draft perubahan dokumen'
+            ]);
      
             session()->setFlashdata('success', 'Draft perubahan telah dikirim ke Admin untuk ditinjau.');
             return redirect()->to('/karyawan/dokumen');
@@ -58,7 +86,7 @@ class RevisiController extends BaseController
     {
         $data['title'] = 'Review Perubahan Dokumen';
         $data['revisi'] = $this->revisiModel
-            ->select('revisi.*, dokumen.judul as judul_asli, users.nama_lengkap')
+            ->select('revisi.*, dokumen.judul as judul_asli, dokumen.deskripsi as deskripsi_asli, users.nama_lengkap')
             ->join('dokumen', 'dokumen.id = revisi.dokumen_id', 'left')
             ->join('users', 'users.id = revisi.user_id', 'left')
             ->orderBy('revisi.created_at', 'DESC')
@@ -84,16 +112,40 @@ class RevisiController extends BaseController
                 'file_dokumen'  => $revisi['file_dokumen'],
             ]);
      
-            // 2. Update Status Revisi
+            // 2. Update Status Revisi yang Disetujui
             $this->revisiModel->update($id, ['status_revisi' => 'Disetujui']);
      
-            // 3. Catat Riwayat
+            // 3. Catat Riwayat Persetujuan
             $this->riwayatModel->save([
                 'dokumen_id' => $revisi['dokumen_id'],
                 'user_id'    => session()->get('id'),
                 'aksi'       => 'Persetujuan Perubahan',
                 'keterangan' => 'Perubahan dari karyawan ' . $revisi['user_id'] . ' telah disetujui dan diterapkan.'
             ]);
+
+            // 4. Tolak otomatis pengajuan revisi lain (jika ada) untuk dokumen yang sama
+            $revisiLain = $this->revisiModel
+                ->where('dokumen_id', $revisi['dokumen_id'])
+                ->where('id !=', $id)
+                ->where('status_revisi', 'Pending')
+                ->findAll();
+
+            if (!empty($revisiLain)) {
+                $pesanOtomatis = 'Revisi ditolak otomatis karena pengajuan revisi lain untuk dokumen ini telah disetujui.';
+                foreach ($revisiLain as $rl) {
+                    $this->revisiModel->update($rl['id'], [
+                        'status_revisi' => 'Ditolak',
+                        'pesan_admin'   => $pesanOtomatis
+                    ]);
+
+                    $this->riwayatModel->save([
+                        'dokumen_id' => $rl['dokumen_id'],
+                        'user_id'    => session()->get('id'),
+                        'aksi'       => 'Penolakan Perubahan',
+                        'keterangan' => 'Sistem menolak otomatis perubahan dari karyawan ' . $rl['user_id'] . '. Pesan: ' . $pesanOtomatis
+                    ]);
+                }
+            }
      
             session()->setFlashdata('success', 'Perubahan dokumen berhasil disetujui dan diterapkan ke sistem.');
             return redirect()->to('/admin/revisi');
@@ -112,6 +164,17 @@ class RevisiController extends BaseController
                 'status_revisi' => 'Ditolak',
                 'pesan_admin'   => $pesan
             ]);
+
+            // Catat Riwayat Penolakan
+            $revisi = $this->revisiModel->find($id);
+            if ($revisi) {
+                $this->riwayatModel->save([
+                    'dokumen_id' => $revisi['dokumen_id'],
+                    'user_id'    => session()->get('id'),
+                    'aksi'       => 'Penolakan Perubahan',
+                    'keterangan' => 'Perubahan dokumen ditolak oleh Admin. Pesan: ' . $pesan
+                ]);
+            }
      
             session()->setFlashdata('success', 'Perubahan dokumen telah ditolak.');
             return redirect()->to('/admin/revisi');

@@ -8,13 +8,13 @@
         <div style="position:relative;z-index:1;">
             <div class="flex items-center space-x-2 mb-2">
                 <div class="w-1.5 h-5 organic-shape" style="background:var(--primary);"></div>
-                <span class="text-[11px] font-bold uppercase tracking-widest font-kalam" style="color:var(--muted);">Personal Journal</span>
+                <span class="text-[11px] font-bold uppercase tracking-widest font-kalam" style="color:var(--muted);">Dashboard</span>
             </div>
             <h1 class="text-3xl font-bold mb-1.5 font-kalam">
                 <span style="color:var(--txt);">Selamat Datang, </span>
-                <span style="color:var(--secondary); text-decoration: underline wavy var(--primary);"><?= esc(session()->get('nama_lengkap')) ?>!</span>
+                <span style="color:var(--secondary); "><?= esc(session()->get('nama_lengkap')) ?>!</span>
             </h1>
-            <p class="text-sm mt-3" style="color:var(--muted); font-family:'Lora',serif;">
+            <p class="text-sm mt-3 font-kalam" style="color:var(--muted); ">
                 Masuk sebagai
                 <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold capitalize badge-vio ml-1 mr-1">
                     <?= esc($role) ?>
@@ -34,7 +34,7 @@
             <div>
                 <p class="text-[11px] font-bold uppercase tracking-widest mb-1.5 font-kalam" style="color:var(--txt);">Total Dokumen</p>
                 <h3 class="text-4xl font-extrabold font-kalam" style="color:var(--txt);"><?= esc($total_dokumen ?? 0) ?></h3>
-                <p class="text-xs mt-1" style="color:var(--muted); font-family:'Lora',serif;">lembar tersimpan</p>
+                <p class="text-xs mt-1 font-kalam" style="color:var(--muted); ">lembar tersimpan</p>
             </div>
             <div class="w-12 h-12 flex items-center justify-center shrink-0 organic-shape"
                  style="background:rgba(224,122,95,0.15);border:2px solid var(--txt);box-shadow: 2px 2px 0px var(--txt);">
@@ -50,7 +50,7 @@
             <div>
                 <p class="text-[11px] font-bold uppercase tracking-widest mb-1.5 font-kalam" style="color:var(--txt);">Total Kategori</p>
                 <h3 class="text-4xl font-extrabold font-kalam" style="color:var(--txt);"><?= esc($total_kategori ?? 0) ?></h3>
-                <p class="text-xs mt-1" style="color:var(--muted); font-family:'Lora',serif;">map terorganisir</p>
+                <p class="text-xs mt-1 font-kalam" style="color:var(--muted); ">map terorganisir</p>
             </div>
             <div class="w-12 h-12 flex items-center justify-center shrink-0 organic-shape"
                  style="background:rgba(132,169,140,0.15);border:2px solid var(--txt);box-shadow: 2px 2px 0px var(--txt);">
@@ -66,7 +66,7 @@
             <div>
                 <p class="text-[11px] font-bold uppercase tracking-widest mb-1.5 font-kalam" style="color:var(--txt);">Total Unit Kerja</p>
                 <h3 class="text-4xl font-extrabold font-kalam" style="color:var(--txt);"><?= esc($total_unit ?? 0) ?></h3>
-                <p class="text-xs mt-1" style="color:var(--muted); font-family:'Lora',serif;">divisi terdaftar</p>
+                <p class="text-xs mt-1 font-kalam" style="color:var(--muted); ">divisi terdaftar</p>
             </div>
             <div class="w-12 h-12 flex items-center justify-center shrink-0 organic-shape"
                  style="background:rgba(224,122,95,0.15);border:2px solid var(--txt);box-shadow: 2px 2px 0px var(--txt);">
@@ -84,7 +84,7 @@
             <div>
                 <p class="text-[11px] font-bold uppercase tracking-widest mb-1.5 font-kalam" style="color:var(--txt);">Total Dokumen</p>
                 <h3 class="text-4xl font-extrabold font-kalam" style="color:var(--txt);"><?= esc($total_dokumen ?? 0) ?></h3>
-                <p class="text-xs mt-1" style="color:var(--muted); font-family:'Lora',serif;">lembar tersedia</p>
+                <p class="text-xs mt-1" style="color:var(--muted); ">lembar tersedia</p>
             </div>
             <div class="w-12 h-12 flex items-center justify-center shrink-0 organic-shape"
                  style="background:rgba(224,122,95,0.15);border:2px solid var(--txt);box-shadow: 2px 2px 0px var(--txt);">
@@ -100,7 +100,7 @@
             <div>
                 <p class="text-[11px] font-bold uppercase tracking-widest mb-1.5 font-kalam" style="color:var(--txt);">Izin Pending</p>
                 <h3 class="text-4xl font-extrabold font-kalam" style="color:var(--txt);"><?= esc($izin_pending ?? 0) ?></h3>
-                <p class="text-xs mt-1" style="color:var(--muted); font-family:'Lora',serif;">menunggu ulasan</p>
+                <p class="text-xs mt-1" style="color:var(--muted); ">menunggu ulasan</p>
             </div>
             <div class="w-12 h-12 flex items-center justify-center shrink-0 organic-shape"
                  style="background:rgba(224,122,95,0.15);border:2px solid var(--txt);box-shadow: 2px 2px 0px var(--txt);">
@@ -116,7 +116,7 @@
             <div>
                 <p class="text-[11px] font-bold uppercase tracking-widest mb-1.5 font-kalam" style="color:var(--txt);">Izin Disetujui</p>
                 <h3 class="text-4xl font-extrabold font-kalam" style="color:var(--txt);"><?= esc($izin_disetujui ?? 0) ?></h3>
-                <p class="text-xs mt-1" style="color:var(--muted); font-family:'Lora',serif;">akses diberikan</p>
+                <p class="text-xs mt-1" style="color:var(--muted); ">akses diberikan</p>
             </div>
             <div class="w-12 h-12 flex items-center justify-center shrink-0 organic-shape"
                  style="background:rgba(132,169,140,0.15);border:2px solid var(--txt);box-shadow: 2px 2px 0px var(--txt);">

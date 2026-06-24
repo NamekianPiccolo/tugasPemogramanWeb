@@ -5,9 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?? 'Workspace DMS' ?></title>
     <!-- Organic Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Kalam:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap" rel="stylesheet">
     <link href="<?= base_url('css/output.css') ?>" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+    window.initSearch = function({ panelId, inputId, items, filterAttrs = [], emptyId = null, countId = 'searchCount' }) {
+        const panel   = document.getElementById(panelId);
+        const input   = document.getElementById(inputId);
+        const clearBtn = panel ? panel.querySelector('.search-bar-clear') : null;
+        const countEl  = document.getElementById(countId);
+        const emptyEl  = emptyId ? document.getElementById(emptyId) : null;
+        const activeFilters = {};
+
+        if (!panel || !input) return;
+
+        /* Clear button */
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                input.value = '';
+                clearBtn.classList.remove('visible');
+                runFilter();
+                input.focus();
+            });
+        }
+
+        /* Text search */
+        input.addEventListener('input', () => {
+            if (clearBtn) clearBtn.classList.toggle('visible', input.value.length > 0);
+            runFilter();
+        });
+
+        /* Chip filters */
+        filterAttrs.forEach(({ attr, pillsSelector }) => {
+            activeFilters[attr] = '';
+            const chips = panel.querySelectorAll(pillsSelector);
+            chips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    chips.forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    activeFilters[attr] = chip.dataset.filter || '';
+                    runFilter();
+                });
+            });
+        });
+
+        function updateCount(n) {
+            if (!countEl) return;
+            countEl.classList.remove('pop');
+            void countEl.offsetWidth;
+            countEl.textContent = n;
+            countEl.classList.add('pop');
+            setTimeout(() => countEl.classList.remove('pop'), 350);
+        }
+
+        function runFilter() {
+            const q = input.value.toLowerCase().trim();
+            let visible = 0;
+            document.querySelectorAll(items).forEach(card => {
+                const textMatch = (card.dataset.search || '').includes(q);
+                let filterMatch = true;
+                filterAttrs.forEach(({ attr }) => {
+                    if (activeFilters[attr] && card.dataset[attr] !== activeFilters[attr]) filterMatch = false;
+                });
+                const show = textMatch && filterMatch;
+                if (show && card.style.display === 'none') {
+                    card.style.display = '';
+                    gsap.fromTo(card, { opacity:0, y:8 }, { opacity:1, y:0, duration:0.2, ease:'power2.out' });
+                } else if (!show) {
+                    card.style.display = 'none';
+                }
+                if (show) visible++;
+            });
+            updateCount(visible);
+            if (emptyEl) emptyEl.classList.toggle('visible', visible === 0 && (q.length > 0 || Object.values(activeFilters).some(Boolean)));
+        }
+    };
+    </script>
 
     <style>
         /* ================================================
@@ -24,7 +97,10 @@
             --dim:      #b5b0a1; /* Light warm gray */
         }
 
-        *, *::before, *::after { box-sizing: border-box; }
+        *, *::before, *::after { 
+            box-sizing: border-box; 
+            font-family: 'Kalam', cursive !important;
+        }
 
         body, html {
             margin: 0; padding: 0; height: 100%; overflow: hidden;
@@ -32,7 +108,7 @@
             /* SVG Paper Texture Overlay */
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
             color: var(--txt);
-            font-family: 'Lora', serif; /* Changed to Lora for organic journal feel */
+            font-family: 'Kalam', cursive;
         }
 
         h1, h2, h3, h4, h5, .font-kalam {
@@ -46,7 +122,7 @@
             border: 2px solid var(--txt);
         }
         .organic-shadow {
-            box-shadow: 4px 4px 0px rgba(61, 64, 91, 0.2);
+            box-shadow: 4px 4px 0px rgba(61, 64, 91, 0.2) !important;
         }
 
         /* ───────── SIDEBAR ───────── */
@@ -99,11 +175,11 @@
             content: ''; position: absolute; inset: 2px; border: 1px solid rgba(61, 64, 91, 0.1);
             border-radius: 15px 255px 15px 225px / 255px 15px 225px 15px; pointer-events: none;
         }
-        .glass-card:hover {
+        /* .glass-card:hover {
             box-shadow: 8px 8px 0px rgba(61, 64, 91, 0.2);
             transform: translateY(-5px) rotate(1.5deg) scale(1.02);
             z-index: 10; /* Bring forward so shadow doesn't clip */
-        }
+        /* } */ 
 
         /* ───────── HEADER ───────── */
         .header-glass {
@@ -149,12 +225,17 @@
             background: var(--surface); border: 2px solid var(--muted); color:var(--txt);
             border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; 
             transition: all 0.2s ease;
-            font-family: 'Lora', serif;
+            font-family: 'Kalam', cursive;
         }
         .glass-input:focus {
             outline:none; border-color:var(--txt);
             box-shadow: 3px 3px 0px rgba(61, 64, 91, 0.15);
             background: #ffffff;
+        }
+
+        /* Global Form elements override to Kalam */
+        input, select, textarea, button, option, .fl-input, .fl-label {
+            font-family: 'Kalam', cursive !important;
         }
 
         /* ───────── BADGES (Hand-drawn tags) ───────── */
@@ -163,7 +244,256 @@
         .badge-wrn { background:rgba(242,204,143,0.2); color:#d97706; border:1px solid #d97706; border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; padding:2px 8px; font-family:'Kalam',cursive; }
         .badge-vio { background:rgba(224,122,95,0.15); color:var(--secondary); border:1px solid var(--secondary); border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; padding:2px 8px; font-family:'Kalam',cursive; }
 
+        /* ═══════════════════════════════════════════════════
+           SEARCH v3 — Clean & Friendly (Linear/Notion-inspired)
+        ═══════════════════════════════════════════════════ */
+
+        /* ── Outer wrapper: just spacing, no heavy borders ── */
+        .search-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        /* ── Main search bar ── */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: var(--surface);
+            border: 2px solid var(--txt);
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            box-shadow: 4px 4px 0px rgba(61, 64, 91, 0.2);
+            padding: 0 12px 0 0;
+            transition: all 0.2s ease;
+            overflow: hidden;
+        }
+        .search-bar:focus-within {
+            background: #ffffff;
+            box-shadow: 6px 6px 0px rgba(61, 64, 91, 0.35);
+            transform: translate(-1px, -1px);
+        }
+
+        /* ── Icon badge on the left ── */
+        .search-icon-badge {
+            width: 48px; height: 52px;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--primary);
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+        .search-bar:focus-within .search-icon-badge {
+            background: #73967b;
+        }
+        .search-icon-badge svg { color: #ffffff; }
+
+        /* ── The input itself ── */
+        .search-bar-input {
+            flex: 1;
+            padding: 14px 12px;
+            background: transparent;
+            border: none; outline: none;
+            color: var(--txt);
+            font-family: 'Kalam', cursive;
+            font-size: 15px; font-weight: 500;
+            caret-color: var(--primary);
+            min-width: 0;
+        }
+        .search-bar-input::placeholder {
+            color: var(--dim);
+            font-weight: 400;
+        }
+
+        /* ── Keyboard shortcut hint ── */
+        .search-kbd {
+            flex-shrink: 0;
+            display: flex; align-items: center; gap: 3px;
+            padding: 4px 8px;
+            background: var(--bg);
+            border: 1.5px solid rgba(61,64,91,0.15);
+            border-radius: 6px;
+            font-size: 10px; font-weight: 700;
+            color: var(--muted);
+            letter-spacing: 0.5px;
+            transition: opacity 0.2s;
+            user-select: none;
+        }
+        .search-bar:focus-within .search-kbd { opacity: 0; pointer-events: none; }
+
+        /* ── Clear button (right side of bar) ── */
+        .search-bar-clear {
+            flex-shrink: 0;
+            width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(224,122,95,0.08);
+            border: 1.5px solid rgba(224,122,95,0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            opacity: 0; pointer-events: none;
+            transition: all 0.18s ease;
+            margin-left: 8px;
+        }
+        .search-bar-clear.visible { opacity: 1; pointer-events: all; }
+        .search-bar-clear:hover {
+            background: rgba(224,122,95,0.18);
+            border-color: var(--secondary);
+            transform: rotate(90deg) scale(1.1);
+        }
+        .search-bar-clear svg { color: var(--secondary); }
+
+        /* ── Filter row below the bar ── */
+        .search-filter-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 0 2px;
+        }
+
+        .search-filter-label {
+            font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px;
+            color: var(--dim);
+            margin-right: 2px;
+            flex-shrink: 0;
+        }
+
+        /* ── Filter chips ── */
+        .sf-chip {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 14px;
+            font-family: 'Kalam', cursive;
+            font-size: 12px; font-weight: 600;
+            background: var(--surface);
+            border: 2px solid var(--txt);
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            color: var(--txt);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none; white-space: nowrap;
+            box-shadow: 2px 2px 0px rgba(61, 64, 91, 0.15);
+        }
+        .sf-chip:hover {
+            border-color: var(--primary);
+            color: var(--txt);
+            background: rgba(132,169,140,0.08);
+            transform: translateY(-1px);
+            box-shadow: 3px 3px 0px rgba(61, 64, 91, 0.2);
+        }
+        .sf-chip.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #ffffff;
+            font-weight: 700;
+            box-shadow: 3px 3px 0px var(--txt);
+            transform: translateY(-1px);
+        }
+        
+        /* Custom active colors based on theme/semantics */
+        .sf-chip.active[data-filter-kat] {
+            background: var(--secondary);
+            border-color: var(--secondary);
+        }
+        .sf-chip.active[data-filter-role="admin"] {
+            background: var(--secondary);
+            border-color: var(--secondary);
+        }
+        .sf-chip.active[data-filter-role="karyawan"] {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+        .sf-chip.active[data-filter-status="pending"],
+        .sf-chip.active[data-filter-status="dipinjam"] {
+            background: #F59E0B;
+            border-color: #F59E0B;
+        }
+        .sf-chip.active[data-filter-status="disetujui"],
+        .sf-chip.active[data-filter-status="dikembalikan"] {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+        .sf-chip.active[data-filter-status="ditolak"],
+        .sf-chip.active[data-filter-status="terlambat"] {
+            background: var(--secondary);
+            border-color: var(--secondary);
+        }
+        .sf-chip.active[data-filter-aksi="tambah"] {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+        .sf-chip.active[data-filter-aksi="edit"] {
+            background: #F59E0B;
+            border-color: #F59E0B;
+        }
+        .sf-chip.active[data-filter-aksi="hapus"] {
+            background: var(--secondary);
+            border-color: var(--secondary);
+        }
+        .sf-chip.active[data-filter-aksi="login"] {
+            background: #8B5CF6;
+            border-color: #8B5CF6;
+        }
+        .sf-chip .sf-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: currentColor; opacity: 0.7;
+            flex-shrink: 0;
+        }
+        .sf-chip.active .sf-dot { opacity: 1; background: rgba(255,255,255,0.7); }
+
+        /* ── Results count badge ── */
+        .search-count-badge {
+            margin-left: auto;
+            display: flex; align-items: baseline; gap: 5px;
+            padding: 5px 14px;
+            background: var(--bg);
+            border: 1.5px solid rgba(61,64,91,0.15);
+            border-radius: 20px;
+            font-family: 'Kalam', cursive;
+            font-size: 12px; font-weight: 600;
+            color: var(--muted);
+            flex-shrink: 0;
+        }
+        .search-count-badge .scb-num {
+            font-size: 16px; font-weight: 800;
+            color: var(--primary);
+            display: inline-block;
+            line-height: 1;
+        }
+        .scb-num.pop {
+            animation: scbPop 0.32s cubic-bezier(0.34,1.56,0.64,1) forwards;
+        }
+        @keyframes scbPop {
+            0%   { transform: scale(1.5); color: var(--secondary); }
+            100% { transform: scale(1);   color: var(--primary); }
+        }
+
+        /* ── Empty state ── */
+        .search-empty {
+            display: none; text-align: center;
+            padding: 56px 24px;
+        }
+        .search-empty.visible { display: block; animation: fadeUp 0.3s ease; }
+        @keyframes fadeUp {
+            from { opacity:0; transform: translateY(12px); }
+            to   { opacity:1; transform: translateY(0); }
+        }
+        .search-empty-icon {
+            width: 72px; height: 72px;
+            margin: 0 auto 20px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(224,122,95,0.08);
+            border: 2px solid rgba(224,122,95,0.25);
+            border-radius: 18px;
+            animation: emptyFloat 2.5s ease-in-out infinite;
+        }
+        @keyframes emptyFloat {
+            0%,100% { transform: translateY(0); }
+            50%     { transform: translateY(-8px); }
+        }
+
     </style>
+
+
     <?= $this->renderSection('styles') ?>
 </head>
 <body class="antialiased w-full h-full flex flex-row">
@@ -175,7 +505,7 @@
         <!-- Logo -->
         <div class="flex items-center space-x-3 px-2 mb-10 mt-2 shrink-0">
             <div class="w-10 h-10 flex items-center justify-center text-white organic-shape"
-                 style="background:var(--secondary); border:2px solid var(--txt); box-shadow: 2px 2px 0px var(--txt);">
+                 style="background:var(--secondary); border:2px solid var(--txt); box-shadow: 2px 2px 0px var(--txt)">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
@@ -183,7 +513,7 @@
             </div>
             <div>
                 <span class="font-bold text-lg tracking-tight font-kalam">Workspace DMS</span>
-                <div class="text-[10px] uppercase tracking-widest font-bold text-gray-500 mt-0.5" style="font-family:'Plus Jakarta Sans',sans-serif;">Organic Edition</div>
+                <div class="text-[10px] uppercase tracking-widest font-bold text-gray-500 mt-0.5">Organic Edition</div>
             </div>
         </div>
 
@@ -243,6 +573,7 @@
             <div>
                 <div class="px-2 mb-3 text-[11px] font-bold uppercase tracking-widest text-gray-500 font-kalam">Workflow</div>
                 <nav class="space-y-1.5">
+                    <?php if ($role === 'admin'): ?>
                     <a href="<?= base_url("$role/distribusi") ?>"
                        class="nav-item flex items-center px-4 py-2.5 <?= strpos(current_url(),'distribusi')!==false?'active':'' ?>">
                         <svg class="w-5 h-5 mr-3 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -250,6 +581,7 @@
                         </svg>
                         Distribusi Berkas
                     </a>
+                    <?php endif; ?>
 
                     <a href="<?= base_url("$role/izin") ?>"
                        class="nav-item flex items-center px-4 py-2.5 <?= strpos(current_url(),'izin')!==false?'active':'' ?>">
@@ -286,12 +618,12 @@
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-2 min-w-0">
                 <div class="w-9 h-9 flex items-center justify-center text-xs font-bold text-white shrink-0 organic-shape"
-                     style="background:var(--primary); border: 2px solid var(--txt);">
+                     style="background:var(--primary); border: 2px solid var(--txt)">
                     <?= strtoupper(substr(session()->get('nama_lengkap') ?? 'US',0,2)) ?>
                 </div>
                 <div class="min-w-0 pr-2">
                     <p class="text-xs font-bold text-gray-800 truncate font-kalam leading-tight"><?= esc(session()->get('nama_lengkap') ?? 'Pengguna') ?></p>
-                    <p class="text-[10px] text-gray-500 truncate capitalize" style="font-family:'Lora',serif;"><?= esc($role) ?></p>
+                    <p class="text-[10px] text-gray-500 truncate capitalize"><?= esc($role) ?></p>
                 </div>
             </div>
             <a href="<?= base_url('/logout') ?>"
@@ -309,34 +641,7 @@
 <div id="workspaceEl" class="flex-1 h-full flex flex-col z-10 relative bg-transparent overflow-hidden">
 
     <!-- HEADER -->
-    <header class="header-glass h-[72px] px-8 flex items-center justify-between shrink-0 z-20">
-        <div class="flex items-center space-x-4">
-            <!-- Toggle btn -->
-            <button id="sidebarToggleBtn" title="Toggle Sidebar" class="w-10 h-10 organic-shape bg-white flex items-center justify-center text-[var(--txt)] hover:bg-[var(--primary)] hover:text-white transition-all duration-200">
-                <svg id="toggleIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                </svg>
-            </button>
-            <!-- Breadcrumb -->
-            <div class="flex items-center text-sm font-bold text-gray-500 font-kalam">
-                <span>Journal</span>
-                <svg class="w-4 h-4 mx-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
-                </svg>
-                <span id="headerTitle" class="text-[var(--txt)]"><?= $title ?? 'Halaman' ?></span>
-            </div>
-        </div>
-
-        <!-- Notification bell -->
-        <button class="w-10 h-10 organic-shape flex items-center justify-center bg-white text-[var(--txt)] hover:bg-[var(--secondary)] hover:text-white transition-all duration-200 relative">
-            <div class="absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full border-2 border-white"
-                 style="background:var(--secondary);"></div>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-            </svg>
-        </button>
-    </header>
+   
 
     <!-- CONTENT -->
     <main class="ws-scroll" id="contentArea">
@@ -347,16 +652,16 @@
 </div>
 
 <!-- ══════════════ GLOBAL CONFIRM MODAL ══════════════ -->
-<div id="organicConfirmModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; background: rgba(61, 64, 91, 0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); justify-content: center; align-items: center;">
-    <div id="organicConfirmContent" class="p-6 md:p-8 organic-shape transition-all duration-300 opacity-0" style="background-color: var(--surface); width: 90%; max-width: 24rem; border: 3px solid var(--txt); box-shadow: 6px 6px 0px var(--txt); transform: scale(0.95);">
-        <h3 id="organicConfirmTitle" class="text-2xl font-bold font-kalam mb-2" style="color: var(--txt);">Konfirmasi</h3>
-        <p id="organicConfirmText" class="text-sm font-lora mb-6" style="color: var(--muted); line-height: 1.6;">Apakah Anda yakin?</p>
+<div id="organicConfirmModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; background: rgba(61, 64, 91, 0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); justify-content: center; align-items: center">
+    <div id="organicConfirmContent" class="p-6 md:p-8 organic-shape transition-all duration-300 opacity-0" style="background-color: var(--surface); width: 90%; max-width: 24rem; border: 3px solid var(--txt); box-shadow: 6px 6px 0px var(--txt); transform: scale(0.95)">
+        <h3 id="organicConfirmTitle" class="text-2xl font-bold font-kalam mb-2" style="color: var(--txt)">Konfirmasi</h3>
+        <p id="organicConfirmText" class="text-sm mb-6" style="color: var(--muted); line-height: 1.6">Apakah Anda yakin?</p>
         
         <div class="flex space-x-3 justify-end">
-            <button id="organicConfirmBtnCancel" class="organic-shape px-4 py-2 font-kalam font-bold text-sm bg-transparent cursor-pointer transition-all" style="border: 2px solid var(--txt); color: var(--txt);" onmouseover="this.style.background='rgba(61,64,91,0.05)'" onmouseout="this.style.background='transparent'">
+            <button id="organicConfirmBtnCancel" class="organic-shape px-4 py-2 font-kalam font-bold text-sm bg-transparent cursor-pointer transition-all" style="border: 2px solid var(--txt); color: var(--txt)" onmouseover="this.style.background='rgba(61,64,91,0.05)'" onmouseout="this.style.background='transparent'">
                 Batal
             </button>
-            <button id="organicConfirmBtnOk" class="organic-shape px-4 py-2 font-kalam font-bold text-sm cursor-pointer transition-all" style="background: var(--primary); border: 2px solid var(--txt); color: #fffcf2; box-shadow: 3px 3px 0px var(--txt);" onmouseover="this.style.transform='translateY(1px)'; this.style.boxShadow='2px 2px 0px var(--txt)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='3px 3px 0px var(--txt)';">
+            <button id="organicConfirmBtnOk" class="organic-shape px-4 py-2 font-kalam font-bold text-sm cursor-pointer transition-all" style="background: var(--primary); border: 2px solid var(--txt); color: #fffcf2; box-shadow: 3px 3px 0px var(--txt)" onmouseover="this.style.transform='translateY(1px)'; this.style.boxShadow='2px 2px 0px var(--txt)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='3px 3px 0px var(--txt)';">
                 Ya, Lanjutkan
             </button>
         </div>
@@ -556,6 +861,8 @@
 })();
 </script>
 
+
 <?= $this->renderSection('scripts') ?>
+
 </body>
 </html>

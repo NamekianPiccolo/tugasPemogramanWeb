@@ -111,6 +111,14 @@ class DokumenController extends BaseController
                 'file_dokumen' => $fileName
             ]);
 
+            // Catat Riwayat Edit
+            $this->riwayatModel->save([
+                'dokumen_id' => $id,
+                'user_id' => session()->get('id'), 
+                'aksi' => 'Edit Dokumen',
+                'keterangan' => 'Dokumen diperbarui oleh ' . session()->get('username')
+            ]);
+
             session()->setFlashdata('success', 'Dokumen berhasil diubah.');
             $role = session()->get('role');
             return redirect()->to("/$role/dokumen");
@@ -124,10 +132,24 @@ class DokumenController extends BaseController
     {
         try {
             $dokumen = $this->dokumenModel->find($id);
-            if (!empty($dokumen['file_dokumen']) && file_exists(FCPATH . 'uploads/' . $dokumen['file_dokumen'])) {
-                unlink(FCPATH . 'uploads/' . $dokumen['file_dokumen']);
+
+            if ($dokumen) {
+                // Catat riwayat sebelum dokumen dihapus
+                $this->riwayatModel->save([
+                    'dokumen_id' => $id,
+                    'user_id' => session()->get('id'), 
+                    'aksi' => 'Hapus Dokumen',
+                    'keterangan' => 'Dokumen "' . $dokumen['judul'] . '" dihapus secara permanen.'
+                ]);
+
+                // Hapus file fisik jika ada
+                if (!empty($dokumen['file_dokumen']) && file_exists(FCPATH . 'uploads/' . $dokumen['file_dokumen'])) {
+                    unlink(FCPATH . 'uploads/' . $dokumen['file_dokumen']);
+                }
+
+                $this->dokumenModel->delete($id);
             }
-            $this->dokumenModel->delete($id);
+
             session()->setFlashdata('success', 'Dokumen berhasil dihapus.');
             $role = session()->get('role');
             return redirect()->to("/$role/dokumen");
@@ -141,10 +163,12 @@ class DokumenController extends BaseController
     {
         $userId = session()->get('id');
         $data['dokumen'] = $this->dokumenModel
-            ->select('dokumen.*, kategori.nama_kategori, unit.nama_unit, izin.status_izin')
+            ->select('dokumen.*, kategori.nama_kategori, unit.nama_unit, izin.status_izin, distribusi.status as status_distribusi, 
+                     (SELECT COUNT(id) FROM distribusi as d2 WHERE d2.dokumen_id = dokumen.id AND d2.status != \'Dikembalikan\') as sedang_dipinjam_global')
             ->join('kategori', 'kategori.id = dokumen.kategori_id', 'left')
             ->join('unit', 'unit.id = dokumen.unit_id', 'left')
             ->join('izin', "izin.dokumen_id = dokumen.id AND izin.user_id = $userId", 'left')
+            ->join('distribusi', "distribusi.dokumen_id = dokumen.id AND distribusi.user_id = $userId AND distribusi.status != 'Dikembalikan'", 'left')
             ->findAll();
         
         return view('admin/dokumen/index', $data);

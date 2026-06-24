@@ -2,82 +2,138 @@
 <?= $this->section('content') ?>
 <?php $role = session()->get('role') ?? 'admin'; ?>
 
-<div class="mb-7 page-intro">
-    <div class="flex items-center space-x-2 mb-1.5">
-        <div class="w-1 h-4 rounded-full" style="background:linear-gradient(180deg,#06B6D4,#10B981);"></div>
-        <span class="text-[9px] font-bold uppercase tracking-widest" style="color:rgba(6,182,212,.65);">Sirkulasi Berkas</span>
+<style>
+.fl-group{position:relative}
+.fl-input{display:block;width:100%;height:56px;padding:20px 16px 6px 46px;font-size:13.5px;color:var(--txt);background:rgba(255,252,242,0.6);border:1.5px solid rgba(61,64,91,0.16);border-radius:10px;outline:none;transition:border-color .2s ease,box-shadow .2s ease,background .2s ease;appearance:none;line-height:1}
+textarea.fl-input{height:auto;padding-top:26px;padding-bottom:10px;resize:none;line-height:1.55}
+.fl-input::placeholder{color:transparent;user-select:none}
+.fl-label{position:absolute;left:46px;top:50%;transform:translateY(-50%);font-size:13px;color:rgba(138,129,124,.85);pointer-events:none;transition:all .2s cubic-bezier(.4,0,.2,1);transform-origin:left center;white-space:nowrap}
+.fl-group.is-textarea .fl-label{top:18px;transform:none}
+.fl-input:focus~.fl-label,.fl-input:not(:placeholder-shown)~.fl-label{top:10px;transform:translateY(0) scale(.73);color:var(--primary);font-family:'Kalam',cursive;font-weight:700;letter-spacing:.3px}
+.fl-group.is-textarea .fl-input:focus~.fl-label,.fl-group.is-textarea .fl-input:not(:placeholder-shown)~.fl-label{top:8px;transform:scale(.73);transform-origin:left top;color:var(--primary);font-family:'Kalam',cursive;font-weight:700}
+.fl-input:focus{border-color:var(--primary);background:#fff;box-shadow:0 0 0 3px rgba(132,169,140,.16),0 1px 3px rgba(61,64,91,.06)}
+.fl-icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:rgba(181,176,161,.9);pointer-events:none;transition:color .2s ease;z-index:2}
+.fl-group.is-textarea .fl-icon{top:18px;transform:none}
+.fl-group:focus-within .fl-icon{color:var(--primary)}
+select.fl-input{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23b5b0a1'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:14px;padding-right:42px!important}
+select.fl-input~.fl-label,input[type="date"].fl-input~.fl-label{top:10px;transform:translateY(0) scale(.73);font-family:'Kalam',cursive;font-weight:700;color:rgba(138,129,124,.8)}
+select.fl-input:focus~.fl-label,input[type="date"].fl-input:focus~.fl-label{color:var(--primary)}
+.sec-sep{display:flex;align-items:center;gap:8px;margin-bottom:20px}
+.sec-sep-line{width:3px;height:14px;border-radius:2px;flex-shrink:0;background:var(--secondary)}
+.sec-sep span{font-family:'Kalam',cursive;font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.sec-sep::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(61,64,91,.1),transparent)}
+.static-card{transition:box-shadow .2s ease!important}.static-card:hover{transform:none!important;box-shadow:3px 3px 0px rgba(61,64,91,.15)!important}
+.btn-save{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;font-family:'Kalam',cursive;font-size:14px;font-weight:700;letter-spacing:.5px;border-radius:11px;cursor:pointer;background:var(--primary);color:#fffcf2;border:2px solid var(--txt);box-shadow:3px 3px 0 var(--txt);transition:all .18s ease}
+.btn-save:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--txt)}
+.btn-cancel{display:flex;align-items:center;justify-content:center;width:100%;padding:10px;font-family:'Kalam',cursive;font-size:13px;font-weight:700;border-radius:11px;cursor:pointer;background:transparent;color:var(--muted);border:1.5px solid rgba(61,64,91,.15);transition:all .18s ease}
+.btn-cancel:hover{border-color:var(--txt);color:var(--txt)}
+.req{color:var(--secondary);margin-left:1px}
+</style>
+
+<!-- Header -->
+<div class="mb-5 page-intro flex items-center justify-between">
+    <div>
+        <div class="flex items-center gap-2 mb-1">
+            <div class="w-1 h-4 rounded-full" style="background:linear-gradient(180deg,#06B6D4,#10B981)"></div>
+            <span class="text-[9px] font-bold uppercase tracking-widest" style="color:rgba(6,182,212,.6)">Sirkulasi Berkas</span>
+        </div>
+        <h1 class="text-xl font-bold grad-violet mb-0.5">Catat Peminjaman Berkas</h1>
+        <p class="text-xs" style="color:var(--muted)">Tambahkan catatan peminjaman atau distribusi berkas fisik ke divisi atau individu.</p>
     </div>
-    <h1 class="text-xl font-bold grad-cyan mb-0.5">Catat Peminjaman Berkas</h1>
-    <p class="text-xs" style="color:var(--muted);">Tambahkan catatan peminjaman atau distribusi berkas fisik ke divisi atau individu.</p>
+    <a href="<?= base_url("$role/distribusi") ?>" class="btn-cancel shrink-0 px-4 py-2 text-xs" style="width:auto;border-radius:8px">← Kembali</a>
 </div>
 
 <?php if (session()->getFlashdata('error')): ?>
-<div class="mb-5 p-3.5 rounded-xl flex items-center text-xs alert-err alert-box">
-    <svg class="w-4 h-4 mr-2.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-    </svg>
-    <span class="font-semibold"><?= session()->getFlashdata('error') ?></span>
+<div class="mb-4 px-4 py-3 rounded-xl flex items-center gap-2.5 text-xs" style="background:rgba(224,122,95,.1);border:1.5px solid rgba(224,122,95,.25);color:var(--txt)">
+    <svg class="w-4 h-4 shrink-0" style="color:var(--secondary)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+    <span class="font-kalam font-bold"><?= session()->getFlashdata('error') ?></span>
 </div>
 <?php endif; ?>
 
-<div class="glass-card p-7 max-w-xl form-card" style="border-radius:18px;">
-    <form action="<?= base_url("$role/distribusi/store") ?>" method="POST">
-        <?= csrf_field() ?>
+<form action="<?= base_url("$role/distribusi/store") ?>" method="POST">
+    <?= csrf_field() ?>
+    <div class="grid gap-5" style="grid-template-columns:3fr 2fr;align-items:start">
 
-        <div class="mb-5">
-            <label class="block text-[10px] font-bold uppercase tracking-widest mb-2" style="color:rgba(6,182,212,.75);">Pilih Dokumen</label>
-            <select name="dokumen_id" class="glass-input w-full px-4 py-2.5 text-sm" required>
-                <option value="">-- Pilih Dokumen --</option>
-                <?php foreach ($dokumen as $d): ?>
-                <option value="<?= $d['id'] ?>" <?= (isset($selected_dokumen) && $selected_dokumen == $d['id']) ? 'selected' : '' ?>>
-                    <?= esc($d['judul']) ?>
-                </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
+        <!-- Left -->
+        <div class="glass-card static-card" style="padding:28px 32px;border-radius:14px">
+            <div class="sec-sep"><div class="sec-sep-line"></div><span>Data Distribusi</span></div>
 
-        <div class="mb-5">
-            <label class="block text-[10px] font-bold uppercase tracking-widest mb-2" style="color:rgba(139,92,246,.75);">Nama Peminjam / Divisi</label>
-            <input type="text" name="peminjam" value="<?= old('peminjam') ?>"
-                   placeholder="Nama peminjam atau divisi tujuan"
-                   class="glass-input w-full px-4 py-2.5 text-sm" required>
-        </div>
-
-        <div class="grid grid-cols-2 gap-5 mb-5">
-            <div>
-                <label class="block text-[10px] font-bold uppercase tracking-widest mb-2" style="color:rgba(16,185,129,.75);">Tanggal Pinjam</label>
-                <input type="date" name="tanggal_pinjam" value="<?= old('tanggal_pinjam', date('Y-m-d')) ?>"
-                       class="glass-input w-full px-4 py-2.5 text-sm" required>
+            <div class="fl-group mb-4">
+                <select name="dokumen_id" id="dokumen_id" class="fl-input" required>
+                    <option value="" disabled <?= !old('dokumen_id') ? 'selected' : '' ?>></option>
+                    <?php foreach ($dokumen as $d): ?>
+                    <option value="<?= $d['id'] ?>" <?= (isset($selected_dokumen) && $selected_dokumen == $d['id']) ? 'selected' : '' ?>>
+                        <?= esc($d['judul']) ?>
+                    </option>
+                    <?php endforeach; ?>
+                </select>
+                <label for="dokumen_id" class="fl-label">Pilih Dokumen <span class="req">*</span></label>
+                <svg class="fl-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             </div>
-            <div>
-                <label class="block text-[10px] font-bold uppercase tracking-widest mb-2" style="color:rgba(245,158,11,.75);">Est. Tanggal Kembali</label>
-                <input type="date" name="tanggal_kembali" value="<?= old('tanggal_kembali') ?>"
-                       class="glass-input w-full px-4 py-2.5 text-sm">
+
+            <div class="fl-group mb-4">
+                <select name="user_id" id="user_id" class="fl-input" required>
+                    <option value="" disabled <?= !old('user_id') ? 'selected' : '' ?>></option>
+                    <?php foreach ($users as $u): ?>
+                    <option value="<?= $u['id'] ?>" <?= old('user_id') == $u['id'] ? 'selected' : '' ?>>
+                        <?= esc($u['nama_lengkap']) ?> (<?= esc($u['role']) ?>)
+                    </option>
+                    <?php endforeach; ?>
+                </select>
+                <label for="user_id" class="fl-label">Nama Peminjam <span class="req">*</span></label>
+                <svg class="fl-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="fl-group">
+                    <input type="date" name="tanggal_pinjam" id="tanggal_pinjam" value="<?= old('tanggal_pinjam', date('Y-m-d')) ?>" class="fl-input" required>
+                    <label for="tanggal_pinjam" class="fl-label">Tanggal Pinjam <span class="req">*</span></label>
+                    <svg class="fl-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </div>
+                <div class="fl-group">
+                    <input type="date" name="tanggal_kembali" id="tanggal_kembali" value="<?= old('tanggal_kembali') ?>" class="fl-input">
+                    <label for="tanggal_kembali" class="fl-label">Est. Tanggal Kembali</label>
+                    <svg class="fl-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+            </div>
+
+            <div class="fl-group">
+                <select name="status" id="status" class="fl-input">
+                    <option value="Dipinjam" <?= old('status','Dipinjam')==='Dipinjam'?'selected':'' ?>>Dipinjam</option>
+                    <option value="Dikembalikan" <?= old('status')==='Dikembalikan'?'selected':'' ?>>Dikembalikan</option>
+                    <option value="Terlambat" <?= old('status')==='Terlambat'?'selected':'' ?>>Terlambat</option>
+                </select>
+                <label for="status" class="fl-label">Status Distribusi</label>
+                <svg class="fl-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
         </div>
 
-        <div class="mb-6">
-            <label class="block text-[10px] font-bold uppercase tracking-widest mb-2" style="color:rgba(236,72,153,.75);">Status</label>
-            <select name="status" class="glass-input w-full px-4 py-2.5 text-sm">
-                <option value="Dipinjam" <?= old('status') === 'Dipinjam' ? 'selected' : '' ?>>Dipinjam</option>
-                <option value="Dikembalikan" <?= old('status') === 'Dikembalikan' ? 'selected' : '' ?>>Dikembalikan</option>
-                <option value="Terlambat" <?= old('status') === 'Terlambat' ? 'selected' : '' ?>>Terlambat</option>
-            </select>
+        <!-- Right -->
+        <div class="flex flex-col gap-4">
+            <div class="glass-card static-card p-5" style="border-radius:14px">
+                <div class="sec-sep"><div class="sec-sep-line" style="background:var(--primary)"></div><span>Panduan</span></div>
+                <div class="space-y-3 text-xs" style="color:var(--muted);line-height:1.7">
+                    <p>📋 Pilih dokumen yang akan dipinjam dari daftar dokumen aktif di sistem.</p>
+                    <p>👤 Isi nama peminjam atau divisi yang menerima berkas secara lengkap.</p>
+                    <p>📅 Tanggal kembali bersifat estimasi dan dapat diperbarui nanti.</p>
+                    <p>🔄 Status dapat diubah kembali dari halaman daftar distribusi.</p>
+                </div>
+            </div>
+            <div class="flex flex-col gap-2.5">
+                <button type="submit" class="btn-save">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+                    Simpan Distribusi
+                </button>
+                <a href="<?= base_url("$role/distribusi") ?>" class="btn-cancel">Batal</a>
+            </div>
         </div>
-
-        <div class="flex space-x-3">
-            <button type="submit" class="btn-violet flex-1 py-2.5 rounded-xl text-xs font-bold cursor-pointer">
-                Simpan Distribusi
-            </button>
-            <a href="<?= base_url("$role/distribusi") ?>"
-               class="btn-outline flex-1 py-2.5 rounded-xl text-xs font-bold text-center cursor-pointer">
-                Batal
-            </a>
-        </div>
-    </form>
-</div>
+    </div>
+</form>
 
 <script>
-(() => { gsap.fromTo(['.page-intro','.form-card'], { y: -18, opacity: 0 }, { y: 0, opacity: 1, duration:.5, stagger:.08, ease:'power3.out' }); })();
+(() => {
+    gsap.fromTo('.page-intro',{y:-14,opacity:0},{y:0,opacity:1,duration:.38,ease:'power3.out'});
+    gsap.fromTo('.glass-card',{y:18,opacity:0},{y:0,opacity:1,duration:.42,stagger:.06,ease:'power3.out',delay:.05});
+})();
 </script>
 <?= $this->endSection() ?>
