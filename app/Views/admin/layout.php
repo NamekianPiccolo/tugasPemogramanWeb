@@ -550,7 +550,7 @@
             inset: 0;
             background: rgba(61, 64, 91, 0.5);
             backdrop-filter: blur(3px);
-            z-index: 1040;
+            z-index: 1055;
         }
         .sidebar-mobile-overlay.active { display: block; }
 
@@ -566,7 +566,7 @@
                 height: 100% !important;
                 transform: translateX(-100%);
                 transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
-                z-index: 1045;
+                z-index: 1060;
                 width: 280px !important;
             }
 
