@@ -146,7 +146,7 @@
         </div>
 
         <!-- Filter Kategori, Unit & Sorting -->
-        <div class="search-filter-row flex flex-wrap items-center justify-between gap-4 border-t border-dashed pt-4" style="border-top-color: rgba(61,64,91,0.15); margin-top: 12px;">
+        <div class="search-filter-row search-dropdown-row flex flex-wrap items-center justify-between gap-4 border-t border-dashed pt-4" style="border-top-color: rgba(61,64,91,0.15); margin-top: 12px;">
             <div class="flex flex-wrap items-center gap-3">
                 <!-- Dropdown Kategori -->
                 <div class="flex items-center space-x-1.5">
