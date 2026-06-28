@@ -244,7 +244,7 @@
         @media (max-width: 640px) {
             .container, .scribble { display: none !important; }
             .mobile-login-wrap    { display: flex !important; }
-            body { overflow: auto; align-items: flex-start; padding: 0; background: #1a1c2c; }
+            body { overflow: auto; align-items: flex-start; padding: 0; background: var(--bg); }
         }
 
         /* ── Wrapper ── */
@@ -253,27 +253,28 @@
             flex-direction: column;
             min-height: 100vh;
             width: 100%;
-            background: #1a1c2c;
+            background: var(--bg);
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
             position: relative;
             overflow: hidden;
         }
 
-        /* ── Animated gradient orbs ── */
+        /* ── Animated gradient orbs (light version) ── */
         .mob-orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(70px);
+            filter: blur(80px);
             pointer-events: none;
             opacity: 0;
-            animation: orbPulse 6s ease-in-out infinite;
+            animation: orbPulse 7s ease-in-out infinite;
         }
-        .mob-orb-1 { width: 280px; height: 280px; background: rgba(132,169,140,0.35); top: -80px; left: -80px; animation-delay: 0s; }
-        .mob-orb-2 { width: 220px; height: 220px; background: rgba(224,122,95,0.25);  top: 60px;  right:-60px; animation-delay: 2s; }
-        .mob-orb-3 { width: 180px; height: 180px; background: rgba(132,169,140,0.2);  bottom:60px;left:20px;   animation-delay: 4s; }
+        .mob-orb-1 { width: 300px; height: 300px; background: rgba(132,169,140,0.18); top: -100px; left: -80px; animation-delay: 0s; }
+        .mob-orb-2 { width: 240px; height: 240px; background: rgba(224,122,95,0.12);  top: 80px;  right:-60px; animation-delay: 2s; }
+        .mob-orb-3 { width: 200px; height: 200px; background: rgba(132,169,140,0.12); bottom:80px;left:20px;   animation-delay: 4s; }
 
         @keyframes orbPulse {
-            0%,100% { opacity: 0.6; transform: scale(1); }
-            50%      { opacity: 1;   transform: scale(1.12); }
+            0%,100% { opacity: 0.7; transform: scale(1); }
+            50%      { opacity: 1;   transform: scale(1.1); }
         }
 
         /* ── Floating dots canvas ── */
@@ -285,7 +286,7 @@
         /* ── Hero section ── */
         .mob-hero {
             position: relative; z-index: 2;
-            padding: 56px 28px 0;
+            padding: 52px 28px 0;
             text-align: center;
         }
 
@@ -300,7 +301,7 @@
             content: '';
             position: absolute; inset: 0;
             border-radius: 50%;
-            border: 2px solid rgba(132,169,140,0.5);
+            border: 2px solid rgba(132,169,140,0.4);
             animation: ringPulse 2.5s ease-in-out infinite;
         }
 
@@ -308,53 +309,51 @@
             content: '';
             position: absolute; inset: -10px;
             border-radius: 50%;
-            border: 1.5px solid rgba(132,169,140,0.2);
+            border: 1.5px solid rgba(132,169,140,0.18);
             animation: ringPulse 2.5s ease-in-out infinite 0.5s;
         }
 
         @keyframes ringPulse {
             0%,100% { transform: scale(1);   opacity: 1; }
-            50%      { transform: scale(1.12); opacity: 0.5; }
+            50%      { transform: scale(1.1); opacity: 0.4; }
         }
 
         .mob-logo-inner {
-            width: 54px; height: 54px;
-            background: linear-gradient(135deg, #84a98c, #52796f);
-            border-radius: 18px;
+            width: 56px; height: 56px;
+            background: var(--primary);
+            border: 2px solid var(--txt);
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            box-shadow: 3px 3px 0 var(--txt);
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 8px 24px rgba(132,169,140,0.4);
         }
 
-        .mob-logo-inner svg { color: white; }
+        .mob-logo-inner svg { color: #fffcf2; }
 
         .mob-hero-title {
             font-family: 'Kalam', cursive;
             font-size: 1.9rem;
             font-weight: 700;
-            color: #fffcf2;
+            color: var(--txt);
             margin: 0 0 8px;
             letter-spacing: 0.5px;
-            text-shadow: 0 2px 20px rgba(132,169,140,0.4);
         }
 
         .mob-hero-sub {
             font-family: 'Kalam', cursive;
             font-size: 0.88rem;
-            color: rgba(255,252,242,0.5);
-            margin: 0 0 40px;
+            color: var(--muted);
+            margin: 0 0 36px;
         }
 
-        /* ── Card ── */
+        /* ── Card (organic paper style) ── */
         .mob-card {
             position: relative; z-index: 2;
             margin: 0 16px 24px;
-            background: rgba(255, 252, 242, 0.05);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1.5px solid rgba(255,252,242,0.1);
-            border-radius: 28px;
-            padding: 28px 22px 32px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+            background: var(--surface);
+            border: 2px solid var(--txt);
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            padding: 28px 24px 32px;
+            box-shadow: 5px 5px 0 var(--txt);
             overflow: hidden;
         }
 
@@ -363,23 +362,25 @@
             content: '';
             position: absolute;
             top: 0; left: -100%; width: 60%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
-            animation: cardShimmer 4s ease-in-out infinite;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: cardShimmer 5s ease-in-out infinite;
         }
         @keyframes cardShimmer {
             0%   { left: -100%; }
             60%,100% { left: 160%; }
         }
 
-        /* ── Role pill tabs ── */
+        /* ── Role pill tabs (organic) ── */
         .mob-pill-bar {
             display: flex;
-            background: rgba(255,252,242,0.06);
-            border: 1.5px solid rgba(255,252,242,0.1);
-            border-radius: 50px;
+            background: var(--bg);
+            border: 2px solid var(--txt);
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            box-shadow: 3px 3px 0 var(--txt);
             padding: 4px;
             margin-bottom: 28px;
             position: relative;
+            overflow: hidden;
         }
 
         .mob-pill {
@@ -389,17 +390,16 @@
             font-family: 'Kalam', cursive;
             font-size: 0.9rem;
             font-weight: 700;
-            color: rgba(255,252,242,0.5);
+            color: var(--muted);
             background: transparent;
             border: none;
-            border-radius: 46px;
+            border-radius: 253px 13px 223px 13px / 13px 223px 13px 253px;
             cursor: pointer;
             transition: color 0.3s ease;
             position: relative; z-index: 2;
-            letter-spacing: 0.3px;
         }
 
-        .mob-pill.active { color: #1a1c2c; }
+        .mob-pill.active { color: #fffcf2; }
 
         /* Sliding active background */
         .mob-pill-slider {
@@ -407,77 +407,74 @@
             top: 4px; bottom: 4px;
             width: calc(50% - 4px);
             left: 4px;
-            border-radius: 46px;
-            background: linear-gradient(135deg, #84a98c, #52796f);
-            box-shadow: 0 4px 16px rgba(132,169,140,0.4);
+            border-radius: 251px 11px 221px 11px / 11px 221px 11px 251px;
+            background: var(--primary);
+            box-shadow: 2px 2px 0 var(--txt);
             transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1),
                         background 0.35s ease;
             z-index: 1;
         }
         .mob-pill-slider.karyawan {
             left: calc(50%);
-            background: linear-gradient(135deg, #e07a5f, #c45c3d);
-            box-shadow: 0 4px 16px rgba(224,122,95,0.4);
+            background: var(--secondary);
         }
 
-        /* ── Floating label inputs ── */
+        /* ── Inputs (organic style) ── */
         .mob-field {
             position: relative;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
         .mob-field-icon {
             position: absolute;
             left: 16px;
             top: 50%; transform: translateY(-50%);
-            color: rgba(255,252,242,0.3);
+            color: var(--dim);
             pointer-events: none;
             transition: color 0.2s;
         }
 
         .mob-field-input {
             width: 100%;
-            background: rgba(255,252,242,0.06);
-            border: 1.5px solid rgba(255,252,242,0.1);
-            border-radius: 14px;
-            padding: 16px 16px 16px 44px;
+            background: var(--bg);
+            border: 2px solid var(--txt);
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            padding: 14px 16px 14px 44px;
             font-family: 'Kalam', cursive;
             font-size: 1rem;
-            color: #fffcf2;
+            color: var(--txt);
             outline: none;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
             -webkit-appearance: none;
             appearance: none;
         }
 
         .mob-field-input::placeholder {
-            color: rgba(255,252,242,0.3);
+            color: var(--muted);
             font-family: 'Kalam', cursive;
         }
 
         .mob-field-input:focus {
-            background: rgba(255,252,242,0.1);
-            border-color: rgba(132,169,140,0.7);
-            box-shadow: 0 0 0 3px rgba(132,169,140,0.15);
+            background: #fff;
+            box-shadow: 2px 2px 0 var(--txt);
+            transform: scale(1.01);
         }
 
-        .mob-field-input:focus + .mob-field-icon,
         .mob-field:focus-within .mob-field-icon {
-            color: #84a98c;
+            color: var(--primary);
         }
 
         .mob-field-input.karyawan-focus:focus {
-            border-color: rgba(224,122,95,0.7);
-            box-shadow: 0 0 0 3px rgba(224,122,95,0.15);
+            box-shadow: 2px 2px 0 var(--secondary);
         }
 
-        /* ── Submit button ── */
+        /* ── Submit button (organic) ── */
         .mob-submit {
             width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #84a98c, #52796f);
+            padding: 14px;
+            border: 2px solid var(--txt);
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            background: var(--primary);
             color: #fffcf2;
             font-family: 'Kalam', cursive;
             font-size: 1.05rem;
@@ -486,18 +483,18 @@
             letter-spacing: 0.5px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 6px 24px rgba(132,169,140,0.35);
+            box-shadow: 3px 3px 0 var(--txt);
             transition: transform 0.15s ease, box-shadow 0.15s ease;
             margin-top: 8px;
         }
 
-        /* Ripple + shimmer on button */
+        /* Shimmer sweep on button */
         .mob-submit::after {
             content: '';
             position: absolute;
             top: 0; left: -100%; width: 70%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-            animation: btnShimmer 2.5s ease-in-out infinite 1s;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: btnShimmer 3s ease-in-out infinite 1.2s;
         }
         @keyframes btnShimmer {
             0%   { left: -100%; }
@@ -505,26 +502,25 @@
         }
 
         .mob-submit:active {
-            transform: scale(0.97);
-            box-shadow: 0 2px 10px rgba(132,169,140,0.3);
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0 var(--txt);
         }
 
         .mob-submit.karyawan {
-            background: linear-gradient(135deg, #e07a5f, #c45c3d);
-            box-shadow: 0 6px 24px rgba(224,122,95,0.35);
+            background: var(--secondary);
         }
 
         /* ── Error box ── */
         .mob-error {
             display: flex; align-items: center; gap: 10px;
-            background: rgba(224,122,95,0.12);
-            border: 1.5px solid rgba(224,122,95,0.35);
-            border-radius: 12px;
-            padding: 12px 14px;
-            margin-bottom: 20px;
+            background: rgba(224,122,95,0.1);
+            border: 2px solid var(--secondary);
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            padding: 10px 16px;
+            margin-bottom: 18px;
             font-family: 'Kalam', cursive;
             font-size: 0.87rem;
-            color: #e07a5f;
+            color: var(--txt);
             font-weight: 700;
             animation: errorShake 0.4s ease;
         }
@@ -540,14 +536,14 @@
             font-family: 'Kalam', cursive;
             font-size: 1.1rem;
             font-weight: 700;
-            color: #fffcf2;
+            color: var(--txt);
             margin: 0 0 4px;
         }
 
         .mob-role-sub {
             font-family: 'Kalam', cursive;
             font-size: 0.78rem;
-            color: rgba(255,252,242,0.4);
+            color: var(--muted);
             margin: 0 0 22px;
         }
 
@@ -558,7 +554,8 @@
             padding: 8px 24px 36px;
             font-family: 'Kalam', cursive;
             font-size: 0.75rem;
-            color: rgba(255,252,242,0.25);
+            color: var(--dim);
+
         }
 
         /* ── Panel switch ── */
