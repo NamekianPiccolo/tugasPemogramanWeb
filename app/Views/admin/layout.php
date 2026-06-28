@@ -496,10 +496,144 @@
 
     </style>
 
+    <!-- =========================================
+         MOBILE RESPONSIVE STYLES (Android)
+         ========================================= -->
+    <style>
+        /* ── Mobile Topbar ── */
+        .mobile-topbar {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 56px;
+            background: var(--surface);
+            border-bottom: 2px solid var(--txt);
+            z-index: 1050;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            box-shadow: 0 2px 8px rgba(61,64,91,0.12);
+        }
+
+        .mobile-topbar-brand {
+            font-family: 'Kalam', cursive;
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--txt);
+        }
+
+        .mobile-hamburger {
+            width: 40px; height: 40px;
+            background: var(--bg);
+            border: 2px solid var(--txt);
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            box-shadow: 2px 2px 0px rgba(61,64,91,0.2);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .mobile-hamburger:hover {
+            background: var(--primary);
+            transform: translate(-1px,-1px);
+            box-shadow: 3px 3px 0px var(--txt);
+        }
+
+        .mobile-hamburger:hover svg { color: #fff; }
+        .mobile-hamburger svg { color: var(--txt); transition: color 0.2s; }
+
+        /* ── Sidebar Overlay ── */
+        .sidebar-mobile-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(61, 64, 91, 0.5);
+            backdrop-filter: blur(3px);
+            z-index: 1040;
+        }
+        .sidebar-mobile-overlay.active { display: block; }
+
+        /* ── Responsive Breakpoints ── */
+        @media (max-width: 1023px) {
+            /* Show topbar, hide desktop sidebar by default */
+            .mobile-topbar { display: flex; }
+
+            /* Sidebar slides in from left */
+            #sidebarEl {
+                position: fixed !important;
+                top: 0; left: 0;
+                height: 100% !important;
+                transform: translateX(-100%);
+                transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                z-index: 1045;
+                width: 280px !important;
+            }
+
+            #sidebarEl.mobile-open {
+                transform: translateX(0);
+            }
+
+            /* Push content down to clear topbar */
+            #workspaceEl {
+                padding-top: 56px;
+            }
+
+            /* Remove the fixed height restriction on body so it scrolls */
+            body, html {
+                overflow: auto !important;
+                height: auto !important;
+            }
+
+            .ws-scroll {
+                overflow: visible !important;
+                height: auto !important;
+                padding: 20px 16px !important;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .ws-scroll {
+                padding: 16px 12px !important;
+            }
+
+            /* Smaller heading sizes */
+            h1 { font-size: 1.5rem !important; }
+            h2 { font-size: 1.25rem !important; }
+            h3 { font-size: 1.1rem !important; }
+
+            /* Glass cards full width */
+            .glass-card {
+                border-radius: 16px !important;
+            }
+
+            /* Search bar adjustments */
+            .search-kbd { display: none !important; }
+            .search-filter-row { flex-wrap: wrap !important; }
+
+            /* Tables: horizontal scroll */
+            .overflow-x-auto { -webkit-overflow-scrolling: touch; }
+        }
+    </style>
+
 
     <?= $this->renderSection('styles') ?>
 </head>
 <body class="antialiased w-full h-full flex flex-row">
+
+<!-- ══════════════ MOBILE TOPBAR ══════════════ -->
+<div class="mobile-topbar">
+    <button class="mobile-hamburger" id="mobileHamburger" aria-label="Buka menu">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+    </button>
+    <span class="mobile-topbar-brand">Kelola Dokumen Digital</span>
+    <div style="width:40px"></div>
+</div>
+
+<!-- ══════════════ SIDEBAR OVERLAY (mobile) ══════════════ -->
+<div class="sidebar-mobile-overlay" id="sidebarOverlay"></div>
 
 <!-- ══════════════ SIDEBAR ══════════════ -->
 <aside id="sidebarEl" class="sidebar-container w-[280px] h-full z-20 flex flex-col justify-between p-6 shrink-0 overflow-y-auto overflow-x-hidden nav-scroll">
@@ -866,6 +1000,41 @@
     });
 
     setupPJAX();
+
+    // ─── MOBILE SIDEBAR TOGGLE ───
+    const hamburgerBtn   = document.getElementById('mobileHamburger');
+    const mobileSidebar  = document.getElementById('sidebarEl');
+    const mobileOverlay  = document.getElementById('sidebarOverlay');
+
+    function openMobileSidebar() {
+        mobileSidebar.classList.add('mobile-open');
+        mobileOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileSidebar() {
+        mobileSidebar.classList.remove('mobile-open');
+        mobileOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    if (hamburgerBtn) {
+        hamburgerBtn.addEventListener('click', function () {
+            mobileSidebar.classList.contains('mobile-open') ? closeMobileSidebar() : openMobileSidebar();
+        });
+    }
+
+    if (mobileOverlay) {
+        mobileOverlay.addEventListener('click', closeMobileSidebar);
+    }
+
+    // Auto-close sidebar when nav link clicked on mobile
+    document.querySelectorAll('#sidebarEl .nav-item').forEach(function(link) {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 1023) closeMobileSidebar();
+        });
+    });
+
 })();
 </script>
 
