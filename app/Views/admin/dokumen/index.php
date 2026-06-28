@@ -19,6 +19,16 @@
         color: #fffcf2 !important;
         box-shadow: 2px 2px 0px var(--txt) !important;
     }
+
+    /* Prevent filter dropdowns from overflowing the viewport width on mobile */
+    @media (max-width: 768px) {
+        #filterKategori, #filterUnit, #filterIzin, #sortSelect {
+            max-width: 135px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    }
 </style>
 <?= $this->endSection() ?>
 
