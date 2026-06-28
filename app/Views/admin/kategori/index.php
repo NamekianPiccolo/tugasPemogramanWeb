@@ -84,11 +84,22 @@
        
     </div>
     <!-- Filter row -->
-    <div class="search-filter-row">
+    <div class="search-filter-row" style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 8px;">
         
         <div class="search-count-badge">
             <span class="scb-num" id="searchCount"><?= count($kategori) ?></span>
             <span>dari <?= count($kategori) ?> kategori</span>
+        </div>
+
+        <!-- Sorting options -->
+        <div style="display: flex; align-items: center; gap: 6px;">
+            <span class="search-filter-label">Urutkan:</span>
+            <select id="sortSelect" class="sf-chip" style="outline: none; padding: 4px 12px; cursor: pointer; font-size: 12px; background-color: var(--surface);">
+                <option value="nama" <?= ($sort ?? '') === 'nama' ? 'selected' : '' ?>>Nama (A-Z)</option>
+                <option value="nama_desc" <?= ($sort ?? '') === 'nama_desc' ? 'selected' : '' ?>>Nama (Z-A)</option>
+                <option value="tanggal_baru" <?= ($sort ?? '') === 'tanggal_baru' ? 'selected' : '' ?>>Terbaru Dibuat</option>
+                <option value="tanggal_lama" <?= ($sort ?? '') === 'tanggal_lama' ? 'selected' : '' ?>>Terlama Dibuat</option>
+            </select>
         </div>
     </div>
 </div>
@@ -115,13 +126,17 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 kat-grid">
     <?php foreach ($kategori as $k): ?>
     <div class="glass-card organic-shape organic-shadow kat-card flex flex-col justify-between" style="background-color: #fffcf2"
-         data-search="<?= esc(strtolower($k['nama_kategori'])) ?>">
+         data-search="<?= esc(strtolower($k['nama_kategori'])) ?>"
+         data-name="<?= esc(strtolower($k['nama_kategori'])) ?>"
+         data-created="<?= !empty($k['created_at']) ? strtotime($k['created_at']) : 0 ?>">
         <div class="p-5 pb-3">
             <div class="w-12 h-12 mb-4 flex items-center justify-center organic-shape" style="background:rgba(132,169,140,0.15);border:2px solid var(--txt);box-shadow: 2px 2px 0px var(--txt)">
                 <svg class="w-6 h-6" fill="none" stroke="var(--txt)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
             </div>
             <h4 class="text-lg font-bold mb-1 truncate font-kalam" style="color:var(--txt)" title="<?= esc($k['nama_kategori']) ?>"><?= esc($k['nama_kategori']) ?></h4>
-            
+            <p class="text-[10px]" style="color:var(--muted); font-family:'Lora',serif;">
+                Dibuat: <?= !empty($k['created_at']) ? esc(date('d M Y', strtotime($k['created_at']))) : '—' ?>
+            </p>
         </div>
         <div class="px-5 pb-6 pt-4 flex space-x-2" style="border-top:2px dashed rgba(61,64,91,0.15);margin-top:auto">
             <a href="<?= base_url('admin/kategori/edit/' . $k['id']) ?>"
@@ -147,6 +162,40 @@
     gsap.fromTo('.stat-card', { y: -16, opacity: 0 }, { y: 0, opacity: 1, duration: .45, stagger: .07, ease: 'back.out(1.5)', delay: .1 });
     gsap.fromTo('.kat-card', { y: -14, opacity: 0 }, { y: 0, opacity: 1, duration: .4, stagger: .05, ease: 'back.out(1.5)', delay: .25 });
     initSearch({ panelId:'searchPanel', inputId:'searchInput', items:'.kat-card', emptyId:'searchEmpty', countId:'searchCount' });
+
+    const sortSelect = document.getElementById('sortSelect');
+    const grid = document.querySelector('.kat-grid');
+    
+    if (sortSelect && grid) {
+        sortSelect.addEventListener('change', function() {
+            const sortBy = this.value;
+            const cards = Array.from(grid.querySelectorAll('.kat-card'));
+            
+            cards.sort((a, b) => {
+                if (sortBy === 'nama') {
+                    const nameA = a.getAttribute('data-name');
+                    const nameB = b.getAttribute('data-name');
+                    return nameA.localeCompare(nameB);
+                } else if (sortBy === 'nama_desc') {
+                    const nameA = a.getAttribute('data-name');
+                    const nameB = b.getAttribute('data-name');
+                    return nameB.localeCompare(nameA);
+                } else if (sortBy === 'tanggal_baru') {
+                    const dateA = parseInt(a.getAttribute('data-created')) || 0;
+                    const dateB = parseInt(b.getAttribute('data-created')) || 0;
+                    return dateB - dateA;
+                } else if (sortBy === 'tanggal_lama') {
+                    const dateA = parseInt(a.getAttribute('data-created')) || 0;
+                    const dateB = parseInt(b.getAttribute('data-created')) || 0;
+                    return dateA - dateB;
+                }
+                return 0;
+            });
+            
+            grid.innerHTML = '';
+            cards.forEach(card => grid.appendChild(card));
+        });
+    }
 })();
 </script>
 <?= $this->endSection() ?>

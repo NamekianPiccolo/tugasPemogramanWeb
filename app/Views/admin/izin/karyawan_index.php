@@ -96,6 +96,7 @@
             $s = strtolower($i['status_izin'] ?? 'pending');
             if ($s === 'disetujui') { $badgeBg = 'rgba(132,169,140,0.15)'; $badgeCol = 'var(--primary)'; }
             elseif ($s === 'ditolak') { $badgeBg = 'rgba(224,122,95,0.15)'; $badgeCol = 'var(--secondary)'; }
+            elseif ($s === 'selesai') { $badgeBg = 'rgba(108,117,125,0.15)'; $badgeCol = '#6C757D'; }
             else { $badgeBg = 'rgba(245,158,11,0.15)'; $badgeCol = '#F59E0B'; }
         ?>
         <div class="glass-card flex flex-col md:flex-row md:items-center justify-between p-5 anim-item organic-shape"
@@ -109,19 +110,78 @@
                 </div>
                 <div class="flex-1 min-w-0">
                     <h4 class="text-lg font-bold font-kalam truncate mb-1" style="color:var(--txt)"><?= esc($i['judul'] ?? 'Dokumen Dihapus') ?></h4>
-                    <p class="text-xs mb-3 italic" style="color:var(--dim)">"<?= esc($i['pesan'] ?: 'Tidak ada pesan.') ?>"</p>
+                    <p class="text-xs mb-3 italic truncate max-w-xs sm:max-w-md md:max-w-lg" style="color:var(--dim)">"<?= esc($i['pesan'] ?: 'Tidak ada pesan.') ?>"</p>
                     <div class="flex flex-wrap items-center gap-3 text-[10px] font-bold uppercase tracking-widest font-kalam" style="color:var(--dim)">
                         <span class="organic-shape px-2.5 py-1" style="background:rgba(61,64,91,0.08); border:1px solid rgba(61,64,91,0.2)">Diajukan: <?= esc(date('d M Y H:i', strtotime($i['tgl_pengajuan']))) ?></span>
                     </div>
                 </div>
             </div>
-            <div class="mt-5 md:mt-0 pt-4 md:pt-0 flex items-center justify-between md:justify-center shrink-0 gap-3" style="border-top:2px dashed rgba(61,64,91,0.15)">
+            <div class="mt-5 md:mt-0 pt-4 md:pt-0 flex items-center justify-between md:justify-center shrink-0 border-t md:border-t-0 border-dashed border-[rgba(61,64,91,0.15)]" style="gap: 12px;">
+                <button type="button" class="px-3 py-1.5 organic-shape text-[10px] font-bold font-kalam uppercase tracking-widest cursor-pointer transition-all duration-200 btn-open-detail-popup"
+                        data-judul="<?= esc($i['judul'] ?? 'Dokumen Dihapus') ?>"
+                        data-status="<?= esc($i['status_izin']) ?>"
+                        data-pesan="<?= esc($i['pesan'] ?: 'Tidak ada pesan.') ?>"
+                        data-pesan-admin="<?= esc($i['pesan_admin'] ?? '') ?>"
+                        data-tgl="<?= esc(date('d M Y H:i', strtotime($i['tgl_pengajuan']))) ?>"
+                        style="background:var(--surface); color:var(--txt); border:2px solid var(--txt);"
+                        onmouseover="this.style.background='var(--primary)'; this.style.color='#fffcf2';"
+                        onmouseout="this.style.background='var(--surface)'; this.style.color='var(--txt)';">
+                    Detail
+                </button>
                 <span class="px-3 py-1.5 organic-shape text-[10px] font-bold font-kalam uppercase tracking-widest text-center"
                       style="background:<?= $badgeBg ?>; color:<?= $badgeCol ?>; border: 2px solid <?= $badgeCol ?>"><?= esc($i['status_izin']) ?></span>
             </div>
         </div>
         <?php endforeach; ?>
     <?php endif; ?>
+</div>
+
+<!-- Modal Detail Pengajuan -->
+<div id="detailPopupModal" style="display: none; position: fixed; inset: 0; background: rgba(61, 64, 91, 0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 9999; justify-content: center; align-items: center; padding: 20px;">
+    <div class="organic-shape" style="background: var(--surface); width: 100%; max-width: 500px; border: 3px solid var(--txt); box-shadow: 6px 6px 0px var(--txt); display: flex; flex-direction: column; overflow: hidden; animation: pop-in 0.3s cubic-bezier(0.34,1.56,0.64,1);">
+        <!-- Modal Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; border-bottom: 2px solid var(--txt); background: #f2e8cf;">
+            <h3 class="text-lg font-bold font-kalam m-0" style="color: var(--txt);">Detail Pengajuan Akses</h3>
+            <button type="button" id="closeDetailPopupModal" class="organic-shape w-8 h-8 bg-white flex items-center justify-center text-gray-600 transition-all cursor-pointer"
+                    style="border: 2px solid var(--txt);"
+                    onmouseover="this.style.background='var(--secondary)'; this.style.color='white';"
+                    onmouseout="this.style.background='white'; this.style.color='#4b5563';"
+                    title="Tutup">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <!-- Modal Content -->
+        <div class="p-6 flex flex-col gap-4">
+            <div>
+                <p class="text-xs font-bold uppercase tracking-wider font-kalam mb-1" style="color:var(--txt);">Nama Dokumen:</p>
+                <p id="detailPopupTitle" class="text-sm font-bold font-kalam" style="color:var(--muted);"></p>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider font-kalam mb-1" style="color:var(--txt);">Status Izin:</p>
+                    <span id="detailPopupStatus" class="inline-block px-3 py-1.5 organic-shape text-xs font-bold font-kalam"></span>
+                </div>
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider font-kalam mb-1" style="color:var(--txt);">Tanggal Pengajuan:</p>
+                    <p id="detailPopupDate" class="text-xs font-bold font-kalam" style="color:var(--muted);"></p>
+                </div>
+            </div>
+            <div>
+                <p class="text-xs font-bold uppercase tracking-wider font-kalam mb-1.5" style="color:var(--txt);">Pesan Alasan Akses:</p>
+                <p id="detailPopupMessage" class="text-sm font-kalam p-3 rounded italic" style="background:rgba(61,64,91,0.04); border:1.5px solid var(--txt); color:var(--txt); line-height: 1.5; word-break: break-word; white-space: pre-wrap;"></p>
+            </div>
+            <div id="detailPopupRejectionBlock" style="display: none;">
+                <p class="text-xs font-bold uppercase tracking-wider font-kalam mb-1.5" style="color:var(--txt);">Catatan Penolakan Admin:</p>
+                <p id="detailPopupRejection" class="text-sm font-kalam p-3 rounded italic" style="background:rgba(224,122,95,0.04); border:1.5px solid var(--secondary); color:var(--secondary); line-height: 1.5; word-break: break-word; white-space: pre-wrap;"></p>
+            </div>
+            <div class="flex justify-end mt-2">
+                <button type="button" id="closeDetailPopupBtn" class="organic-shape px-5 py-2 text-sm font-bold font-kalam cursor-pointer text-white"
+                        style="background:var(--primary); border:2px solid var(--txt); box-shadow: 2px 2px 0 var(--txt);">Tutup</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -138,6 +198,75 @@
         filterAttrs: [
             { attr: 'status', pillsSelector: '.sf-chip[data-filter-status]' }
         ]
+    });
+
+    // Logika Detail Popup Modal
+    const detailPopupModal = document.getElementById('detailPopupModal');
+    const detailPopupTitle = document.getElementById('detailPopupTitle');
+    const detailPopupStatus = document.getElementById('detailPopupStatus');
+    const detailPopupDate = document.getElementById('detailPopupDate');
+    const detailPopupMessage = document.getElementById('detailPopupMessage');
+    const closeDetailPopupModalBtn = document.getElementById('closeDetailPopupModal');
+    const closeDetailPopupBtn = document.getElementById('closeDetailPopupBtn');
+
+    document.querySelectorAll('.btn-open-detail-popup').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const docJudul = btn.dataset.judul;
+            const docStatus = btn.dataset.status;
+            const docPesan = btn.dataset.pesan;
+            const pesanAdmin = btn.dataset.pesanAdmin;
+            const docTgl = btn.dataset.tgl;
+
+            if (detailPopupTitle) detailPopupTitle.textContent = docJudul;
+            if (detailPopupDate) detailPopupDate.textContent = docTgl;
+            if (detailPopupMessage) detailPopupMessage.textContent = docPesan;
+            
+            const rejectBlock = document.getElementById('detailPopupRejectionBlock');
+            const rejectText = document.getElementById('detailPopupRejection');
+            if (rejectBlock && rejectText) {
+                if (docStatus.toLowerCase() === 'ditolak') {
+                    rejectText.textContent = pesanAdmin || 'Permohonan ditolak oleh Administrator.';
+                    rejectBlock.style.display = 'block';
+                } else {
+                    rejectBlock.style.display = 'none';
+                }
+            }
+            
+            if (detailPopupStatus) {
+                detailPopupStatus.textContent = docStatus;
+                detailPopupStatus.className = 'inline-block px-3 py-1.5 organic-shape text-xs font-bold font-kalam';
+                
+                const s = docStatus.toLowerCase();
+                if (s === 'pending') {
+                    detailPopupStatus.style.background = '#fef3c7'; // Soft yellow
+                    detailPopupStatus.style.color = '#92400e';
+                    detailPopupStatus.style.border = '1.5px solid #92400e';
+                } else if (s === 'ditolak') {
+                    detailPopupStatus.style.background = '#fee2e2'; // Soft red
+                    detailPopupStatus.style.color = '#991b1b';
+                    detailPopupStatus.style.border = '1.5px solid #991b1b';
+                } else {
+                    detailPopupStatus.style.background = '#d1fae5'; // Soft green
+                    detailPopupStatus.style.color = '#065f46';
+                    detailPopupStatus.style.border = '1.5px solid #065f46';
+                }
+            }
+
+            if (detailPopupModal) detailPopupModal.style.display = 'flex';
+        });
+    });
+
+    const closeDetailPopup = () => {
+        if (detailPopupModal) detailPopupModal.style.display = 'none';
+    };
+
+    if (closeDetailPopupModalBtn) closeDetailPopupModalBtn.addEventListener('click', closeDetailPopup);
+    if (closeDetailPopupBtn) closeDetailPopupBtn.addEventListener('click', closeDetailPopup);
+
+    window.addEventListener('click', e => {
+        if (e.target === detailPopupModal) {
+            closeDetailPopup();
+        }
     });
 })();
 </script>

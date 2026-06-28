@@ -8,38 +8,45 @@ use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * BaseController provides a convenient place for loading components
- * and performing functions that are needed by all your controllers.
+ * Class BaseController
  *
- * Extend this class in any new controllers:
+ * BaseController menyediakan wadah terpusat untuk memuat komponen
+ * dan menjalankan fungsi-fungsi dasar yang dibutuhkan oleh seluruh controller di aplikasi.
+ *
+ * Kelas ini diwarisi oleh controller lain:
  * ```
  *     class Home extends BaseController
  * ```
  *
- * For security, be sure to declare any new methods as protected or private.
+ * Demi keamanan, pastikan metode baru dideklarasikan sebagai protected atau private.
  */
 abstract class BaseController extends Controller
 {
     /**
-     * Be sure to declare properties for any property fetch you initialized.
-     * The creation of dynamic property is deprecated in PHP 8.2.
+     * Menampung helper yang akan dimuat secara otomatis.
+     *
+     * @var array
      */
-
-    // protected $session;
+    protected $helpers = [];
 
     /**
+     * Menginisialisasi controller utama.
+     * Mengatur request, response, dan sistem logger bawaan CodeIgniter.
+     *
+     * @param RequestInterface  $request  Objek HTTP Request
+     * @param ResponseInterface $response Objek HTTP Response
+     * @param LoggerInterface   $logger   Objek Logger
      * @return void
      */
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        // Load here all helpers you want to be available in your controllers that extend BaseController.
-        // Caution: Do not put the this below the parent::initController() call below.
-        // $this->helpers = ['form', 'url'];
+        // Pemuatan helper form dan url secara bawaan untuk mempermudah pengerjaan form
+        $this->helpers = ['form', 'url'];
 
-        // Caution: Do not edit this line.
+        // Memanggil initController milik parent class (Controller dasar CodeIgniter)
         parent::initController($request, $response, $logger);
 
-        // Preload any models, libraries, etc, here.
-        // $this->session = service('session');
+        // Contoh inisialisasi service sesi jika diperlukan secara global
+        // $this->session = \Config\Services::session();
     }
 }

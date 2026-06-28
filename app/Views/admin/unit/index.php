@@ -44,11 +44,22 @@
         
     </div>
     <!-- Filter row -->
-    <div class="search-filter-row">
+    <div class="search-filter-row" style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 8px;">
        
         <div class="search-count-badge">
             <span class="scb-num" id="searchCount"><?= count($unit) ?></span>
             <span>dari <?= count($unit) ?> unit</span>
+        </div>
+
+        <!-- Sorting options -->
+        <div style="display: flex; align-items: center; gap: 6px;">
+            <span class="search-filter-label">Urutkan:</span>
+            <select id="sortSelect" class="sf-chip" style="outline: none; padding: 4px 12px; cursor: pointer; font-size: 12px; background-color: var(--surface);">
+                <option value="nama" <?= ($sort ?? '') === 'nama' ? 'selected' : '' ?>>Nama (A-Z)</option>
+                <option value="nama_desc" <?= ($sort ?? '') === 'nama_desc' ? 'selected' : '' ?>>Nama (Z-A)</option>
+                <option value="tanggal_baru" <?= ($sort ?? '') === 'tanggal_baru' ? 'selected' : '' ?>>Terbaru Dibuat</option>
+                <option value="tanggal_lama" <?= ($sort ?? '') === 'tanggal_lama' ? 'selected' : '' ?>>Terlama Dibuat</option>
+            </select>
         </div>
     </div>
 </div>
@@ -70,15 +81,20 @@
         <p class="text-sm" style="color:var(--muted)">Tambahkan unit atau divisi pertama untuk memulai.</p>
     </div>
 <?php else: ?>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 unit-grid">
         <?php foreach ($unit as $u): ?>
         <div class="glass-card organic-shape organic-shadow p-5 anim-item flex flex-col justify-between" style="background-color: #fffcf2"
-             data-search="<?= esc(strtolower($u['nama_unit'])) ?>">
+             data-search="<?= esc(strtolower($u['nama_unit'])) ?>"
+             data-name="<?= esc(strtolower($u['nama_unit'])) ?>"
+             data-created="<?= !empty($u['created_at']) ? strtotime($u['created_at']) : 0 ?>">
             <div>
                 <div class="w-12 h-12 mb-4 flex items-center justify-center organic-shape" style="background:rgba(132,169,140,0.15);border:2px solid var(--txt);box-shadow: 2px 2px 0px var(--txt)">
                     <svg class="w-6 h-6" fill="none" stroke="var(--txt)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
                 </div>
                 <h3 class="text-xl font-bold font-kalam mb-2" style="color:var(--txt)"><?= esc($u['nama_unit']) ?></h3>
+                <p class="text-[10px]" style="color:var(--muted); font-family:'Lora',serif; margin-top:-4px; margin-bottom:8px;">
+                    Dibuat: <?= !empty($u['created_at']) ? esc(date('d M Y', strtotime($u['created_at']))) : '—' ?>
+                </p>
             </div>
             <div class="mt-6 pb-8 px-5 pt-4 flex items-center justify-end space-x-2" style="border-top: 2px dashed rgba(61,64,91,0.15); margin-top:auto">
                 <a href="<?= base_url('admin/unit/edit/' . $u['id']) ?>"
@@ -103,6 +119,40 @@
     gsap.fromTo('.page-intro', { y: -18, opacity: 0 }, { y: 0, opacity: 1, duration:.5, ease:'back.out(1.5)' });
     gsap.fromTo('.anim-item', { y: -10, opacity: 0 }, { y: 0, opacity: 1, duration:.4, stagger:.05, ease:'back.out(1.5)', delay:.15 });
     initSearch({ panelId:'searchPanel', inputId:'searchInput', items:'.anim-item', emptyId:'searchEmpty', countId:'searchCount' });
+
+    const sortSelect = document.getElementById('sortSelect');
+    const grid = document.querySelector('.unit-grid');
+    
+    if (sortSelect && grid) {
+        sortSelect.addEventListener('change', function() {
+            const sortBy = this.value;
+            const cards = Array.from(grid.querySelectorAll('.anim-item'));
+            
+            cards.sort((a, b) => {
+                if (sortBy === 'nama') {
+                    const nameA = a.getAttribute('data-name');
+                    const nameB = b.getAttribute('data-name');
+                    return nameA.localeCompare(nameB);
+                } else if (sortBy === 'nama_desc') {
+                    const nameA = a.getAttribute('data-name');
+                    const nameB = b.getAttribute('data-name');
+                    return nameB.localeCompare(nameA);
+                } else if (sortBy === 'tanggal_baru') {
+                    const dateA = parseInt(a.getAttribute('data-created')) || 0;
+                    const dateB = parseInt(b.getAttribute('data-created')) || 0;
+                    return dateB - dateA;
+                } else if (sortBy === 'tanggal_lama') {
+                    const dateA = parseInt(a.getAttribute('data-created')) || 0;
+                    const dateB = parseInt(b.getAttribute('data-created')) || 0;
+                    return dateA - dateB;
+                }
+                return 0;
+            });
+            
+            grid.innerHTML = '';
+            cards.forEach(card => grid.appendChild(card));
+        });
+    }
 })();
 </script>
 <?= $this->endSection() ?>

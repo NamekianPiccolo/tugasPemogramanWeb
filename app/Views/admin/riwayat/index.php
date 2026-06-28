@@ -11,6 +11,13 @@
         <h1 class="text-3xl font-bold font-kalam mb-0.5" style="color:var(--txt)">Riwayat Aktivitas</h1>
         <p class="text-sm mt-2" style="color:var(--muted)">Log lengkap semua aktivitas yang terjadi dalam sistem arsip dokumen.</p>
     </div>
+    <!-- Tombol Cetak Laporan (Hanya muncul untuk Admin) -->
+    <div class="shrink-0">
+        <a id="btnPrint" href="<?= base_url('admin/riwayat/print') ?>" target="_blank" class="btn-violet px-4 py-2 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+            <span>Cetak Laporan</span>
+        </a>
+    </div>
 </div>
 
 <!-- ── Search ── -->
@@ -25,16 +32,25 @@
        
     </div>
     <!-- Filter row -->
-    <div class="search-filter-row">
-       
-        <button class="sf-chip active" data-filter="" data-filter-aksi="">Semua</button>
-        <button class="sf-chip" data-filter="tambah" data-filter-aksi="tambah">Tambah</button>
-        <button class="sf-chip" data-filter="edit" data-filter-aksi="edit">Edit</button>
-        <button class="sf-chip" data-filter="hapus" data-filter-aksi="hapus">Hapus</button>
-        <button class="sf-chip" data-filter="login" data-filter-aksi="login">Login</button>
-        <div class="search-count-badge">
-            <span class="scb-num" id="searchCount"><?= count($riwayat) ?></span>
-            <span>dari <?= count($riwayat) ?> log</span>
+    <div class="search-filter-row flex items-center justify-end flex-wrap gap-4 w-full" style="padding-top: 10px; padding-bottom: 10px;">
+        <div class="flex items-center gap-4 flex-wrap">
+            <div class="flex items-center space-x-1.5">
+                <label for="filterTanggal" class="text-xs font-bold font-kalam" style="color:var(--txt)">Pilih Tanggal:</label>
+                <input type="date" id="filterTanggal" class="organic-shape px-2.5 py-1.5 text-xs font-bold font-kalam cursor-pointer"
+                    style="background:var(--surface); border:2px solid var(--txt); box-shadow: 1.5px 1.5px 0 var(--txt)">
+            </div>
+            <div class="flex items-center space-x-1.5">
+                <label for="sortSelect" class="text-xs font-bold font-kalam" style="color:var(--txt)">Urutkan:</label>
+                <select id="sortSelect" class="organic-shape px-2.5 py-1.5 text-xs font-bold font-kalam cursor-pointer"
+                    style="background:var(--surface); border:2px solid var(--txt); box-shadow: 1.5px 1.5px 0 var(--txt)">
+                    <option value="desc">Terbaru</option>
+                    <option value="asc">Terlama</option>
+                </select>
+            </div>
+            <div class="search-count-badge">
+                <span class="scb-num" id="searchCount"><?= count($riwayat) ?></span>
+                <span>dari <?= count($riwayat) ?> log</span>
+            </div>
         </div>
     </div>
 </div>
@@ -82,7 +98,9 @@
         ?>
         <div class="mb-10 relative anim-item pl-8 md:pl-10"
              data-search="<?= esc(strtolower(($r['username'] ?? '') . ' ' . ($r['aksi'] ?? '') . ' ' . ($r['judul'] ?? '') . ' ' . ($r['keterangan'] ?? ''))) ?>"
-             data-aksi="<?= esc($aksiTag) ?>">
+             data-aksi="<?= esc($aksiTag) ?>"
+             data-timestamp="<?= strtotime($r['created_at']) ?>"
+             data-date="<?= date('Y-m-d', strtotime($r['created_at'])) ?>">
             <!-- Timeline Node -->
            
 
@@ -123,16 +141,102 @@
     gsap.fromTo('.page-intro', { y: -18, opacity: 0 }, { y: 0, opacity: 1, duration:.5, ease:'back.out(1.5)' });
     gsap.fromTo('.anim-item', { y: -10, opacity: 0 }, { y: 0, opacity: 1, duration:.35, stagger:.03, ease:'back.out(1.5)', delay:.15 });
 
-    initSearch({
-        panelId: 'searchPanel',
-        inputId: 'searchInput',
-        items: '.anim-item',
-        emptyId: 'searchEmpty',
-        countId: 'searchCount',
-        filterAttrs: [
-            { attr: 'aksi', pillsSelector: '.sf-chip[data-filter-aksi]' }
-        ]
-    });
+    const searchInput = document.getElementById('searchInput');
+    const filterTanggal = document.getElementById('filterTanggal');
+    const sortSelect = document.getElementById('sortSelect');
+    const countEl = document.getElementById('searchCount');
+    const emptyEl = document.getElementById('searchEmpty');
+    const container = document.querySelector('.list-container');
+
+    const btnPrint = document.getElementById('btnPrint');
+    function updatePrintUrl() {
+        if (!btnPrint) return;
+        const q = searchInput ? searchInput.value.trim() : '';
+        const selectedDate = filterTanggal ? filterTanggal.value : '';
+        const order = sortSelect ? sortSelect.value : 'desc';
+
+        if (!btnPrint.dataset.baseUrl) {
+            btnPrint.dataset.baseUrl = btnPrint.href;
+        }
+
+        const url = new URL(btnPrint.dataset.baseUrl);
+        const params = new URLSearchParams(url.search);
+
+        if (q) {
+            params.set('search', q);
+        } else {
+            params.delete('search');
+        }
+        if (selectedDate) {
+            params.set('tanggal', selectedDate);
+        } else {
+            params.delete('tanggal');
+        }
+        if (order) {
+            params.set('sort', order);
+        } else {
+            params.delete('sort');
+        }
+
+        url.search = params.toString();
+        btnPrint.href = url.toString();
+    }
+
+    function runFilter() {
+        const q = searchInput.value.toLowerCase().trim();
+        const selectedDate = filterTanggal ? filterTanggal.value : '';
+        let visible = 0;
+
+        document.querySelectorAll('.anim-item').forEach(card => {
+            const textMatch = (card.dataset.search || '').includes(q);
+            const dateMatch = !selectedDate || card.dataset.date === selectedDate;
+
+            const show = textMatch && dateMatch;
+            if (show && card.style.display === 'none') {
+                card.style.display = '';
+                gsap.fromTo(card, { opacity:0, y:8 }, { opacity:1, y:0, duration:0.2, ease:'power2.out' });
+            } else if (!show) {
+                card.style.display = 'none';
+            }
+            if (show) visible++;
+        });
+
+        if (countEl) countEl.textContent = visible;
+        if (emptyEl) {
+            emptyEl.classList.toggle('visible', visible === 0);
+        }
+        updatePrintUrl();
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', runFilter);
+    }
+    if (filterTanggal) {
+        filterTanggal.addEventListener('change', runFilter);
+    }
+
+    if (sortSelect && container) {
+        sortSelect.addEventListener('change', () => {
+            const items = Array.from(container.querySelectorAll('.anim-item'));
+            const order = sortSelect.value;
+            
+            items.sort((a, b) => {
+                const timeA = parseInt(a.dataset.timestamp || 0);
+                const timeB = parseInt(b.dataset.timestamp || 0);
+                return order === 'asc' ? timeA - timeB : timeB - timeA;
+            });
+            
+            items.forEach(item => container.appendChild(item));
+            
+            gsap.fromTo(items.filter(item => item.style.display !== 'none'), 
+                { y: -10, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 0.3, stagger: 0.02, ease: 'power2.out' }
+            );
+            updatePrintUrl();
+        });
+    }
+
+    updatePrintUrl();
 })();
 </script>
 <?= $this->endSection() ?>

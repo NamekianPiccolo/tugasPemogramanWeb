@@ -170,8 +170,8 @@
 </div>
 
 <!-- Compare Modal -->
-<div id="compareModal" style="display:none;position:fixed;inset:0;z-index:50;backdrop-filter:blur(8px);background:rgba(255,255,255,.7);align-items:center;justify-content:center">
-    <div class="glass-card w-full max-w-2xl mx-4 relative" style="border-radius:20px;max-height:85vh;overflow:hidden;display:flex;flex-direction:column">
+<div id="compareModal" style="display:none;position:fixed;top:0;left:280px;right:0;bottom:0;z-index:99999;backdrop-filter:blur(8px);background:rgba(255,255,255,.7);align-items:center;justify-content:center">
+    <div class="glass-card w-full max-w-5xl mx-4 relative" style="border-radius:20px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column">
         <div class="ca ca-tl"></div><div class="ca ca-tr"></div><div class="ca ca-bl"></div><div class="ca ca-br"></div>
 
         <div class="p-6 shrink-0" style="border-bottom:1px solid rgba(139,92,246,.12)">
@@ -185,11 +185,12 @@
             </div>
         </div>
         <div class="p-6 overflow-y-auto" id="compareContent" style="flex:1"></div>
+        <div class="p-6 shrink-0 flex justify-end gap-3" id="compareFooter" style="border-top:1px solid rgba(139,92,246,.12); background:#fffcf2; display:none;"></div>
     </div>
 </div>
 
 <!-- Reject Modal -->
-<div id="rejectModal" style="display:none;position:fixed;inset:0;z-index:50;backdrop-filter:blur(8px);background:rgba(255,255,255,.7);align-items:center;justify-content:center">
+<div id="rejectModal" style="display:none;position:fixed;top:0;left:280px;right:0;bottom:0;z-index:99999;backdrop-filter:blur(8px);background:rgba(255,255,255,.7);align-items:center;justify-content:center">
     <div class="glass-card w-full max-w-md mx-4 relative" style="border-radius:20px">
         <div class="ca ca-tl"></div><div class="ca ca-tr"></div><div class="ca ca-bl"></div><div class="ca ca-br"></div>
 
@@ -199,7 +200,7 @@
                 <?= csrf_field() ?>
                 <div class="mb-4">
                     <label class="block text-[10px] font-bold uppercase tracking-widest mb-2" style="color:rgba(239,68,68,.7)">Alasan Penolakan</label>
-                    <textarea name="alasan" rows="3" placeholder="Masukkan alasan penolakan..."
+                    <textarea name="pesan_admin" rows="3" placeholder="Masukkan alasan penolakan..."
                               class="glass-input w-full px-3 py-2 text-xs" style="resize:none;border-radius:10px"></textarea>
                 </div>
                 <div class="flex space-x-3">
@@ -236,30 +237,148 @@ function openCompareModal(data) {
     const c = document.getElementById('compareContent');
     c.innerHTML = `
         <div class="grid grid-cols-2 gap-4 mb-4">
-            <div class="p-4 rounded-xl" style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2)">
-                <p class="text-[9px] font-bold uppercase tracking-widest mb-2" style="color:rgba(248,113,113,.7)">Versi Asli</p>
-                <p class="text-sm font-bold mb-1" style="color:var(--txt)">${data.judul_asli ?? '-'}</p>
-                <p class="text-xs" style="color:var(--muted)">${data.deskripsi_asli ?? 'Tidak ada deskripsi.'}</p>
+            <div class="p-4 rounded-xl flex flex-col justify-between" style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2)">
+                <div>
+                    <p class="text-[9px] font-bold uppercase tracking-widest mb-2" style="color:rgba(248,113,113,.7)">Versi Asli</p>
+                    <p class="text-sm font-bold mb-1" style="color:var(--txt)">${data.judul_asli ?? '-'}</p>
+                    <p class="text-xs mb-3" style="color:var(--muted)">${data.deskripsi_asli ?? 'Tidak ada deskripsi.'}</p>
+                </div>
+                ${data.file_asli ? `
+                <a href="<?= base_url('uploads/') ?>${data.file_asli}" target="_blank" class="mt-3 inline-flex items-center gap-1.5 text-xs font-bold font-kalam hover:underline mb-2" style="color:var(--secondary)">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Unduh File Asli
+                </a>
+                <div id="preview-asli-container" class="mt-2 overflow-hidden rounded-lg border border-red-200" style="height: 380px; display: none;">
+                    <iframe id="iframe-asli" src="" style="width:100%; height:100%; border:none; display:none;"></iframe>
+                    <div id="docx-asli" style="width:100%; height:100%; overflow:auto; background:white; padding:10px; display:none;"></div>
+                </div>` : '<p class="text-[10px] text-gray-400 mt-3 font-kalam">Tidak ada file asli</p>'}
             </div>
-            <div class="p-4 rounded-xl" style="background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2)">
-                <p class="text-[9px] font-bold uppercase tracking-widest mb-2" style="color:rgba(52,211,153,.7)">Revisi Diajukan</p>
-                <p class="text-sm font-bold mb-1" style="color:var(--txt)">${data.judul ?? '-'}</p>
-                <p class="text-xs" style="color:var(--muted)">${data.deskripsi ?? 'Tidak ada deskripsi.'}</p>
+            <div class="p-4 rounded-xl flex flex-col justify-between" style="background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2)">
+                <div>
+                    <p class="text-[9px] font-bold uppercase tracking-widest mb-2" style="color:rgba(52,211,153,.7)">Revisi Diajukan</p>
+                    <p class="text-sm font-bold mb-1" style="color:var(--txt)">${data.judul ?? '-'}</p>
+                    <p class="text-xs mb-3" style="color:var(--muted)">${data.deskripsi ?? 'Tidak ada deskripsi.'}</p>
+                </div>
+                ${data.file_dokumen ? `
+                <a href="<?= base_url('uploads/') ?>${data.file_dokumen}" target="_blank" class="mt-3 inline-flex items-center gap-1.5 text-xs font-bold font-kalam hover:underline mb-2" style="color:var(--primary)">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Unduh File Revisi
+                </a>
+                <div id="preview-revisi-container" class="mt-2 overflow-hidden rounded-lg border border-green-200" style="height: 380px; display: none;">
+                    <iframe id="iframe-revisi" src="" style="width:100%; height:100%; border:none; display:none;"></iframe>
+                    <div id="docx-revisi" style="width:100%; height:100%; overflow:auto; background:white; padding:10px; display:none;"></div>
+                </div>` : '<p class="text-[10px] text-gray-400 mt-3 font-kalam">Tidak ada file revisi</p>'}
             </div>
         </div>
-        <div class="p-3 rounded-xl text-xs" style="background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.15)">
-            <p class="text-[9px] font-bold uppercase tracking-widest mb-1" style="color:rgba(196,181,253,.6)">Pengaju</p>
-            <p style="color:var(--txt)">${data.nama_lengkap ?? '-'} — ${data.created_at ?? '-'}</p>
+        <div class="p-4 rounded-xl" style="background:rgba(139,92,246,.06); border:1px solid rgba(139,92,246,.15); margin-top: 24px;">
+            <p class="text-[11px] font-bold uppercase tracking-widest mb-1.5" style="color:#8B5CF6">Pengaju</p>
+            <p style="color:var(--txt); font-size:14px; font-weight:700;">${data.nama_lengkap ?? '-'} <span style="font-weight:500; color:var(--muted); font-size:12px; margin-left: 4px;">— ${data.created_at ?? '-'}</span></p>
+        </div>
+        <div class="p-4 rounded-xl" style="background:rgba(245,158,11,.08); border:1px solid rgba(245,158,11,.25); margin-top: 20px;">
+            <p class="text-[11px] font-bold uppercase tracking-widest mb-1.5" style="color:#D97706">Pesan / Catatan Revisi Karyawan</p>
+            <p style="color:var(--txt); font-style: italic; font-family:'Lora',serif; font-size:15px; line-height:1.6; white-space:pre-wrap;">"${data.pesan_revisi ? data.pesan_revisi : 'Tidak ada catatan perubahan.'}"</p>
         </div>`;
+
     m.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     gsap.fromTo(m.firstElementChild, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: 'expo.out' });
+
+    // Render original file preview if exists
+    if (data.file_asli) {
+        const fileUrl = `<?= base_url('uploads/') ?>${data.file_asli}`;
+        const isPdf = fileUrl.toLowerCase().endsWith('.pdf');
+        const isDocx = fileUrl.toLowerCase().endsWith('.docx');
+        const container = document.getElementById('preview-asli-container');
+        const iframe = document.getElementById('iframe-asli');
+        const docxDiv = document.getElementById('docx-asli');
+        
+        if (isPdf) {
+            container.style.display = 'block';
+            iframe.src = fileUrl;
+            iframe.style.display = 'block';
+        } else if (isDocx) {
+            container.style.display = 'block';
+            docxDiv.style.display = 'block';
+            docxDiv.innerHTML = '<p class="text-[10px] text-gray-500 font-bold p-4 text-center">Memuat Word...</p>';
+            fetch(fileUrl)
+                .then(res => res.blob())
+                .then(blob => {
+                    if (typeof docx !== 'undefined') {
+                        docx.renderAsync(blob, docxDiv).catch(err => {
+                            docxDiv.innerHTML = '<p class="text-[10px] text-red-500 text-center p-2">Error: ' + err.message + '</p>';
+                        });
+                    } else {
+                        docxDiv.innerHTML = '<p class="text-[10px] text-amber-600 text-center p-2">No renderer</p>';
+                    }
+                })
+                .catch(err => {
+                    docxDiv.innerHTML = '<p class="text-[10px] text-red-500 text-center p-2">Gagal memuat berkas</p>';
+                });
+        }
+    }
+
+    // Render revised file preview if exists
+    if (data.file_dokumen) {
+        const fileUrl = `<?= base_url('uploads/') ?>${data.file_dokumen}`;
+        const isPdf = fileUrl.toLowerCase().endsWith('.pdf');
+        const isDocx = fileUrl.toLowerCase().endsWith('.docx');
+        const container = document.getElementById('preview-revisi-container');
+        const iframe = document.getElementById('iframe-revisi');
+        const docxDiv = document.getElementById('docx-revisi');
+        
+        if (isPdf) {
+            container.style.display = 'block';
+            iframe.src = fileUrl;
+            iframe.style.display = 'block';
+        } else if (isDocx) {
+            container.style.display = 'block';
+            docxDiv.style.display = 'block';
+            docxDiv.innerHTML = '<p class="text-[10px] text-gray-500 font-bold p-4 text-center">Memuat Word...</p>';
+            fetch(fileUrl)
+                .then(res => res.blob())
+                .then(blob => {
+                    if (typeof docx !== 'undefined') {
+                        docx.renderAsync(blob, docxDiv).catch(err => {
+                            docxDiv.innerHTML = '<p class="text-[10px] text-red-500 text-center p-2">Error: ' + err.message + '</p>';
+                        });
+                    } else {
+                        docxDiv.innerHTML = '<p class="text-[10px] text-amber-600 text-center p-2">No renderer</p>';
+                    }
+                })
+                .catch(err => {
+                    docxDiv.innerHTML = '<p class="text-[10px] text-red-500 text-center p-2">Gagal memuat berkas</p>';
+                });
+        }
+    }
+
+    // Render footer action buttons if status is pending
+    const footer = document.getElementById('compareFooter');
+    if (data.status_revisi.toLowerCase() === 'pending') {
+        footer.style.display = 'flex';
+        footer.innerHTML = `
+            <button onclick="closeCompareModal()" class="organic-shape px-5 py-2 text-xs font-bold font-kalam text-center cursor-pointer transition-all duration-200" style="background:var(--surface); color:var(--txt); border:2px solid var(--txt)">
+                Batal
+            </button>
+            <button onclick="openRejectModal(${data.id}); closeCompareModal();" class="organic-shape px-5 py-2 text-xs font-bold font-kalam text-center cursor-pointer transition-all duration-200 text-white" style="background:var(--secondary); border:2px solid var(--txt); box-shadow: 2px 2px 0px var(--txt)">
+                Tolak
+            </button>
+            <a href="<?= base_url('admin/revisi/approve/') ?>${data.id}" class="organic-shape px-5 py-2 text-xs font-bold font-kalam text-center cursor-pointer transition-all duration-200 text-white flex items-center justify-center" style="background:var(--primary); border:2px solid var(--txt); box-shadow: 2px 2px 0px var(--txt)">
+                Terapkan
+            </a>
+        `;
+    } else {
+        footer.style.display = 'none';
+        footer.innerHTML = '';
+    }
 }
 function closeCompareModal() {
     gsap.to('#compareModal', { opacity: 0, duration: .25, ease:'power2.in', onComplete: () => {
         document.getElementById('compareModal').style.display='none';
         document.body.style.overflow = '';
         gsap.set('#compareModal', {opacity:1});
+        document.getElementById('compareContent').innerHTML = ''; // Clear contents
+        document.getElementById('compareFooter').innerHTML = ''; // Clear footer
+        document.getElementById('compareFooter').style.display = 'none';
     }});
 }
 function openRejectModal(id) {

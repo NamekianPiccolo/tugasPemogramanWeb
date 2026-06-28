@@ -20,6 +20,7 @@ class CreateRevisiTable extends Migration
             'file_dokumen'   => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
             'status_revisi'  => ['type' => 'ENUM', 'constraint' => ['Pending', 'Disetujui', 'Ditolak'], 'default' => 'Pending'],
             'pesan_admin'    => ['type' => 'TEXT', 'null' => true],
+            'pesan_revisi'   => ['type' => 'TEXT', 'null' => true],
             'created_at'     => ['type' => 'DATETIME', 'null' => true],
             'updated_at'     => ['type' => 'DATETIME', 'null' => true],
         ]);

@@ -13,7 +13,7 @@ class CreateIzinTable extends Migration
             'user_id'        => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true],
             'dokumen_id'     => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true],
             'pesan'          => ['type' => 'TEXT', 'null' => true],
-            'status_izin'    => ['type' => 'ENUM', 'constraint' => ['Pending', 'Disetujui', 'Ditolak'], 'default' => 'Pending'],
+            'status_izin'    => ['type' => 'ENUM', 'constraint' => ['Pending', 'Disetujui', 'Ditolak', 'Selesai'], 'default' => 'Pending'],
             'tgl_pengajuan'  => ['type' => 'DATETIME', 'null' => true],
             'created_at'     => ['type' => 'DATETIME', 'null' => true],
             'updated_at'     => ['type' => 'DATETIME', 'null' => true],

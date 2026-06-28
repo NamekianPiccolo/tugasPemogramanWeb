@@ -93,6 +93,11 @@
             $bgCard = $colors[$idx % count($colors)];
             $idx++;
             $status = strtolower($d['status'] ?? 'dipinjam');
+            // Jika status masih dipinjam dan tanggal kembali sudah terlewati hari ini, set status menjadi terlambat
+            if ($status === 'dipinjam' && !empty($d['tanggal_kembali']) && $d['tanggal_kembali'] < date('Y-m-d')) {
+                $status = 'terlambat';
+            }
+
             if ($status === 'dikembalikan') { $badgeBg = 'rgba(132,169,140,0.15)'; $badgeCol = 'var(--primary)'; }
             elseif ($status === 'terlambat') { $badgeBg = 'rgba(224,122,95,0.15)'; $badgeCol = 'var(--secondary)'; }
             else { $badgeBg = 'rgba(245,158,11,0.15)'; $badgeCol = '#F59E0B'; }
@@ -121,7 +126,7 @@
                  style="border-top:2px dashed rgba(61,64,91,0.15)">
                 <span class="px-3 py-1.5 organic-shape text-[10px] font-bold font-kalam uppercase tracking-widest text-center"
                       style="background:<?= $badgeBg ?>; color:<?= $badgeCol ?>; border: 2px solid <?= $badgeCol ?>">
-                    <?= esc($d['status']) ?>
+                    <?= esc(ucfirst($status)) ?>
                 </span>
                 <?php if ($role === 'admin'): ?>
                 <a href="<?= base_url('admin/distribusi/delete/' . $d['id']) ?>"

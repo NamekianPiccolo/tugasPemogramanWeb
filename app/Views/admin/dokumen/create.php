@@ -264,7 +264,7 @@ input[type="date"].fl-input:focus ~ .fl-label { color: var(--primary); }
     <?= csrf_field() ?>
 
     <!-- 5 col grid: left=3, right=2  -->
-    <div class="grid gap-5" style="grid-template-columns: 3fr 2fr; align-items: start">
+    <div class="grid gap-5" style="grid-template-columns: 1fr; align-items: start">
 
         <!-- ════ LEFT PANEL — Form fields ════ -->
         <div class="glass-card static-card" style="padding: 28px 32px; border-radius: 14px">
@@ -370,13 +370,16 @@ input[type="date"].fl-input:focus ~ .fl-label { color: var(--primary); }
                     </div>
                 </div>
 
-                <!-- PDF Preview Container -->
-                <div id="pdfPreviewContainer" style="display:none; margin-top: 15px; border: 1.5px solid rgba(61,64,91,0.15); border-radius: 10px; overflow: hidden; height: 350px; position: relative; animation: pop-in 0.28s cubic-bezier(0.34,1.56,0.64,1);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: #f2e8cf; padding: 6px 12px; border-bottom: 1.5px solid rgba(61,64,91,0.15);">
-                        <span style="font-family: 'Kalam', cursive; font-size: 11px; font-weight: 700; color: var(--txt);">Pratinjau PDF</span>
+                <!-- File Preview Container (PDF & Word DOCX) -->
+                <div id="pdfPreviewContainer" style="display:none; margin-top: 15px; border: 1.5px solid rgba(61,64,91,0.15); border-radius: 10px; overflow: hidden; height: 650px; position: relative; animation: pop-in 0.28s cubic-bezier(0.34,1.56,0.64,1);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: #f2e8cf; padding: 6px 12px; border-bottom: 1.5px solid rgba(61,64,91,0.15); z-index: 10; position: relative;">
+                        <span id="previewTitle" style="font-family: 'Kalam', cursive; font-size: 11px; font-weight: 700; color: var(--txt);">Pratinjau File</span>
                         <button type="button" id="removePdfPreview" style="color: var(--secondary); font-size: 10px; font-weight: bold; cursor: pointer; border: none; background: transparent;">Hapus</button>
                     </div>
-                    <iframe id="pdfPreviewFrame" src="" style="width: 100%; height: calc(100% - 30px); border: none;"></iframe>
+                    <!-- Frame untuk PDF -->
+                    <iframe id="pdfPreviewFrame" src="" style="width: 100%; height: calc(100% - 30px); border: none; display: none;"></iframe>
+                    <!-- Container untuk merender DOCX -->
+                    <div id="docxPreviewDiv" style="width: 100%; height: calc(100% - 30px); overflow: auto; background: white; padding: 15px; display: none;"></div>
                 </div>
 
                 <!-- Tips -->
@@ -428,6 +431,31 @@ input[type="date"].fl-input:focus ~ .fl-label { color: var(--primary); }
 
 <script>
 (() => {
+    const parseCSVToHTML = (csvText) => {
+        const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
+        if (lines.length === 0) return '<p class="text-xs text-gray-500 text-center">Berkas CSV kosong.</p>';
+        
+        let html = '<div class="overflow-x-auto" style="max-height: 550px;"><table style="width: 100%; border-collapse: collapse; font-family: sans-serif; font-size: 11px; color: var(--txt); border: 2.5px solid var(--txt); box-shadow: 3px 3px 0 var(--txt);">';
+        
+        lines.forEach((line, index) => {
+            const matches = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || line.split(',');
+            const cells = matches.map(cell => cell.replace(/^"|"$/g, '').trim());
+            
+            const cellTag = index === 0 ? 'th' : 'td';
+            const cellStyle = index === 0 
+                ? 'background: var(--primary); color: #fffcf2; font-weight: bold; border: 1.5px solid var(--txt); padding: 8px 10px; text-align: left; position: sticky; top: 0;' 
+                : 'border: 1.5px solid var(--txt); padding: 8px 10px; background: ' + (index % 2 === 0 ? '#f2e8cf' : '#fffcf2') + ';';
+                
+            html += '<tr>';
+            cells.forEach(cell => {
+                html += `<${cellTag} style="${cellStyle}">${cell}</${cellTag}>`;
+            });
+            html += '</tr>';
+        });
+        
+        html += '</table></div>';
+        return html;
+    };
     gsap.fromTo('.page-intro',  { y:-14, opacity:0 }, { y:0, opacity:1, duration:.38, ease:'power3.out' });
     gsap.fromTo('.glass-card',  { y:18,  opacity:0 }, { y:0, opacity:1, duration:.42, stagger:.06, ease:'power3.out', delay:.05 });
 
@@ -439,10 +467,12 @@ input[type="date"].fl-input:focus ~ .fl-label { color: var(--primary); }
     const ring   = document.getElementById('uploadRing');
     const icon   = document.getElementById('uploadIcon');
 
-    /* PDF Preview elements */
+    /* Preview elements */
     const previewContainer = document.getElementById('pdfPreviewContainer');
     const previewFrame = document.getElementById('pdfPreviewFrame');
+    const docxPreviewDiv = document.getElementById('docxPreviewDiv');
     const removePreviewBtn = document.getElementById('removePdfPreview');
+    const previewTitle = document.getElementById('previewTitle');
 
     const setFile = file => {
         nameEl.textContent = file.name;
@@ -450,14 +480,54 @@ input[type="date"].fl-input:focus ~ .fl-label { color: var(--primary); }
         ring.style.cssText += ';border-color:var(--primary);border-style:solid;background:rgba(132,169,140,0.15)';
         icon.style.color = 'var(--primary)';
 
-        // Show PDF preview if it is a PDF
-        if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+        const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+        const isDocx = file.name.toLowerCase().endsWith('.docx');
+        const isCsv = file.name.toLowerCase().endsWith('.csv');
+
+        // Reset previous preview content
+        previewFrame.src = '';
+        previewFrame.style.display = 'none';
+        docxPreviewDiv.innerHTML = '';
+        docxPreviewDiv.style.display = 'none';
+        previewContainer.style.display = 'none';
+
+        if (isPdf) {
             const objectUrl = URL.createObjectURL(file);
             previewFrame.src = objectUrl;
+            previewFrame.style.display = 'block';
+            if (previewTitle) previewTitle.textContent = "Pratinjau PDF";
             previewContainer.style.display = 'block';
-        } else {
-            previewFrame.src = '';
-            previewContainer.style.display = 'none';
+        } else if (isDocx) {
+            if (previewTitle) previewTitle.textContent = "Pratinjau Word (DOCX)";
+            previewContainer.style.display = 'block';
+            docxPreviewDiv.style.display = 'block';
+            docxPreviewDiv.innerHTML = '<p class="text-xs text-gray-500 font-bold p-4 text-center">Memuat pratinjau dokumen...</p>';
+            
+            if (typeof docx !== 'undefined') {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const arrayBuffer = e.target.result;
+                    docx.renderAsync(arrayBuffer, docxPreviewDiv)
+                        .catch(err => {
+                            docxPreviewDiv.innerHTML = '<p class="text-xs text-red-500 font-bold p-4 text-center">Gagal merender DOCX: ' + err.message + '</p>';
+                        });
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                docxPreviewDiv.innerHTML = '<p class="text-xs text-amber-600 font-bold p-4 text-center">Sistem pratinjau Word sedang dimuat...</p>';
+            }
+        } else if (isCsv) {
+            if (previewTitle) previewTitle.textContent = "Pratinjau CSV";
+            previewContainer.style.display = 'block';
+            docxPreviewDiv.style.display = 'block';
+            docxPreviewDiv.innerHTML = '<p class="text-xs text-gray-500 font-bold p-4 text-center">Memuat data CSV...</p>';
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                docxPreviewDiv.innerHTML = parseCSVToHTML(text);
+            };
+            reader.readAsText(file);
         }
     };
 
@@ -468,6 +538,9 @@ input[type="date"].fl-input:focus ~ .fl-label { color: var(--primary); }
             ring.style.cssText = '';
             icon.style.color = 'rgba(181,176,161,0.9)';
             previewFrame.src = '';
+            previewFrame.style.display = 'none';
+            docxPreviewDiv.innerHTML = '';
+            docxPreviewDiv.style.display = 'none';
             previewContainer.style.display = 'none';
         });
     }

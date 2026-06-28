@@ -13,6 +13,8 @@ services:
       - "8081:80"
     volumes:
       - .:/var/www/html
+      - ./.env.docker:/var/www/html/.env
+      - writable_data:/var/www/html/writable
     environment:
       - CI_ENVIRONMENT=development
     depends_on:
@@ -58,3 +60,4 @@ services:
 # Penyimpanan data MySQL agar tidak hilang saat container dihapus
 volumes:
   db_data:
+  writable_data:

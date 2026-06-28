@@ -8,6 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap" rel="stylesheet">
     <link href="<?= base_url('css/output.css') ?>" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <!-- JSZip & docx-preview for Word (.docx) document previews -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docx-preview@0.1.15/dist/docx-preview.min.js"></script>
     <script>
     window.initSearch = function({ panelId, inputId, items, filterAttrs = [], emptyId = null, countId = 'searchCount' }) {
         const panel   = document.getElementById(panelId);
@@ -512,15 +515,15 @@
                 </svg>
             </div>
             <div>
-                <span class="font-bold text-lg tracking-tight font-kalam">Workspace DMS</span>
-                <div class="text-[10px] uppercase tracking-widest font-bold text-gray-500 mt-0.5">Organic Edition</div>
+                <span class="font-bold text-lg tracking-tight font-kalam">Kelola Dokemen Digital</span>
+               
             </div>
         </div>
 
         <!-- Navigation -->
         <div class="space-y-8 flex-1 pr-2">
             <!-- Workspace section -->
-            <div>
+            <div class="mt-6">
                 <div class="px-2 mb-3 text-[11px] font-bold uppercase tracking-widest text-gray-500 font-kalam">Main Menu</div>
                 <nav class="space-y-1.5">
                     <?php $role = session()->get('role') ?? 'admin'; ?>
@@ -591,8 +594,7 @@
                         Izin Akses
                     </a>
 
-                    <?php if ($role === 'admin'): ?>
-                    <a href="<?= base_url('admin/revisi') ?>"
+                    <a href="<?= base_url("$role/revisi") ?>"
                        class="nav-item flex items-center px-4 py-2.5 <?= strpos(current_url(),'revisi')!==false?'active':'' ?>">
                         <svg class="w-5 h-5 mr-3 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
@@ -600,6 +602,7 @@
                         Revisi Dokumen
                     </a>
 
+                    <?php if ($role === 'admin'): ?>
                     <a href="<?= base_url('admin/riwayat') ?>"
                        class="nav-item flex items-center px-4 py-2.5 <?= strpos(current_url(),'riwayat')!==false?'active':'' ?>">
                         <svg class="w-5 h-5 mr-3 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -757,7 +760,7 @@
 
                     gsap.fromTo('#contentArea',
                         { opacity: 0, scale: 1.02, rotation: 0.5 },
-                        { opacity: 1, scale: 1, rotation: 0, duration: 0.4, ease: 'back.out(1.5)' }
+                        { opacity: 1, scale: 1, rotation: 0, duration: 0.4, ease: 'back.out(1.5)', clearProps: 'transform' }
                     );
                 }).catch(() => { window.location.href = url; });
             }
@@ -819,7 +822,12 @@
             const match = link.getAttribute('onclick').match(/confirm\(['"](.*?)['"]\)/);
             const msg = match ? match[1] : 'Apakah Anda yakin ingin menghapus data ini?';
             
-            showConfirm('Konfirmasi Hapus', msg, 'Hapus', 'var(--secondary)').then(res => {
+            const isReturn = link.href.includes('kembalikan') || msg.toLowerCase().includes('kembalikan');
+            const title = isReturn ? 'Konfirmasi Pengembalian' : 'Konfirmasi Hapus';
+            const btnText = isReturn ? 'Kembalikan' : 'Hapus';
+            const btnColor = isReturn ? 'var(--primary)' : 'var(--secondary)';
+            
+            showConfirm(title, msg, btnText, btnColor).then(res => {
                 if(res) {
                     link.removeAttribute('onclick'); // prevent loop
                     link.click();
@@ -836,9 +844,9 @@
         
         e.preventDefault();
         
-        let title = 'Konfirmasi Simpan';
-        let text = 'Apakah Anda yakin ingin menyimpan data ini?';
-        let btnText = 'Simpan';
+        let title = form.getAttribute('data-confirm-title') || 'Konfirmasi Simpan';
+        let text = form.getAttribute('data-confirm-text') || 'Apakah Anda yakin ingin menyimpan data ini?';
+        let btnText = form.getAttribute('data-confirm-btn') || 'Simpan';
         let btnColor = 'var(--primary)';
 
         // If it's a delete form or "Hapus" button form

@@ -43,6 +43,11 @@ select.fl-input:focus~.fl-label,input[type="date"].fl-input:focus~.fl-label{colo
     <a href="<?= base_url("$role/distribusi") ?>" class="btn-cancel shrink-0 px-4 py-2 text-xs" style="width:auto;border-radius:8px">← Kembali</a>
 </div>
 
+<div id="jsError" class="mb-4 px-4 py-3 rounded-xl items-center gap-2.5 text-xs" style="display: none; background:rgba(224,122,95,.1);border:1.5px solid rgba(224,122,95,.25);color:var(--txt)">
+    <svg class="w-4 h-4 shrink-0" style="color:var(--secondary)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+    <span id="jsErrorText" class="font-kalam font-bold"></span>
+</div>
+
 <?php if (session()->getFlashdata('error')): ?>
 <div class="mb-4 px-4 py-3 rounded-xl flex items-center gap-2.5 text-xs" style="background:rgba(224,122,95,.1);border:1.5px solid rgba(224,122,95,.25);color:var(--txt)">
     <svg class="w-4 h-4 shrink-0" style="color:var(--secondary)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
@@ -50,7 +55,7 @@ select.fl-input:focus~.fl-label,input[type="date"].fl-input:focus~.fl-label{colo
 </div>
 <?php endif; ?>
 
-<form action="<?= base_url("$role/distribusi/store") ?>" method="POST">
+<form id="formDistribusi" action="<?= base_url("$role/distribusi/store") ?>" method="POST">
     <?= csrf_field() ?>
     <div class="grid gap-5" style="grid-template-columns:3fr 2fr;align-items:start">
 
@@ -86,22 +91,20 @@ select.fl-input:focus~.fl-label,input[type="date"].fl-input:focus~.fl-label{colo
 
             <div class="grid grid-cols-2 gap-4 mb-4">
                 <div class="fl-group">
-                    <input type="date" name="tanggal_pinjam" id="tanggal_pinjam" value="<?= old('tanggal_pinjam', date('Y-m-d')) ?>" class="fl-input" required>
+                    <input type="date" name="tanggal_pinjam" id="tanggal_pinjam" value="<?= date('Y-m-d') ?>" min="<?= date('Y-m-d') ?>" max="<?= date('Y-m-d') ?>" class="fl-input" readonly required>
                     <label for="tanggal_pinjam" class="fl-label">Tanggal Pinjam <span class="req">*</span></label>
                     <svg class="fl-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 </div>
                 <div class="fl-group">
-                    <input type="date" name="tanggal_kembali" id="tanggal_kembali" value="<?= old('tanggal_kembali') ?>" class="fl-input">
+                    <input type="date" name="tanggal_kembali" id="tanggal_kembali" min="<?= date('Y-m-d') ?>" value="<?= old('tanggal_kembali') ?>" class="fl-input">
                     <label for="tanggal_kembali" class="fl-label">Est. Tanggal Kembali</label>
                     <svg class="fl-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
             </div>
 
             <div class="fl-group">
-                <select name="status" id="status" class="fl-input">
-                    <option value="Dipinjam" <?= old('status','Dipinjam')==='Dipinjam'?'selected':'' ?>>Dipinjam</option>
-                    <option value="Dikembalikan" <?= old('status')==='Dikembalikan'?'selected':'' ?>>Dikembalikan</option>
-                    <option value="Terlambat" <?= old('status')==='Terlambat'?'selected':'' ?>>Terlambat</option>
+                <select name="status" id="status" class="fl-input" required>
+                    <option value="Dipinjam" selected>Dipinjam</option>
                 </select>
                 <label for="status" class="fl-label">Status Distribusi</label>
                 <svg class="fl-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -134,6 +137,55 @@ select.fl-input:focus~.fl-label,input[type="date"].fl-input:focus~.fl-label{colo
 (() => {
     gsap.fromTo('.page-intro',{y:-14,opacity:0},{y:0,opacity:1,duration:.38,ease:'power3.out'});
     gsap.fromTo('.glass-card',{y:18,opacity:0},{y:0,opacity:1,duration:.42,stagger:.06,ease:'power3.out',delay:.05});
+
+    const form = document.getElementById('formDistribusi');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            const tanggalPinjam = document.getElementById('tanggal_pinjam').value;
+            const tanggalKembali = document.getElementById('tanggal_kembali').value;
+            const status = document.getElementById('status').value;
+            
+            // Dapatkan tanggal hari ini dalam format lokal YYYY-MM-DD
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const today = `${year}-${month}-${day}`;
+
+            const jsError = document.getElementById('jsError');
+            if (jsError) {
+                jsError.style.display = 'none';
+            }
+
+            if (tanggalPinjam !== today) {
+                e.preventDefault();
+                showError('Tanggal Pinjam harus hari ini (' + today + ')!');
+                return;
+            }
+
+            if (tanggalKembali && tanggalKembali < tanggalPinjam) {
+                e.preventDefault();
+                showError('Est. Tanggal Kembali harus sama dengan atau setelah Tanggal Pinjam!');
+                return;
+            }
+
+            if (status !== 'Dipinjam') {
+                e.preventDefault();
+                showError('Status Distribusi harus "Dipinjam"!');
+                return;
+            }
+        });
+    }
+
+    function showError(msg) {
+        const jsError = document.getElementById('jsError');
+        const jsErrorText = document.getElementById('jsErrorText');
+        if (jsError && jsErrorText) {
+            jsErrorText.textContent = msg;
+            jsError.style.setProperty('display', 'flex', 'important');
+            jsError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
 })();
 </script>
 <?= $this->endSection() ?>

@@ -77,7 +77,7 @@
         <p class="text-sm" style="color:var(--muted)">Tambahkan pengguna pertama untuk memulai.</p>
     </div>
 <?php else: ?>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 user-grid">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 user-grid" style="display: grid; gap: 20px; margin-top: 24px;">
         <?php 
         $colors = ['#fffcf2', '#f2e8cf', '#d8e2dc', '#fae1dd'];
         $i = 0;
@@ -85,11 +85,11 @@
             $bgCard = $colors[$i % count($colors)]; $i++;
             $isAdmin = ($u['role'] === 'admin');
         ?>
-        <div class="glass-card organic-shape organic-shadow group flex flex-col relative overflow-hidden user-card p-3" 
+        <div class="glass-card group flex flex-col justify-between relative overflow-hidden user-card" 
              style="background-color: <?= $bgCard ?>;"
              data-search="<?= esc(strtolower(($u['nama_lengkap'] ?? '') . ' ' . ($u['username'] ?? '') . ' ' . ($u['email'] ?? '') . ' ' . ($u['role'] ?? ''))) ?>"
              data-role="<?= esc(strtolower($u['role'] ?? '')) ?>">
-            <div class="p-6">
+            <div class="p-6 pb-2">
                 <div class="flex items-start justify-between mb-4">
                     <div class="w-14 h-14 flex items-center justify-center text-xl font-bold font-kalam text-white shrink-0 organic-shape"
                          style="background: <?= $isAdmin ? 'var(--secondary)' : 'var(--primary)' ?>; border: 2px solid var(--txt); box-shadow: 2px 2px 0px var(--txt)">
@@ -110,7 +110,7 @@
                     <span class="truncate"><?= esc($u['email']) ?></span>
                 </div>
             </div>
-            <div class="px-6 pb-8 pt-4 flex space-x-2 mt-auto" style="border-top:2px dashed rgba(61,64,91,0.15)">
+            <div class="px-6 p-5 pb-8 pt-5 flex space-x-2 mt-auto" style="border-top:2px dashed rgba(61,64,91,0.15); margin-top:auto;">
                 <a href="<?= base_url('admin/user/edit/' . $u['id']) ?>"
                    class="organic-shape flex-1 text-center py-2 mb-2 text-sm font-bold font-kalam cursor-pointer transition-all duration-200"
                    style="background:var(--surface); color:var(--txt); border:2px solid var(--txt)"
