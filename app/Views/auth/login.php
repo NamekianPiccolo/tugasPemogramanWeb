@@ -238,215 +238,336 @@
             z-index: 0;
         }
 
-        /* ═══════════════════════════════════════
-           MOBILE LAYOUT (Android / ≤640px)
-           ═══════════════════════════════════════ */
+        /* ════════════════════════════════════════════
+           PREMIUM MOBILE LOGIN  (Android / ≤640px)
+           ════════════════════════════════════════════ */
         @media (max-width: 640px) {
-            /* Hide the desktop sliding-panel layout */
-            .container,
-            .scribble {
-                display: none !important;
-            }
-
-            /* Show the mobile layout */
-            .mobile-login-wrap {
-                display: flex !important;
-            }
-
-            body {
-                overflow: auto;
-                align-items: flex-start;
-                padding: 0;
-            }
+            .container, .scribble { display: none !important; }
+            .mobile-login-wrap    { display: flex !important; }
+            body { overflow: auto; align-items: flex-start; padding: 0; background: #1a1c2c; }
         }
 
-        /* Mobile login: hidden on desktop */
+        /* ── Wrapper ── */
         .mobile-login-wrap {
             display: none;
             flex-direction: column;
-            align-items: stretch;
             min-height: 100vh;
             width: 100%;
-            background: var(--bg);
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-        }
-
-        /* Mobile header banner */
-        .mob-header {
-            background: var(--primary);
-            border-bottom: 3px solid var(--txt);
-            padding: 40px 24px 32px;
-            text-align: center;
+            background: #1a1c2c;
             position: relative;
             overflow: hidden;
         }
 
-        .mob-header::after {
-            content: '';
+        /* ── Animated gradient orbs ── */
+        .mob-orb {
             position: absolute;
-            bottom: -30px; right: -30px;
-            width: 100px; height: 100px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.08);
+            filter: blur(70px);
+            pointer-events: none;
+            opacity: 0;
+            animation: orbPulse 6s ease-in-out infinite;
+        }
+        .mob-orb-1 { width: 280px; height: 280px; background: rgba(132,169,140,0.35); top: -80px; left: -80px; animation-delay: 0s; }
+        .mob-orb-2 { width: 220px; height: 220px; background: rgba(224,122,95,0.25);  top: 60px;  right:-60px; animation-delay: 2s; }
+        .mob-orb-3 { width: 180px; height: 180px; background: rgba(132,169,140,0.2);  bottom:60px;left:20px;   animation-delay: 4s; }
+
+        @keyframes orbPulse {
+            0%,100% { opacity: 0.6; transform: scale(1); }
+            50%      { opacity: 1;   transform: scale(1.12); }
         }
 
-        .mob-header-logo {
-            width: 56px; height: 56px;
-            background: #fffcf2;
-            border: 3px solid var(--txt);
-            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-            box-shadow: 3px 3px 0 var(--txt);
+        /* ── Floating dots canvas ── */
+        #mobParticles {
+            position: absolute; inset: 0;
+            pointer-events: none; z-index: 0;
+        }
+
+        /* ── Hero section ── */
+        .mob-hero {
+            position: relative; z-index: 2;
+            padding: 56px 28px 0;
+            text-align: center;
+        }
+
+        .mob-logo-ring {
+            width: 72px; height: 72px;
+            margin: 0 auto 20px;
+            position: relative;
             display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 16px;
         }
 
-        .mob-header-logo svg { color: var(--primary); }
+        .mob-logo-ring::before {
+            content: '';
+            position: absolute; inset: 0;
+            border-radius: 50%;
+            border: 2px solid rgba(132,169,140,0.5);
+            animation: ringPulse 2.5s ease-in-out infinite;
+        }
 
-        .mob-header h1 {
+        .mob-logo-ring::after {
+            content: '';
+            position: absolute; inset: -10px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(132,169,140,0.2);
+            animation: ringPulse 2.5s ease-in-out infinite 0.5s;
+        }
+
+        @keyframes ringPulse {
+            0%,100% { transform: scale(1);   opacity: 1; }
+            50%      { transform: scale(1.12); opacity: 0.5; }
+        }
+
+        .mob-logo-inner {
+            width: 54px; height: 54px;
+            background: linear-gradient(135deg, #84a98c, #52796f);
+            border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 24px rgba(132,169,140,0.4);
+        }
+
+        .mob-logo-inner svg { color: white; }
+
+        .mob-hero-title {
+            font-family: 'Kalam', cursive;
+            font-size: 1.9rem;
+            font-weight: 700;
             color: #fffcf2;
-            font-size: 1.6rem;
-            margin: 0 0 6px;
+            margin: 0 0 8px;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 20px rgba(132,169,140,0.4);
         }
 
-        .mob-header p {
-            color: rgba(255,252,242,0.75);
-            font-size: 0.85rem;
-            margin: 0;
+        .mob-hero-sub {
+            font-family: 'Kalam', cursive;
+            font-size: 0.88rem;
+            color: rgba(255,252,242,0.5);
+            margin: 0 0 40px;
         }
 
-        /* Tab switcher */
-        .mob-tabs {
-            display: flex;
-            margin: 24px 20px 0;
-            background: var(--surface);
-            border: 2px solid var(--txt);
-            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-            box-shadow: 3px 3px 0 var(--txt);
+        /* ── Card ── */
+        .mob-card {
+            position: relative; z-index: 2;
+            margin: 0 16px 24px;
+            background: rgba(255, 252, 242, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1.5px solid rgba(255,252,242,0.1);
+            border-radius: 28px;
+            padding: 28px 22px 32px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
             overflow: hidden;
         }
 
-        .mob-tab {
+        /* Shimmer sweep on card */
+        .mob-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+            animation: cardShimmer 4s ease-in-out infinite;
+        }
+        @keyframes cardShimmer {
+            0%   { left: -100%; }
+            60%,100% { left: 160%; }
+        }
+
+        /* ── Role pill tabs ── */
+        .mob-pill-bar {
+            display: flex;
+            background: rgba(255,252,242,0.06);
+            border: 1.5px solid rgba(255,252,242,0.1);
+            border-radius: 50px;
+            padding: 4px;
+            margin-bottom: 28px;
+            position: relative;
+        }
+
+        .mob-pill {
             flex: 1;
-            padding: 12px 8px;
+            padding: 10px 8px;
             text-align: center;
             font-family: 'Kalam', cursive;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 700;
-            color: var(--muted);
+            color: rgba(255,252,242,0.5);
             background: transparent;
             border: none;
+            border-radius: 46px;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: color 0.3s ease;
+            position: relative; z-index: 2;
+            letter-spacing: 0.3px;
         }
 
-        .mob-tab.active {
-            background: var(--primary);
-            color: #fffcf2;
+        .mob-pill.active { color: #1a1c2c; }
+
+        /* Sliding active background */
+        .mob-pill-slider {
+            position: absolute;
+            top: 4px; bottom: 4px;
+            width: calc(50% - 4px);
+            left: 4px;
+            border-radius: 46px;
+            background: linear-gradient(135deg, #84a98c, #52796f);
+            box-shadow: 0 4px 16px rgba(132,169,140,0.4);
+            transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                        background 0.35s ease;
+            z-index: 1;
+        }
+        .mob-pill-slider.karyawan {
+            left: calc(50%);
+            background: linear-gradient(135deg, #e07a5f, #c45c3d);
+            box-shadow: 0 4px 16px rgba(224,122,95,0.4);
         }
 
-        .mob-tab:first-child.active {
-            border-radius: 253px 13px 223px 13px / 13px 223px 13px 253px;
+        /* ── Floating label inputs ── */
+        .mob-field {
+            position: relative;
+            margin-bottom: 18px;
         }
 
-        .mob-tab:last-child.active {
-            background: var(--secondary);
-            border-radius: 13px 253px 13px 223px / 223px 13px 253px 13px;
+        .mob-field-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%; transform: translateY(-50%);
+            color: rgba(255,252,242,0.3);
+            pointer-events: none;
+            transition: color 0.2s;
         }
 
-        /* Form card */
-        .mob-form-card {
-            margin: 20px;
-            background: var(--surface);
-            border: 2px solid var(--txt);
-            border-radius: 24px;
-            box-shadow: 4px 4px 0 var(--txt);
-            padding: 28px 24px;
-        }
-
-        .mob-form-card h2 {
-            font-family: 'Kalam', cursive;
-            font-size: 1.3rem;
-            color: var(--txt);
-            margin: 0 0 6px;
-        }
-
-        .mob-form-card p.mob-subtitle {
-            font-size: 0.82rem;
-            color: var(--muted);
-            margin: 0 0 24px;
-        }
-
-        .mob-input {
+        .mob-field-input {
             width: 100%;
-            background: var(--bg);
-            border: 2px solid var(--txt);
-            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-            padding: 14px 18px;
+            background: rgba(255,252,242,0.06);
+            border: 1.5px solid rgba(255,252,242,0.1);
+            border-radius: 14px;
+            padding: 16px 16px 16px 44px;
             font-family: 'Kalam', cursive;
             font-size: 1rem;
-            color: var(--txt);
+            color: #fffcf2;
             outline: none;
-            margin-bottom: 14px;
-            transition: all 0.2s;
-            display: block;
+            transition: all 0.25s ease;
+            -webkit-appearance: none;
+            appearance: none;
         }
 
-        .mob-input:focus {
-            background: #fff;
-            box-shadow: 2px 2px 0 var(--txt);
-            transform: scale(1.01);
+        .mob-field-input::placeholder {
+            color: rgba(255,252,242,0.3);
+            font-family: 'Kalam', cursive;
         }
 
-        .mob-input::placeholder { color: var(--muted); }
+        .mob-field-input:focus {
+            background: rgba(255,252,242,0.1);
+            border-color: rgba(132,169,140,0.7);
+            box-shadow: 0 0 0 3px rgba(132,169,140,0.15);
+        }
 
-        .mob-btn {
+        .mob-field-input:focus + .mob-field-icon,
+        .mob-field:focus-within .mob-field-icon {
+            color: #84a98c;
+        }
+
+        .mob-field-input.karyawan-focus:focus {
+            border-color: rgba(224,122,95,0.7);
+            box-shadow: 0 0 0 3px rgba(224,122,95,0.15);
+        }
+
+        /* ── Submit button ── */
+        .mob-submit {
             width: 100%;
-            padding: 14px;
-            border: 2px solid var(--txt);
-            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-            background: var(--primary);
+            padding: 16px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #84a98c, #52796f);
             color: #fffcf2;
             font-family: 'Kalam', cursive;
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 3px 3px 0 var(--txt);
-            transition: all 0.2s;
-            margin-top: 6px;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 24px rgba(132,169,140,0.35);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            margin-top: 8px;
         }
 
-        .mob-btn:active {
-            transform: translateY(2px);
-            box-shadow: 1px 1px 0 var(--txt);
+        /* Ripple + shimmer on button */
+        .mob-submit::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 70%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            animation: btnShimmer 2.5s ease-in-out infinite 1s;
+        }
+        @keyframes btnShimmer {
+            0%   { left: -100%; }
+            60%,100% { left: 160%; }
         }
 
-        .mob-btn.karyawan {
-            background: var(--secondary);
+        .mob-submit:active {
+            transform: scale(0.97);
+            box-shadow: 0 2px 10px rgba(132,169,140,0.3);
         }
 
+        .mob-submit.karyawan {
+            background: linear-gradient(135deg, #e07a5f, #c45c3d);
+            box-shadow: 0 6px 24px rgba(224,122,95,0.35);
+        }
+
+        /* ── Error box ── */
         .mob-error {
+            display: flex; align-items: center; gap: 10px;
             background: rgba(224,122,95,0.12);
-            border: 2px solid var(--secondary);
+            border: 1.5px solid rgba(224,122,95,0.35);
             border-radius: 12px;
-            padding: 10px 14px;
+            padding: 12px 14px;
+            margin-bottom: 20px;
             font-family: 'Kalam', cursive;
-            font-size: 0.85rem;
-            color: var(--txt);
+            font-size: 0.87rem;
+            color: #e07a5f;
             font-weight: 700;
-            margin-bottom: 16px;
+            animation: errorShake 0.4s ease;
+        }
+        @keyframes errorShake {
+            0%,100% { transform: translateX(0); }
+            20%     { transform: translateX(-6px); }
+            40%     { transform: translateX(6px); }
+            60%     { transform: translateX(-4px); }
+            80%     { transform: translateX(4px); }
         }
 
-        .mob-footer {
-            text-align: center;
-            padding: 20px 24px 32px;
+        .mob-role-label {
+            font-family: 'Kalam', cursive;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fffcf2;
+            margin: 0 0 4px;
+        }
+
+        .mob-role-sub {
             font-family: 'Kalam', cursive;
             font-size: 0.78rem;
-            color: var(--muted);
+            color: rgba(255,252,242,0.4);
+            margin: 0 0 22px;
         }
 
-        /* Form panels */
+        /* ── Footer ── */
+        .mob-footer {
+            position: relative; z-index: 2;
+            text-align: center;
+            padding: 8px 24px 36px;
+            font-family: 'Kalam', cursive;
+            font-size: 0.75rem;
+            color: rgba(255,252,242,0.25);
+        }
+
+        /* ── Panel switch ── */
         .mob-panel { display: none; }
-        .mob-panel.active { display: block; }
+        .mob-panel.active { display: block; animation: panelFadeUp 0.35s ease; }
+        @keyframes panelFadeUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -527,124 +648,219 @@ $flashLoginType = $session->getFlashdata('login_type');
     </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════
-     MOBILE LOGIN LAYOUT (only shown on ≤640px)
-     ═══════════════════════════════════════════════ -->
-<div class="mobile-login-wrap">
+<!-- ════════════════════════════════════════════════════
+     PREMIUM MOBILE LOGIN  (only shown on ≤640px)
+     ════════════════════════════════════════════════════ -->
+<div class="mobile-login-wrap" id="mobileLoginWrap">
 
-    <!-- Header Banner -->
-    <div class="mob-header">
-        <div class="mob-header-logo">
-            <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-            </svg>
+    <!-- Ambient orbs -->
+    <div class="mob-orb mob-orb-1"></div>
+    <div class="mob-orb mob-orb-2"></div>
+    <div class="mob-orb mob-orb-3"></div>
+    <canvas id="mobParticles"></canvas>
+
+    <!-- Hero -->
+    <div class="mob-hero" id="mobHero">
+        <div class="mob-logo-ring" id="mobLogo">
+            <div class="mob-logo-inner">
+                <svg width="26" height="26" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
         </div>
-        <h1>Workspace DMS</h1>
-        <p>Kelola Dokumen Digital Perusahaan</p>
+        <div class="mob-hero-title">Workspace DMS</div>
+        <div class="mob-hero-sub">Kelola Dokumen Digital Perusahaan</div>
     </div>
 
-    <!-- Tab Switcher -->
-    <div class="mob-tabs">
-        <button class="mob-tab <?= ($flashLoginType !== 'karyawan') ? 'active' : '' ?>" id="mobTabAdmin">🛡️ Admin</button>
-        <button class="mob-tab <?= ($flashLoginType === 'karyawan') ? 'active' : '' ?>" id="mobTabKaryawan">👤 Karyawan</button>
-    </div>
+    <!-- Card -->
+    <div class="mob-card" id="mobCard">
 
-    <!-- Form Card -->
-    <div class="mob-form-card">
+        <!-- Pill tab bar -->
+        <div class="mob-pill-bar">
+            <div class="mob-pill-slider" id="mobSlider"></div>
+            <button class="mob-pill <?= ($flashLoginType !== 'karyawan') ? 'active' : '' ?>" id="mobPillAdmin">
+                🛡️ Admin
+            </button>
+            <button class="mob-pill <?= ($flashLoginType === 'karyawan') ? 'active' : '' ?>" id="mobPillKaryawan">
+                👤 Karyawan
+            </button>
+        </div>
 
-        <!-- Admin Panel -->
+        <!-- Admin panel -->
         <div class="mob-panel <?= ($flashLoginType !== 'karyawan') ? 'active' : '' ?>" id="mobPanelAdmin">
-            <h2>Masuk sebagai Admin</h2>
-            <p class="mob-subtitle">Kelola dokumen dan pengaturan sistem</p>
+            <div class="mob-role-label">Selamat datang, Admin 👋</div>
+            <div class="mob-role-sub">Masuk untuk mengelola dokumen &amp; sistem</div>
 
             <?php if ($flashError && $flashLoginType !== 'karyawan'): ?>
-            <div class="mob-error">⚠️ <?= $flashError ?></div>
+            <div class="mob-error">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <?= $flashError ?>
+            </div>
             <?php endif; ?>
 
             <form action="<?= base_url('login') ?>" method="POST">
                 <?= csrf_field() ?>
                 <input type="hidden" name="login_type" value="admin">
-                <input type="text"     name="username" class="mob-input" placeholder="Username" required value="<?= old('username') ?>">
-                <input type="password" name="password" class="mob-input" placeholder="Password" required>
-                <button type="submit" class="mob-btn" id="mobFormBtn">Masuk →</button>
+
+                <div class="mob-field">
+                    <input type="text" name="username" class="mob-field-input" placeholder="Username" required
+                           value="<?= old('username') ?>" autocomplete="username">
+                    <span class="mob-field-icon">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    </span>
+                </div>
+
+                <div class="mob-field">
+                    <input type="password" name="password" class="mob-field-input" placeholder="Password" required
+                           autocomplete="current-password">
+                    <span class="mob-field-icon">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    </span>
+                </div>
+
+                <button type="submit" class="mob-submit" id="mobBtnAdmin">
+                    Masuk sebagai Admin &nbsp;→
+                </button>
             </form>
         </div>
 
-        <!-- Karyawan Panel -->
+        <!-- Karyawan panel -->
         <div class="mob-panel <?= ($flashLoginType === 'karyawan') ? 'active' : '' ?>" id="mobPanelKaryawan">
-            <h2>Masuk sebagai Karyawan</h2>
-            <p class="mob-subtitle">Cari dokumen dan ajukan izin akses</p>
+            <div class="mob-role-label">Halo, Karyawan 👋</div>
+            <div class="mob-role-sub">Cari dokumen &amp; ajukan izin akses</div>
 
             <?php if ($flashError && $flashLoginType === 'karyawan'): ?>
-            <div class="mob-error">⚠️ <?= $flashError ?></div>
+            <div class="mob-error">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <?= $flashError ?>
+            </div>
             <?php endif; ?>
 
             <form action="<?= base_url('login') ?>" method="POST">
                 <?= csrf_field() ?>
                 <input type="hidden" name="login_type" value="karyawan">
-                <input type="text"     name="username" class="mob-input" placeholder="Username" required value="<?= old('username') ?>">
-                <input type="password" name="password" class="mob-input" placeholder="Password" required>
-                <button type="submit" class="mob-btn karyawan">Masuk →</button>
+
+                <div class="mob-field">
+                    <input type="text" name="username" class="mob-field-input karyawan-focus" placeholder="Username" required
+                           value="<?= old('username') ?>" autocomplete="username">
+                    <span class="mob-field-icon">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    </span>
+                </div>
+
+                <div class="mob-field">
+                    <input type="password" name="password" class="mob-field-input karyawan-focus" placeholder="Password" required
+                           autocomplete="current-password">
+                    <span class="mob-field-icon">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    </span>
+                </div>
+
+                <button type="submit" class="mob-submit karyawan">
+                    Masuk sebagai Karyawan &nbsp;→
+                </button>
             </form>
         </div>
 
-    </div>
+    </div><!-- /mob-card -->
 
-    <div class="mob-footer">
-        © <?= date('Y') ?> Workspace DMS. All rights reserved.
-    </div>
-</div>
+    <div class="mob-footer">© <?= date('Y') ?> Workspace DMS · All rights reserved</div>
+
+</div><!-- /mobile-login-wrap -->
 
 <script>
+    // ─── Desktop panel toggle ───
     const signUpButton = document.getElementById('signUp');
     const signInButton = document.getElementById('signIn');
-    const container = document.getElementById('container');
+    const container    = document.getElementById('container');
+    if (signUpButton) signUpButton.addEventListener('click', () => container.classList.add('right-panel-active'));
+    if (signInButton) signInButton.addEventListener('click', () => container.classList.remove('right-panel-active'));
 
-    signUpButton.addEventListener('click', () => {
-        container.classList.add("right-panel-active");
-    });
-
-    signInButton.addEventListener('click', () => {
-        container.classList.remove("right-panel-active");
-    });
-
-    // Entrance Animation
     document.addEventListener('DOMContentLoaded', () => {
-        gsap.from('#container', { y: 40, opacity: 0, duration: 1, ease: 'back.out(1.2)' });
-        gsap.from('.scribble', { opacity: 0, duration: 2, delay: 0.5 });
-    });
-
-    // ─── MOBILE TAB TOGGLE ───
-    const mobTabAdmin    = document.getElementById('mobTabAdmin');
-    const mobTabKaryawan = document.getElementById('mobTabKaryawan');
-    const mobPanelAdmin    = document.getElementById('mobPanelAdmin');
-    const mobPanelKaryawan = document.getElementById('mobPanelKaryawan');
-    const mobFormBtn = document.getElementById('mobFormBtn');
-
-    function activateMobileTab(role) {
-        if (role === 'admin') {
-            mobTabAdmin.classList.add('active');
-            mobTabKaryawan.classList.remove('active');
-            mobPanelAdmin.classList.add('active');
-            mobPanelKaryawan.classList.remove('active');
-            if (mobFormBtn) { mobFormBtn.classList.remove('karyawan'); }
-        } else {
-            mobTabKaryawan.classList.add('active');
-            mobTabAdmin.classList.remove('active');
-            mobPanelKaryawan.classList.add('active');
-            mobPanelAdmin.classList.remove('active');
-            if (mobFormBtn) { mobFormBtn.classList.add('karyawan'); }
+        // Desktop entrance
+        if (typeof gsap !== 'undefined') {
+            gsap.from('#container', { y: 40, opacity: 0, duration: 1, ease: 'back.out(1.2)' });
+            gsap.from('.scribble',  { opacity: 0, duration: 2, delay: 0.5 });
         }
-    }
 
-    if (mobTabAdmin)    mobTabAdmin.addEventListener('click',    () => activateMobileTab('admin'));
-    if (mobTabKaryawan) mobTabKaryawan.addEventListener('click', () => activateMobileTab('karyawan'));
+        // Only run mobile code on small screens
+        if (window.innerWidth > 640) return;
 
-    // If returning from flash error on karyawan, activate that tab automatically
-    <?php if ($flashLoginType === 'karyawan'): ?>
-    document.addEventListener('DOMContentLoaded', () => activateMobileTab('karyawan'));
-    <?php endif; ?>
+        // ── GSAP entrance sequence ──
+        if (typeof gsap !== 'undefined') {
+            const tl = gsap.timeline({ defaults: { ease: 'back.out(1.4)' }});
+            tl.from('#mobLogo',  { scale: 0,   opacity: 0, duration: 0.6 })
+              .from('.mob-hero-title', { y: 20,  opacity: 0, duration: 0.5 }, '-=0.2')
+              .from('.mob-hero-sub',   { y: 15,  opacity: 0, duration: 0.4 }, '-=0.3')
+              .from('#mobCard',  { y: 40,  opacity: 0, duration: 0.6, ease: 'back.out(1.2)' }, '-=0.2')
+              .from('.mob-pill-bar', { scaleX: 0.8, opacity: 0, duration: 0.4 }, '-=0.3')
+              .from('.mob-role-label, .mob-role-sub', { x: -20, opacity: 0, duration: 0.4, stagger: 0.1 }, '-=0.2')
+              .from('.mob-field', { y: 15, opacity: 0, duration: 0.35, stagger: 0.12 }, '-=0.2')
+              .from('.mob-submit', { scale: 0.9, opacity: 0, duration: 0.4 }, '-=0.1')
+              .from('.mob-footer', { opacity: 0, duration: 0.4 }, '-=0.1');
+        }
+
+        // ── Particle canvas ──
+        const canvas = document.getElementById('mobParticles');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            canvas.width  = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const dots = Array.from({ length: 35 }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                r: Math.random() * 1.5 + 0.5,
+                vx: (Math.random() - 0.5) * 0.3,
+                vy: (Math.random() - 0.5) * 0.3,
+                a: Math.random() * 0.4 + 0.1
+            }));
+            function drawParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                dots.forEach(d => {
+                    d.x += d.vx; d.y += d.vy;
+                    if (d.x < 0) d.x = canvas.width;
+                    if (d.x > canvas.width) d.x = 0;
+                    if (d.y < 0) d.y = canvas.height;
+                    if (d.y > canvas.height) d.y = 0;
+                    ctx.beginPath();
+                    ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(132,169,140,${d.a})`;
+                    ctx.fill();
+                });
+                requestAnimationFrame(drawParticles);
+            }
+            drawParticles();
+        }
+
+        // ── Pill tab logic ──
+        const pillAdmin    = document.getElementById('mobPillAdmin');
+        const pillKaryawan = document.getElementById('mobPillKaryawan');
+        const panelAdmin    = document.getElementById('mobPanelAdmin');
+        const panelKaryawan = document.getElementById('mobPanelKaryawan');
+        const slider        = document.getElementById('mobSlider');
+
+        function switchTab(role) {
+            const isAdmin = role === 'admin';
+            pillAdmin.classList.toggle('active', isAdmin);
+            pillKaryawan.classList.toggle('active', !isAdmin);
+            panelAdmin.classList.toggle('active', isAdmin);
+            panelKaryawan.classList.toggle('active', !isAdmin);
+            slider.classList.toggle('karyawan', !isAdmin);
+
+            // Micro-bounce on card
+            if (typeof gsap !== 'undefined') {
+                gsap.fromTo('#mobCard', { scale: 0.98 }, { scale: 1, duration: 0.35, ease: 'back.out(1.8)' });
+            }
+        }
+
+        if (pillAdmin)    pillAdmin.addEventListener('click',    () => switchTab('admin'));
+        if (pillKaryawan) pillKaryawan.addEventListener('click', () => switchTab('karyawan'));
+
+        <?php if ($flashLoginType === 'karyawan'): ?>
+        switchTab('karyawan');
+        <?php endif; ?>
+    });
 </script>
 
 </body>
