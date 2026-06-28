@@ -353,6 +353,13 @@
             padding: 0 2px;
         }
 
+        .search-filter-row select {
+            max-width: 180px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
         .search-filter-label {
             font-size: 11px; font-weight: 700;
             text-transform: uppercase; letter-spacing: 1px;
@@ -610,6 +617,34 @@
             /* Search bar adjustments */
             .search-kbd { display: none !important; }
             .search-filter-row { flex-wrap: wrap !important; }
+            .search-filter-row select { max-width: 130px !important; }
+
+            /* On small screens, stack filters vertically to prevent viewport overflow */
+            @media (max-width: 480px) {
+                .search-filter-row {
+                    flex-direction: column !important;
+                    align-items: stretch !important;
+                    gap: 10px !important;
+                }
+                .search-filter-row > div {
+                    flex-direction: column !important;
+                    align-items: stretch !important;
+                    gap: 10px !important;
+                    width: 100% !important;
+                }
+                .search-filter-row .flex.items-center {
+                    display: flex !important;
+                    flex-direction: row !important;
+                    justify-content: space-between !important;
+                    width: 100% !important;
+                    margin-left: 0 !important;
+                }
+                .search-filter-row select {
+                    max-width: 70% !important;
+                    width: 70% !important;
+                    margin-left: 0 !important;
+                }
+            }
 
             /* Tables: horizontal scroll */
             .overflow-x-auto { -webkit-overflow-scrolling: touch; }
