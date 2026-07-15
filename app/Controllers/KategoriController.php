@@ -54,7 +54,7 @@ class KategoriController extends BaseController
         $data['kategori'] = $query->findAll();
         $data['sort'] = $sort;
         $data['title'] = 'Data Kategori Dokumen';
-        return view('admin/kategori/index', $data);
+        return view('admin/datakategori/index', $data);
     }
 
     /**

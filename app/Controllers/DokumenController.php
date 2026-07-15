@@ -254,7 +254,7 @@ class DokumenController extends BaseController
         $userId = session()->get('id');
 
         $data['dokumen'] = $this->dokumenModel
-            ->select('dokumen.*, kategori.nama_kategori, unit.nama_unit, izin.status_izin, izin.pesan as izin_pesan, izin.pesan_admin as izin_pesan_admin, izin.tgl_pengajuan as izin_tgl, distribusi.status as status_distribusi, distribusi.tanggal_kembali as distribusi_tanggal_kembali, 
+            ->select('dokumen.*, kategori.nama_kategori, unit.nama_unit, izin.status_izin, izin.pesan as izin_pesan, izin.pesan_admin as izin_pesan_admin, izin.tgl_pengajuan as izin_tgl, distribusi.status as status_distribusi, distribusi.tanggal_pinjam as distribusi_tanggal_pinjam, distribusi.tanggal_kembali as distribusi_tanggal_kembali, 
                       (SELECT COUNT(id) FROM distribusi as d2 WHERE d2.dokumen_id = dokumen.id AND d2.status != \'Dikembalikan\') as sedang_dipinjam_global,
                       (SELECT status_revisi FROM revisi as r2 WHERE r2.dokumen_id = dokumen.id AND r2.user_id = ' . $userId . ' ORDER BY r2.created_at DESC LIMIT 1) as status_revisi_terakhir,
                       (SELECT pesan_admin FROM revisi as r3 WHERE r3.dokumen_id = dokumen.id AND r3.user_id = ' . $userId . ' ORDER BY r3.created_at DESC LIMIT 1) as pesan_revisi_admin_terakhir')

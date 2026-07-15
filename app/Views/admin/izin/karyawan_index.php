@@ -113,6 +113,12 @@
                     <p class="text-xs mb-3 italic truncate max-w-xs sm:max-w-md md:max-w-lg" style="color:var(--dim)">"<?= esc($i['pesan'] ?: 'Tidak ada pesan.') ?>"</p>
                     <div class="flex flex-wrap items-center gap-3 text-[10px] font-bold uppercase tracking-widest font-kalam" style="color:var(--dim)">
                         <span class="organic-shape px-2.5 py-1" style="background:rgba(61,64,91,0.08); border:1px solid rgba(61,64,91,0.2)">Diajukan: <?= esc(date('d M Y H:i', strtotime($i['tgl_pengajuan']))) ?></span>
+                        <?php 
+                        $isRequestExpired = !empty($i['distribusi_tanggal_kembali']) && $i['distribusi_tanggal_kembali'] < date('Y-m-d');
+                        if (strtolower($i['status_izin'] ?? '') === 'disetujui' && !empty($i['distribusi_tanggal_pinjam']) && !$isRequestExpired): 
+                        ?>
+                            <span class="organic-shape px-2.5 py-1" style="background:rgba(132,169,140,0.08); border:1px solid rgba(132,169,140,0.3); color:var(--primary)">Masa Pinjam: <?= esc(date('d M Y', strtotime($i['distribusi_tanggal_pinjam']))) ?> s/d <?= $i['distribusi_tanggal_kembali'] ? esc(date('d M Y', strtotime($i['distribusi_tanggal_kembali']))) : '—' ?></span>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -123,6 +129,8 @@
                         data-pesan="<?= esc($i['pesan'] ?: 'Tidak ada pesan.') ?>"
                         data-pesan-admin="<?= esc($i['pesan_admin'] ?? '') ?>"
                         data-tgl="<?= esc(date('d M Y H:i', strtotime($i['tgl_pengajuan']))) ?>"
+                        data-tgl-pinjam="<?= (!$isRequestExpired && !empty($i['distribusi_tanggal_pinjam'])) ? esc(date('d M Y', strtotime($i['distribusi_tanggal_pinjam']))) : '' ?>"
+                        data-tgl-kembali="<?= (!$isRequestExpired && !empty($i['distribusi_tanggal_kembali'])) ? esc(date('d M Y', strtotime($i['distribusi_tanggal_kembali']))) : '' ?>"
                         style="background:var(--surface); color:var(--txt); border:2px solid var(--txt);"
                         onmouseover="this.style.background='var(--primary)'; this.style.color='#fffcf2';"
                         onmouseout="this.style.background='var(--surface)'; this.style.color='var(--txt)';">
@@ -172,6 +180,16 @@
                 <p class="text-xs font-bold uppercase tracking-wider font-kalam mb-1.5" style="color:var(--txt);">Pesan Alasan Akses:</p>
                 <p id="detailPopupMessage" class="text-sm font-kalam p-3 rounded italic" style="background:rgba(61,64,91,0.04); border:1.5px solid var(--txt); color:var(--txt); line-height: 1.5; word-break: break-word; white-space: pre-wrap;"></p>
             </div>
+            <div id="detailPopupBorrowBlock" style="display: none;" class="grid grid-cols-2 gap-4">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider font-kalam mb-1" style="color:var(--txt);">Tanggal Pinjam:</p>
+                    <p id="detailPopupBorrowStart" class="text-xs font-bold font-kalam" style="color:var(--muted);"></p>
+                </div>
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider font-kalam mb-1" style="color:var(--txt);">Tanggal Kembali:</p>
+                    <p id="detailPopupBorrowEnd" class="text-xs font-bold font-kalam" style="color:var(--muted);"></p>
+                </div>
+            </div>
             <div id="detailPopupRejectionBlock" style="display: none;">
                 <p class="text-xs font-bold uppercase tracking-wider font-kalam mb-1.5" style="color:var(--txt);">Catatan Penolakan Admin:</p>
                 <p id="detailPopupRejection" class="text-sm font-kalam p-3 rounded italic" style="background:rgba(224,122,95,0.04); border:1.5px solid var(--secondary); color:var(--secondary); line-height: 1.5; word-break: break-word; white-space: pre-wrap;"></p>
@@ -216,8 +234,23 @@
             const docPesan = btn.dataset.pesan;
             const pesanAdmin = btn.dataset.pesanAdmin;
             const docTgl = btn.dataset.tgl;
+            const tglPinjam = btn.dataset.tglPinjam;
+            const tglKembali = btn.dataset.tglKembali;
 
             if (detailPopupTitle) detailPopupTitle.textContent = docJudul;
+            
+            const borrowBlock = document.getElementById('detailPopupBorrowBlock');
+            const borrowStart = document.getElementById('detailPopupBorrowStart');
+            const borrowEnd = document.getElementById('detailPopupBorrowEnd');
+            if (borrowBlock && borrowStart && borrowEnd) {
+                if (tglPinjam) {
+                    borrowStart.textContent = tglPinjam;
+                    borrowEnd.textContent = tglKembali || '—';
+                    borrowBlock.style.display = 'grid';
+                } else {
+                    borrowBlock.style.display = 'none';
+                }
+            }
             if (detailPopupDate) detailPopupDate.textContent = docTgl;
             if (detailPopupMessage) detailPopupMessage.textContent = docPesan;
             

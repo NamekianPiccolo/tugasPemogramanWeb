@@ -41,9 +41,10 @@ class IzinController extends BaseController
 
         // Mengambil semua riwayat izin akses milik karyawan bersangkutan
         $data['izin'] = $this->izinModel
-            ->select('izin.*, dokumen.judul')
+            ->select('izin.*, dokumen.judul, distribusi.tanggal_pinjam as distribusi_tanggal_pinjam, distribusi.tanggal_kembali as distribusi_tanggal_kembali, distribusi.status as distribusi_status')
             ->join('dokumen', 'dokumen.id = izin.dokumen_id', 'left')
-            ->where('user_id', session()->get('id'))
+            ->join('distribusi', 'distribusi.id = (SELECT MAX(d_sub.id) FROM distribusi d_sub WHERE d_sub.dokumen_id = izin.dokumen_id AND d_sub.user_id = izin.user_id)', 'left')
+            ->where('izin.user_id', session()->get('id'))
             ->findAll();
 
         return view('admin/izin/karyawan_index', $data);

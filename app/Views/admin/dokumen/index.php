@@ -326,6 +326,26 @@
                     <p class="text-sm leading-relaxed line-clamp-3" style="color:var(--muted); font-family:'Lora',serif;">
                         <?= esc($d['deskripsi'] ?: 'Tidak ada deskripsi tambahan.') ?>
                     </p>
+                    <?php if ($role === 'karyawan' && !empty($d['status_distribusi']) && !$isExpired): ?>
+                        <div class="mt-3.5 p-3 rounded-xl text-xs flex flex-col gap-1.5" style="background:rgba(132,169,140,0.08); border:2px dashed rgba(132,169,140,0.35); color:var(--txt)">
+                            <div class="flex items-center gap-1.5 font-bold uppercase tracking-wider text-[9px]" style="color:var(--primary)">
+                                <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                Masa Peminjaman Aktif
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-[11px] font-kalam">
+                                <div>
+                                    <span style="color:var(--muted)">Pinjam:</span><br>
+                                    <span class="font-bold"><?= !empty($d['distribusi_tanggal_pinjam']) ? esc(date('d M Y', strtotime($d['distribusi_tanggal_pinjam']))) : '—' ?></span>
+                                </div>
+                                <div>
+                                    <span style="color:var(--muted)">Kembali:</span><br>
+                                    <span class="font-bold"><?= !empty($d['distribusi_tanggal_kembali']) ? esc(date('d M Y', strtotime($d['distribusi_tanggal_kembali']))) : '—' ?></span>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                     <?php if ($role === 'karyawan' && ($d['status_revisi_terakhir'] ?? '') === 'Ditolak'): ?>
                         <div class="mt-3.5 p-3.5 rounded-xl text-xs" style="background:rgba(224,122,95,0.08); border:2px dashed rgba(224,122,95,0.35); color:var(--txt)">
                             <div class="flex items-center gap-1.5 font-bold uppercase tracking-wider text-[9px] mb-1" style="color:var(--secondary)">
@@ -394,21 +414,7 @@
                                                 Ajukan Izin Lagi
                                             </button>
                                         </div>
-                                    <?php elseif ($isExpired): ?>
-                                        <div class="flex flex-row items-center gap-4">
-                                            <span class="px-3 py-1.5 organic-shape text-xs font-bold font-kalam text-center"
-                                                style="background:rgba(224,122,95,0.15); color:var(--secondary); border:2px dashed var(--secondary);">
-                                                Masa Pinjam Habis
-                                            </span>
-                                            <button type="button" class="px-4 py-1.5 organic-shape text-xs font-bold font-kalam text-white transition-all cursor-pointer btn-open-izin-modal"
-                                                data-id="<?= $d['id'] ?>"
-                                                data-judul="<?= esc($d['judul']) ?>"
-                                                style="background:var(--secondary); border:2px solid var(--txt); box-shadow: 2px 2px 0px var(--txt);"
-                                                onmouseover="this.style.transform='translateY(-1px)';" onmouseout="this.style.transform='translateY(0)';">
-                                                Minta Izin Lagi
-                                            </button>
-                                        </div>
-                                    <?php else: ?>
+<?php else: ?>
                                         <button type="button" class="px-4 py-1.5 organic-shape text-sm font-bold font-kalam transition-all cursor-pointer btn-open-izin-modal"
                                             data-id="<?= $d['id'] ?>"
                                             data-judul="<?= esc($d['judul']) ?>"
